@@ -22,4 +22,10 @@
     <style name="Theme.Marketplace.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Marketplace.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="EditTextStyle">
+        <item name="android:ems">10</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+    </style>
 </resources>

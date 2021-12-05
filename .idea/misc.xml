@@ -10,8 +10,13 @@
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.3828125" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/drawable/side_nav_bar.xml" value="0.3828125" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/activity_main.xml" value="0.2078804347826087" />
+        <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/app_bar_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/content_main.xml" value="0.22010869565217392" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/fragment_gallery.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/fragment_login.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/fragment_register.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/login_fragment.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/layout/nav_header_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/menu/activity_main_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Max/AndroidStudioProjects/Marketplace/app/src/main/res/menu/main.xml" value="0.36666666666666664" />
