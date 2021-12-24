@@ -1,4 +1,4 @@
-package com.company.marketplace.provider;
+package com.company.marketplace.repository;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -11,10 +11,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.company.marketplace.HttpsTrustManager;
 import com.company.marketplace.models.User;
-import com.company.marketplace.provider.response.BadRequestErrorListener;
-import com.company.marketplace.provider.response.ProviderErrorListener;
-import com.company.marketplace.provider.response.ResponseListener;
-import com.company.marketplace.provider.response.UnauthorizedErrorListener;
+import com.company.marketplace.repository.response.BadRequestErrorListener;
+import com.company.marketplace.repository.response.ProviderErrorListener;
+import com.company.marketplace.repository.response.ResponseListener;
+import com.company.marketplace.repository.response.UnauthorizedErrorListener;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -28,7 +28,7 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MarketplaceProvider implements UserProvider {
+public class MarketplaceRepository implements UserRepository {
 
 	private static final String ACCESS_TOKEN_PATH = "access_token.txt";
 
@@ -39,9 +39,9 @@ public class MarketplaceProvider implements UserProvider {
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final ProviderErrorListener providerErrorListener;
 
-	public MarketplaceProvider(Context context,
-							   UnauthorizedErrorListener unauthorizedErrorListener,
-							   ProviderErrorListener providerErrorListener) {
+	public MarketplaceRepository(Context context,
+								 UnauthorizedErrorListener unauthorizedErrorListener,
+								 ProviderErrorListener providerErrorListener) {
 
 		this.context = context;
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
@@ -113,7 +113,7 @@ public class MarketplaceProvider implements UserProvider {
 		) {
 			@Override
 			public Map<String, String> getHeaders() {
-				return MarketplaceProvider.this.getHeaders();
+				return MarketplaceRepository.this.getHeaders();
 			}
 		};
 		requestQueue.add(request);

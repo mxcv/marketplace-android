@@ -9,18 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.company.marketplace.R;
-import com.company.marketplace.models.User;
-import com.company.marketplace.provider.MarketplaceProvider;
-import com.company.marketplace.provider.UserProvider;
-import com.company.marketplace.provider.response.BadRequestErrorListener;
-import com.company.marketplace.provider.response.ProviderErrorListener;
-import com.company.marketplace.provider.response.ResponseListener;
-import com.company.marketplace.provider.response.UnauthorizedErrorListener;
+import com.company.marketplace.repository.MarketplaceRepository;
+import com.company.marketplace.repository.UserRepository;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -39,11 +33,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		UserProvider userProvider = new MarketplaceProvider(getContext(), null, () ->
+		UserRepository userRepository = new MarketplaceRepository(getContext(), null, () ->
 			Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show()
 		);
-		userProvider.login(emailEditText.getText().toString(), passwordEditText.getText().toString(),
-			ignored -> userProvider.getUser(user -> {
+		userRepository.login(emailEditText.getText().toString(), passwordEditText.getText().toString(),
+			ignored -> userRepository.getUser(user -> {
 				Log.i("", user.email);
 			}),
 			() -> Toast.makeText(getContext(), R.string.invalid_email_or_password, Toast.LENGTH_SHORT).show()

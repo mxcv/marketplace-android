@@ -1,10 +1,10 @@
-package com.company.marketplace.provider;
+package com.company.marketplace.repository;
 
 import com.company.marketplace.models.User;
-import com.company.marketplace.provider.response.BadRequestErrorListener;
-import com.company.marketplace.provider.response.ResponseListener;
+import com.company.marketplace.repository.response.BadRequestErrorListener;
+import com.company.marketplace.repository.response.ResponseListener;
 
-public interface UserProvider {
+public interface UserRepository {
 
 	void login(String email,
 			   String password,
