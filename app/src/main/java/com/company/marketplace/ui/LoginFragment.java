@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.company.marketplace.R;
-import com.company.marketplace.repository.MarketplaceRepository;
-import com.company.marketplace.repository.UserRepository;
+import com.company.marketplace.repositories.MarketplaceRepository;
+import com.company.marketplace.repositories.UserRepository;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package com.company.marketplace.repository.response;
+package com.company.marketplace.repositories.response;
 
 public interface ProviderErrorListener {
 	void onProviderError();

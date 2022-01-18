@@ -1,4 +1,4 @@
-package com.company.marketplace.repository;
+package com.company.marketplace.repositories;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -11,10 +11,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.company.marketplace.HttpsTrustManager;
 import com.company.marketplace.models.User;
-import com.company.marketplace.repository.response.BadRequestErrorListener;
-import com.company.marketplace.repository.response.ProviderErrorListener;
-import com.company.marketplace.repository.response.ResponseListener;
-import com.company.marketplace.repository.response.UnauthorizedErrorListener;
+import com.company.marketplace.repositories.response.BadRequestErrorListener;
+import com.company.marketplace.repositories.response.ProviderErrorListener;
+import com.company.marketplace.repositories.response.ResponseListener;
+import com.company.marketplace.repositories.response.UnauthorizedErrorListener;
 import com.google.gson.Gson;
 
 import org.json.JSONException;

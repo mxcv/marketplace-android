@@ -1,8 +1,8 @@
-package com.company.marketplace.repository;
+package com.company.marketplace.repositories;
 
 import com.company.marketplace.models.User;
-import com.company.marketplace.repository.response.BadRequestErrorListener;
-import com.company.marketplace.repository.response.ResponseListener;
+import com.company.marketplace.repositories.response.BadRequestErrorListener;
+import com.company.marketplace.repositories.response.ResponseListener;
 
 public interface UserRepository {
 
