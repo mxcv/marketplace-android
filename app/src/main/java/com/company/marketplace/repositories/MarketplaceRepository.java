@@ -124,7 +124,29 @@ public class MarketplaceRepository implements UserRepository {
 						   ResponseListener<Void> responseListener,
 						   BadRequestErrorListener badRequestErrorListener) {
 
-
+		HttpsTrustManager.allowAllSSL();
+		try {
+			JsonObjectRequestWithNull request = new JsonObjectRequestWithNull(
+				Request.Method.PUT,
+				apiUrl + "/users",
+				new JSONObject(gson.toJson(user)),
+				response -> {
+					if (responseListener != null)
+						responseListener.onResponse(null);
+				},
+				error -> {
+					if (error.networkResponse != null && error.networkResponse.statusCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+						if (badRequestErrorListener != null)
+							badRequestErrorListener.onBadRequestError();
+					}
+					else if (providerErrorListener != null)
+						providerErrorListener.onProviderError();
+				}
+			);
+			requestQueue.add(request);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Map<String, String> getHeaders() {
