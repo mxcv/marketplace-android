@@ -3,17 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_items"
-            android:title="@string/menu_items" />
-        <item
-            android:id="@+id/nav_my_items"
-            android:title="@string/menu_my_items" />
-        <item
-            android:id="@+id/nav_add_item"
-            android:title="@string/menu_add_item" />
-    </group>
+    <item
+        android:id="@+id/nav_items"
+        android:title="@string/menu_items" />
 
     <item android:title="@string/menu_account">
         <menu>

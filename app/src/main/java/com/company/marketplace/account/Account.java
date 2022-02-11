@@ -1,5 +1,8 @@
 package com.company.marketplace.account;
 
+import android.app.Activity;
+import android.view.View;
+
 import com.company.marketplace.models.User;
 
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ public class Account {
 
 	private Account () {
 		userChangedListeners = new ArrayList<>();
+		user = null;
 	}
 
 	public static synchronized Account getInstance(){
@@ -24,10 +28,10 @@ public class Account {
 	public User getUser() {
 		return user;
 	}
-	public void setUser(User user) {
+	public void setUser(User user, Activity activity) {
 		this.user = user;
 		for (UserChangedListener listener : userChangedListeners)
-			listener.onUserChanged(user);
+			listener.onUserChanged(user, activity);
 	}
 
 	public void addUserChangedListener(UserChangedListener listener) {
