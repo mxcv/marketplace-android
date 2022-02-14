@@ -1,7 +1,6 @@
 package com.company.marketplace.account;
 
 import android.app.Activity;
-import android.view.View;
 
 import com.company.marketplace.models.User;
 

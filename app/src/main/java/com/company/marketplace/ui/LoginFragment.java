@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 import com.company.marketplace.repositories.MarketplaceRepository;
+import com.company.marketplace.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.repositories.UserRepository;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
@@ -21,7 +22,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		View view = inflater.inflate(R.layout.fragment_login, container, false);
 		view.findViewById(R.id.login).setOnClickListener(this);
 		emailEditText = view.findViewById(R.id.loginEmail);
@@ -31,13 +31,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		UserRepository userRepository = new MarketplaceRepository(getContext(), null, () ->
-			Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show()
-		);
+		UserRepository userRepository = new MarketplaceRepositoryFactory().create(getActivity());
 		userRepository.login(emailEditText.getText().toString(), passwordEditText.getText().toString(),
-			ignored -> userRepository.getUser(user -> {
-				Account.getInstance().setUser(user, getActivity());
-			}),
+			ignored -> userRepository.getUser(user -> Account.getInstance().setUser(user, getActivity())),
 			() -> Toast.makeText(getContext(), R.string.invalid_email_or_password, Toast.LENGTH_SHORT).show()
 		);
 	}

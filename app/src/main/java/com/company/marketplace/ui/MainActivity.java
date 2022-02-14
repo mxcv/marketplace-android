@@ -5,23 +5,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 import com.company.marketplace.account.UserChangedListener;
+import com.company.marketplace.databinding.ActivityMainBinding;
 import com.company.marketplace.models.User;
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.company.marketplace.databinding.ActivityMainBinding;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements UserChangedListener {
 
