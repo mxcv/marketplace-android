@@ -12,8 +12,6 @@ public class MarketplaceRepositoryFactory {
 		return new MarketplaceRepository(activity, () -> {
 			create(activity).logout();
 			Account.getInstance().setUser(null, activity);
-		}, () -> {
-			Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show();
-		});
+		}, () -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
 	}
 }

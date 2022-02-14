@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +11,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.company.marketplace.HttpsTrustManager;
 import com.company.marketplace.models.User;
+import com.company.marketplace.repositories.jwt.FileJwtRepository;
+import com.company.marketplace.repositories.jwt.JwtRepository;
+import com.company.marketplace.repositories.jwt.JwtType;
 import com.company.marketplace.repositories.response.BadRequestErrorListener;
 import com.company.marketplace.repositories.response.ProviderErrorListener;
 import com.company.marketplace.repositories.response.ResponseListener;
@@ -21,34 +23,28 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MarketplaceRepository implements UserRepository {
 
-	private static final String ACCESS_TOKEN_PATH = "access_token.txt";
-
-	private final Context context;
 	private final RequestQueue requestQueue;
 	private final String apiUrl;
 	private final Gson gson;
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final ProviderErrorListener providerErrorListener;
+	private final JwtRepository jwtRepository;
 
 	public MarketplaceRepository(Context context,
 								 UnauthorizedErrorListener unauthorizedErrorListener,
 								 ProviderErrorListener providerErrorListener) {
 
-		this.context = context;
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
 		this.providerErrorListener = providerErrorListener;
 		requestQueue = Volley.newRequestQueue(context);
 		gson = new Gson();
+		jwtRepository = new FileJwtRepository(context);
 		try {
 			ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
 			apiUrl = String.valueOf(ai.metaData.get("api_url"));
@@ -71,7 +67,7 @@ public class MarketplaceRepository implements UserRepository {
 				new JSONObject(gson.toJson(new User(email, password))),
 				response -> {
 					Map<?, ?> root = gson.fromJson(response.toString(), Map.class);
-					setAccessToken(String.valueOf(root.get("accessToken")));
+					jwtRepository.setToken(JwtType.ACCESS, String.valueOf(root.get("accessToken")));
 					if (responseListener != null)
 						responseListener.onResponse(null);
 				},
@@ -92,7 +88,7 @@ public class MarketplaceRepository implements UserRepository {
 
 	@Override
 	public void logout() {
-		setAccessToken(null);
+		jwtRepository.setToken(JwtType.ACCESS, null);
 	}
 
 	@Override
@@ -152,31 +148,7 @@ public class MarketplaceRepository implements UserRepository {
 
 	private Map<String, String> getHeaders() {
 		Map<String, String> headers = new HashMap<>();
-		headers.put("Authorization", "Bearer " + getAccessToken());
+		headers.put("Authorization", "Bearer " + jwtRepository.getToken(JwtType.ACCESS));
 		return headers;
-	}
-
-	private String getAccessToken() {
-		try (FileInputStream stream = context.openFileInput(ACCESS_TOKEN_PATH)) {
-			byte[] b = new byte[stream.available()];
-			stream.read(b);
-			return new String(b);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private void setAccessToken(String accessToken) {
-		if (accessToken == null) {
-			new File(ACCESS_TOKEN_PATH).delete();
-		}
-		else {
-			try (FileOutputStream stream = context.openFileOutput(ACCESS_TOKEN_PATH, Context.MODE_PRIVATE)) {
-				stream.write(accessToken.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

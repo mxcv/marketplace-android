@@ -1,22 +1,18 @@
 package com.company.marketplace.ui;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.company.marketplace.R;
 import com.company.marketplace.models.User;
-import com.company.marketplace.repositories.MarketplaceRepository;
 import com.company.marketplace.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.repositories.UserRepository;
 

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
-import com.company.marketplace.repositories.MarketplaceRepository;
 import com.company.marketplace.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.repositories.UserRepository;
 
