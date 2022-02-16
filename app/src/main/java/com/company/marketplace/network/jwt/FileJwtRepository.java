@@ -1,6 +1,8 @@
-package com.company.marketplace.repositories.jwt;
+package com.company.marketplace.network.jwt;
 
 import android.content.Context;
+
+import com.company.marketplace.models.AccessRefreshJwt;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,6 +46,19 @@ public class FileJwtRepository implements JwtRepository {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public AccessRefreshJwt getTokens() {
+		return new AccessRefreshJwt(getToken(JwtType.ACCESS), getToken(JwtType.REFRESH));
+	}
+
+	@Override
+	public void setTokens(AccessRefreshJwt jwt) {
+		if (jwt == null)
+			jwt = new AccessRefreshJwt();
+		setToken(JwtType.ACCESS, jwt.getAccessToken());
+		setToken(JwtType.REFRESH, jwt.getRefreshToken());
 	}
 
 	private String getPath(JwtType type) {

@@ -13,8 +13,8 @@ import androidx.navigation.Navigation;
 
 import com.company.marketplace.R;
 import com.company.marketplace.models.User;
-import com.company.marketplace.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.repositories.UserRepository;
+import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
+import com.company.marketplace.network.repositories.UserRepository;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
 
@@ -45,7 +45,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 					nameEditText.getText().toString()
 				),
 				ignored -> Navigation.findNavController(v).navigate(R.id.nav_login),
-				() -> Toast.makeText(getContext(), R.string.invalid_email_or_password, Toast.LENGTH_SHORT).show()
+				() -> Toast.makeText(getContext(), R.string.registration_error, Toast.LENGTH_SHORT).show()
 			);
 		}
 	}

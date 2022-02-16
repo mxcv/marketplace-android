@@ -1,4 +1,4 @@
-package com.company.marketplace.repositories;
+package com.company.marketplace.network.repositories;
 
 import android.app.Activity;
 import android.widget.Toast;

@@ -24,5 +24,6 @@
 
     <string name="connection_error">Could not connect to the server. Check your network connection and try again later.</string>
     <string name="invalid_email_or_password">Invalid email or password</string>
+    <string name="registration_error">Could not create a new user. Try another email or password.</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
 </resources>

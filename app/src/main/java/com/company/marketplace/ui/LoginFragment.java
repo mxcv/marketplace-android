@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
-import com.company.marketplace.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.repositories.UserRepository;
+import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
+import com.company.marketplace.network.repositories.UserRepository;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 

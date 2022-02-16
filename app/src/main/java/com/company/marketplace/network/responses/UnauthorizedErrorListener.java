@@ -1,4 +1,4 @@
-package com.company.marketplace.repositories.response;
+package com.company.marketplace.network.responses;
 
 public interface UnauthorizedErrorListener {
 	void onUnauthorizedError();

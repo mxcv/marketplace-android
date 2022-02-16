@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		} else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);
-			((TextView)activity.findViewById(R.id.navName)).setText(user.name);
-			((TextView)activity.findViewById(R.id.navPhoneNumber)).setText(user.phoneNumber);
+			((TextView)activity.findViewById(R.id.navName)).setText(user.getName());
+			((TextView)activity.findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
 		}
 	}
 }
