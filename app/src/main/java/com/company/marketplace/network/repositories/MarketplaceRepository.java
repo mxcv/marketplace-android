@@ -1,7 +1,6 @@
 package com.company.marketplace.network.repositories;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
@@ -45,7 +44,6 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 			.enqueue(new SimpleCallback<>(
 				jwt -> {
 					jwtRepository.setTokens(jwt);
-					Log.i("JWT", "Access and refresh tokens were acquired.");
 					if (responseListener != null)
 						responseListener.onResponse(null);
 				},
@@ -58,7 +56,6 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 	@Override
 	public void logout() {
 		jwtRepository.setTokens(null);
-		Log.i("JWT", "Access and refresh tokens were removed.");
 	}
 
 	@Override

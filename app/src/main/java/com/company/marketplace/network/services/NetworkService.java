@@ -3,7 +3,6 @@ package com.company.marketplace.network.services;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import com.company.marketplace.models.AccessRefreshJwt;
 import com.company.marketplace.network.jwt.FileJwtRepository;
@@ -57,13 +56,11 @@ public class NetworkService {
 				if (refreshResponse.isSuccessful()) {
 					AccessRefreshJwt jwt = refreshResponse.body();
 					jwtRepository.setTokens(jwt);
-					Log.i("JWT", "Access and refresh tokens were updated.");
 					return response.request()
 						.newBuilder()
 						.header("Authorization", getAuthHeader(Objects.requireNonNull(jwt).getAccessToken()))
 						.build();
 				}
-				Log.w("JWT", "Refresh token is not valid.");
 				return null;
 			}).build();
 

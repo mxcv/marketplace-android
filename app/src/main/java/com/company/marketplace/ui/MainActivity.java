@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		NavigationView navigationView = binding.navView;
 
 		appBarConfiguration = new AppBarConfiguration.Builder(
-			R.id.nav_items, R.id.nav_my_items, R.id.nav_add_item, R.id.nav_login, R.id.nav_register)
+			R.id.nav_items, R.id.nav_my_items, R.id.nav_add_item, R.id.nav_login, R.id.nav_register, R.id.nav_logout)
 			.setOpenableLayout(drawer)
 			.build();
 

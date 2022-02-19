@@ -1,20 +1,22 @@
 package com.company.marketplace.network.jwt;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.company.marketplace.models.AccessRefreshJwt;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileJwtRepository implements JwtRepository {
 
-	private static final String ACCESS_TOKEN_PATH = "access_token.txt";
-	private static final String REFRESH_TOKEN_PATH = "refresh_token.txt";
+	private static final String ACCESS_TOKEN_FILENAME = "access_token.txt";
+	private static final String REFRESH_TOKEN_FILENAME = "refresh_token.txt";
+	private static final String FILES_DIRECTORY = "files";
 	private final Context context;
 
 	public FileJwtRepository(Context context) {
@@ -23,7 +25,8 @@ public class FileJwtRepository implements JwtRepository {
 
 	@Override
 	public String getToken(JwtType type) {
-		try (FileInputStream stream = context.openFileInput(getPath(type))) {
+		try (FileInputStream stream = context.openFileInput(
+				type == JwtType.ACCESS ? ACCESS_TOKEN_FILENAME : REFRESH_TOKEN_FILENAME)) {
 			byte[] b = new byte[stream.available()];
 			stream.read(b);
 			return new String(b);
@@ -37,14 +40,20 @@ public class FileJwtRepository implements JwtRepository {
 
 	@Override
 	public void setToken(JwtType type, String token) {
-		if (token == null)
-			new File(getPath(type)).delete();
+		String fileName = type == JwtType.ACCESS ? ACCESS_TOKEN_FILENAME : REFRESH_TOKEN_FILENAME;
+		if (token == null) {
+			Paths.get(context.getApplicationInfo().dataDir, FILES_DIRECTORY, fileName)
+				.toFile()
+				.delete();
+			Log.i("JWT", (type == JwtType.ACCESS ? "Access" : "Refresh") + " token was removed.");
+		}
 		else {
-			try (FileOutputStream stream = context.openFileOutput(getPath(type), Context.MODE_PRIVATE)) {
+			try (FileOutputStream stream = context.openFileOutput(fileName, Context.MODE_PRIVATE)) {
 				stream.write(token.getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			Log.i("JWT", (type == JwtType.ACCESS ? "Access" : "Refresh") + " token was updated.");
 		}
 	}
 
@@ -59,9 +68,5 @@ public class FileJwtRepository implements JwtRepository {
 			jwt = new AccessRefreshJwt();
 		setToken(JwtType.ACCESS, jwt.getAccessToken());
 		setToken(JwtType.REFRESH, jwt.getRefreshToken());
-	}
-
-	private String getPath(JwtType type) {
-		return type == JwtType.ACCESS ? ACCESS_TOKEN_PATH : REFRESH_TOKEN_PATH;
 	}
 }
