@@ -8,6 +8,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.jwt.FileJwtRepository;
 import com.company.marketplace.network.jwt.JwtRepository;
+import com.company.marketplace.network.jwt.JwtType;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.NetworkErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
@@ -62,6 +63,12 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 
 	@Override
 	public void getUser(ResponseListener<User> responseListener) {
+
+		if (jwtRepository.getToken(JwtType.ACCESS) == null) {
+			if (unauthorizedErrorListener != null)
+				unauthorizedErrorListener.onUnauthorizedError();
+			return;
+		}
 
 		NetworkService.getInstance()
 			.getUserService()

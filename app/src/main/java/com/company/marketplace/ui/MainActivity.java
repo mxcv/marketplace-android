@@ -17,6 +17,7 @@ import com.company.marketplace.account.Account;
 import com.company.marketplace.account.UserChangedListener;
 import com.company.marketplace.databinding.ActivityMainBinding;
 import com.company.marketplace.models.User;
+import com.company.marketplace.network.repositories.MarketplaceRepository;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements UserChangedListener {
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		NavigationUI.setupWithNavController(navigationView, navController);
 
 		Account.getInstance().addUserChangedListener(this);
+		new MarketplaceRepository(this, null, null).getUser(user ->
+			Account.getInstance().setUser(user, this)
+		);
 	}
 
 	@Override
