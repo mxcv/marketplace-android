@@ -23,9 +23,12 @@
 
     <style name="Theme.Marketplace.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="EditTextStyle">
-        <item name="android:ems">10</item>
+    <style name="SpinnerStyle">
         <item name="android:minHeight">48dp</item>
         <item name="android:layout_marginVertical">4dp</item>
+    </style>
+
+    <style name="EditTextStyle" parent="SpinnerStyle">
+        <item name="android:ems">10</item>
     </style>
 </resources>

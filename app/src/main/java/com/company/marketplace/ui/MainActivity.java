@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 			Navigation.findNavController(activity, R.id.nav_host_fragment_content_main).navigate(R.id.nav_login);
 		} else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
+			Navigation.findNavController(activity, R.id.nav_host_fragment_content_main).navigate(R.id.nav_items);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);
 			((TextView)activity.findViewById(R.id.navName)).setText(user.getName());
 			((TextView)activity.findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());

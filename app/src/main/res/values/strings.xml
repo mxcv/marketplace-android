@@ -26,4 +26,14 @@
     <string name="invalid_email_or_password">Invalid email or password</string>
     <string name="registration_error">Could not create a new user. Try another email or password.</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="currency">Currency</string>
+    <string name="publish">Publish</string>
+    <string name="title_empty">Title cannot be empty</string>
+    <string name="price_range">Price cannot be less than 0 or too big</string>
+    <string name="currency_select">Currency is not selected</string>
+    <string name="add_item_error">Could not add this item</string>
 </resources>

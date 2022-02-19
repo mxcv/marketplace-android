@@ -88,6 +88,12 @@ public class NetworkService {
 	public TokenService getTokenService() {
 		return retrofit.create(TokenService.class);
 	}
+	public CurrencyService getCurrencyService() {
+		return retrofit.create(CurrencyService.class);
+	}
+	public ItemService getItemService() {
+		return retrofit.create(ItemService.class);
+	}
 
 	private String getAuthHeader(String token) {
 		return token == null ? null : "Bearer " + token;
