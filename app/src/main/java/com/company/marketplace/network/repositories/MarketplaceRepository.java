@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.models.PageInput;
+import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.jwt.FileJwtRepository;
 import com.company.marketplace.network.jwt.JwtRepository;
@@ -118,14 +120,16 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 	}
 
 	@Override
-	public void getMyItems(ResponseListener<List<Item>> responseListener) {
+	public void getMyItems(PageOutput pageOutput,
+						   ResponseListener<PageInput> responseListener) {
+
 		NetworkService.getInstance()
 			.getItemService()
-			.getMyItems()
+			.getMyItems(pageOutput)
 			.enqueue(new SimpleCallback<>(
-				items -> {
+				pageInput -> {
 					if (responseListener != null)
-						responseListener.onResponse(items);
+						responseListener.onResponse(pageInput);
 				},
 				null,
 				unauthorizedErrorListener,

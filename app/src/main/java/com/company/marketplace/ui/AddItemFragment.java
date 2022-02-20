@@ -67,7 +67,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 				price,
 				(Currency) currencySpinner.getSelectedItem()
 			),ignored -> {
-				Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main).navigate(R.id.nav_items);
+				Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_items);
 			}, () -> {
 				Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show();
 			});

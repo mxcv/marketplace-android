@@ -23,10 +23,14 @@ public class Currency {
 		this.countryCode = countryCode;
 	}
 
+	public Locale getLocale() {
+		String[] codes = countryCode.split("-");
+		return new Locale(codes[0], codes[1]);
+	}
+
 	@NonNull
 	@Override
 	public String toString() {
-		String[] codes = countryCode.split("-");
-		return java.util.Currency.getInstance(new Locale(codes[0], codes[1])).getSymbol();
+		return java.util.Currency.getInstance(getLocale()).getSymbol();
 	}
 }
