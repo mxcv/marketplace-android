@@ -7,7 +7,7 @@ import java.util.Locale;
 public class Currency {
 
 	private int id;
-	private String countryCode;
+	private String languageTag;
 
 	public int getId() {
 		return id;
@@ -16,16 +16,15 @@ public class Currency {
 		this.id = id;
 	}
 
-	public String getCountryCode() {
-		return countryCode;
+	public String getLanguageTag() {
+		return languageTag;
 	}
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
+	public void setLanguageTag(String languageTag) {
+		this.languageTag = languageTag;
 	}
 
 	public Locale getLocale() {
-		String[] codes = countryCode.split("-");
-		return new Locale(codes[0], codes[1]);
+		return Locale.forLanguageTag(languageTag);
 	}
 
 	@NonNull
