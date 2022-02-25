@@ -26,14 +26,15 @@ public class NetworkService {
 	private final Retrofit retrofit;
 
 	private NetworkService(Context context) {
-		context = context.getApplicationContext();
-		JwtRepository.initialize(context);
+		Context appContext = context.getApplicationContext();
+		JwtRepository.initialize(appContext);
 
 		OkHttpClient client = getUnsafeOkHttpClient()
 			.addInterceptor(chain -> {
 				String token = JwtRepository.getInstance().getToken(JwtType.ACCESS);
 				return chain.proceed(token == null ? chain.request() : chain.request()
 					.newBuilder()
+					.addHeader("Accept-Language", appContext.getResources().getConfiguration().getLocales().toLanguageTags())
 					.addHeader("Authorization", getAuthHeader(token))
 					.build()
 				);
@@ -54,7 +55,7 @@ public class NetworkService {
 			}).build();
 
 		retrofit = new Retrofit.Builder()
-			.baseUrl(Objects.requireNonNull(getBaseUrl(context)))
+			.baseUrl(Objects.requireNonNull(getBaseUrl(appContext)))
 			.addConverterFactory(GsonConverterFactory.create())
 			.client(client)
 			.build();
