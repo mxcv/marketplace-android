@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import com.company.marketplace.models.AccessRefreshJwt;
-import com.company.marketplace.network.jwt.FileJwtRepository;
-import com.company.marketplace.network.jwt.JwtRepository;
-import com.company.marketplace.network.jwt.JwtType;
+import com.company.marketplace.network.repositories.JwtRepository;
+import com.company.marketplace.models.JwtType;
 
 import java.util.Objects;
 
@@ -27,22 +26,12 @@ public class NetworkService {
 	private final Retrofit retrofit;
 
 	private NetworkService(Context context) {
-		String baseUrl = "";
-		try {
-			baseUrl = context
-				.getPackageManager()
-				.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
-				.metaData
-				.get("api_url")
-				.toString();
-		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
-		}
+		context = context.getApplicationContext();
+		JwtRepository.initialize(context);
 
-		JwtRepository jwtRepository = new FileJwtRepository(context.getApplicationContext());
 		OkHttpClient client = getUnsafeOkHttpClient()
 			.addInterceptor(chain -> {
-				String token = jwtRepository.getToken(JwtType.ACCESS);
+				String token = JwtRepository.getInstance().getToken(JwtType.ACCESS);
 				return chain.proceed(token == null ? chain.request() : chain.request()
 					.newBuilder()
 					.addHeader("Authorization", getAuthHeader(token))
@@ -51,11 +40,11 @@ public class NetworkService {
 			}).authenticator((route, response) -> {
 				Response<AccessRefreshJwt> refreshResponse = NetworkService.getInstance()
 					.getTokenService()
-					.refresh(jwtRepository.getTokens())
+					.refresh(JwtRepository.getInstance().getTokens())
 					.execute();
 				if (refreshResponse.isSuccessful()) {
 					AccessRefreshJwt jwt = refreshResponse.body();
-					jwtRepository.setTokens(jwt);
+					JwtRepository.getInstance().setTokens(jwt);
 					return response.request()
 						.newBuilder()
 						.header("Authorization", getAuthHeader(Objects.requireNonNull(jwt).getAccessToken()))
@@ -65,7 +54,7 @@ public class NetworkService {
 			}).build();
 
 		retrofit = new Retrofit.Builder()
-			.baseUrl(baseUrl)
+			.baseUrl(Objects.requireNonNull(getBaseUrl(context)))
 			.addConverterFactory(GsonConverterFactory.create())
 			.client(client)
 			.build();
@@ -75,6 +64,7 @@ public class NetworkService {
 		if (instance == null)
 			instance = new NetworkService(context);
 	}
+
 	public static synchronized NetworkService getInstance() {
 		return instance;
 	}
@@ -90,6 +80,20 @@ public class NetworkService {
 	}
 	public ItemService getItemService() {
 		return retrofit.create(ItemService.class);
+	}
+
+	private String getBaseUrl(Context context) {
+		try {
+			return context
+				.getPackageManager()
+				.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
+				.metaData
+				.get("api_url")
+				.toString();
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private String getAuthHeader(String token) {

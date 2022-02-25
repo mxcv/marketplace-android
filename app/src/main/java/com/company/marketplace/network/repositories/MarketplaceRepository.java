@@ -7,9 +7,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.models.User;
-import com.company.marketplace.network.jwt.FileJwtRepository;
-import com.company.marketplace.network.jwt.JwtRepository;
-import com.company.marketplace.network.jwt.JwtType;
+import com.company.marketplace.models.JwtType;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.NetworkErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
@@ -23,7 +21,6 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
-	private final JwtRepository jwtRepository;
 
 	public MarketplaceRepository(Context context,
 								 UnauthorizedErrorListener unauthorizedErrorListener,
@@ -31,7 +28,7 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
 		this.networkErrorListener = networkErrorListener;
-		jwtRepository = new FileJwtRepository(context);
+		JwtRepository.initialize(context);
 		NetworkService.initialize(context);
 	}
 
@@ -45,7 +42,7 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 			.access(new User(email, password))
 			.enqueue(new SimpleCallback<>(
 				jwt -> {
-					jwtRepository.setTokens(jwt);
+					JwtRepository.getInstance().setTokens(jwt);
 					if (responseListener != null)
 						responseListener.onResponse(null);
 				},
@@ -57,13 +54,13 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 
 	@Override
 	public void logout() {
-		jwtRepository.setTokens(null);
+		JwtRepository.getInstance().setTokens(null);
 	}
 
 	@Override
 	public void getUser(ResponseListener<User> responseListener) {
 
-		if (jwtRepository.getToken(JwtType.ACCESS) == null) {
+		if (JwtRepository.getInstance().getToken(JwtType.ACCESS) == null) {
 			if (unauthorizedErrorListener != null)
 				unauthorizedErrorListener.onUnauthorizedError();
 			return;
