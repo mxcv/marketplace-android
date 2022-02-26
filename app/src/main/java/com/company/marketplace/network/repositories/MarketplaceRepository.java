@@ -18,7 +18,7 @@ import com.company.marketplace.network.services.SimpleCallback;
 
 import java.util.List;
 
-public class MarketplaceRepository implements UserRepository, CurrencyRepository, ItemRepository {
+public class MarketplaceRepository implements UserRepository, ItemRepository {
 
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
@@ -101,23 +101,6 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 	}
 
 	@Override
-	public void getCurrencies(ResponseListener<List<Currency>> responseListener) {
-
-		NetworkService.getInstance()
-			.getCurrencyService()
-			.getCurrencies()
-			.enqueue(new SimpleCallback<>(
-				currencies -> {
-					if (responseListener != null)
-						responseListener.onResponse(currencies);
-				},
-				null,
-				unauthorizedErrorListener,
-				networkErrorListener
-			));
-	}
-
-	@Override
 	public void getMyItems(PageOutput pageOutput,
 						   ResponseListener<PageInput> responseListener) {
 
@@ -168,6 +151,23 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 						responseListener.onResponse(null);
 				},
 				badRequestErrorListener,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getCurrencies(ResponseListener<List<Currency>> responseListener) {
+
+		NetworkService.getInstance()
+			.getCurrencyService()
+			.getCurrencies()
+			.enqueue(new SimpleCallback<>(
+				currencies -> {
+					if (responseListener != null)
+						responseListener.onResponse(currencies);
+				},
+				null,
 				unauthorizedErrorListener,
 				networkErrorListener
 			));
