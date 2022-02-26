@@ -17,6 +17,7 @@ import com.company.marketplace.R;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
@@ -38,13 +39,13 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 		currencySpinner = view.findViewById(R.id.addItemCurrency);
 		categorySpinner = view.findViewById(R.id.addItemCategory);
 
-		MarketplaceRepository marketplaceRepository = new MarketplaceRepositoryFactory().create(getActivity());
-		marketplaceRepository.getCurrencies(currencies -> {
+		ItemRepository itemRepository = new MarketplaceRepositoryFactory().create(getActivity());
+		itemRepository.getCurrencies(currencies -> {
 				ArrayAdapter<Currency> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				currencySpinner.setAdapter(adapter);
 			});
-		marketplaceRepository.getCategories(categories -> {
+		itemRepository.getCategories(categories -> {
 			categories.add(0, new Category(0, getString(R.string.category_not_selected)));
 			ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
