@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.company.marketplace.R;
+import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.network.repositories.MarketplaceRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
 import java.math.BigDecimal;
@@ -24,7 +26,7 @@ import java.util.Objects;
 public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	private EditText titleEditText, priceEditText, descriptionEditText;
-	private Spinner currencySpinner;
+	private Spinner currencySpinner, categorySpinner;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,13 +36,20 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 		priceEditText = view.findViewById(R.id.addItemPrice);
 		descriptionEditText = view.findViewById(R.id.addItemDescription);
 		currencySpinner = view.findViewById(R.id.addItemCurrency);
+		categorySpinner = view.findViewById(R.id.addItemCategory);
 
-		new MarketplaceRepositoryFactory().create(getActivity())
-			.getCurrencies(currencies -> {
+		MarketplaceRepository marketplaceRepository = new MarketplaceRepositoryFactory().create(getActivity());
+		marketplaceRepository.getCurrencies(currencies -> {
 				ArrayAdapter<Currency> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				currencySpinner.setAdapter(adapter);
 			});
+		marketplaceRepository.getCategories(categories -> {
+			categories.add(0, new Category(0, getString(R.string.category_not_selected)));
+			ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			categorySpinner.setAdapter(adapter);
+		});
 		return view;
 	}
 
@@ -55,21 +64,21 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			Toast.makeText(getContext(), R.string.price_range, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		if (currencySpinner.getSelectedItem() == null) {
-			Toast.makeText(getContext(), R.string.currency_select, Toast.LENGTH_SHORT).show();
-			return;
-		}
+		Category category = categorySpinner.getSelectedItemPosition() == 0
+			? null : (Category) categorySpinner.getSelectedItem();
 
 		new MarketplaceRepositoryFactory().create(getActivity())
 			.addItem(new Item(
-				titleEditText.getText().toString(),
-				descriptionEditText.getText().toString(),
-				price,
-				(Currency) currencySpinner.getSelectedItem()
-			),ignored -> {
-				Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_items);
-			}, () -> {
-				Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show();
-			});
+					titleEditText.getText().toString(),
+					descriptionEditText.getText().toString(),
+					price,
+					(Currency) currencySpinner.getSelectedItem(),
+					category
+				),ignored -> Navigation.findNavController(
+						Objects.requireNonNull(getActivity()),
+						R.id.nav_host_fragment_content_main
+					).navigate(R.id.nav_my_items),
+				() -> Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show()
+			);
 	}
 }

@@ -82,6 +82,9 @@ public class NetworkService {
 	public ItemService getItemService() {
 		return retrofit.create(ItemService.class);
 	}
+	public CategoryService getCategoryService() {
+		return retrofit.create(CategoryService.class);
+	}
 
 	private String getBaseUrl(Context context) {
 		try {

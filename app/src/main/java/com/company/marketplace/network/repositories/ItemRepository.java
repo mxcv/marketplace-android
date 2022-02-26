@@ -1,5 +1,6 @@
 package com.company.marketplace.network.repositories;
 
+import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
@@ -20,4 +21,6 @@ public interface ItemRepository {
 	void removeItem(int id,
 					ResponseListener<Void> responseListener,
 					BadRequestErrorListener badRequestErrorListener);
+
+	void getCategories(ResponseListener<List<Category>> responseListener);
 }

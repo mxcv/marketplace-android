@@ -2,6 +2,7 @@ package com.company.marketplace.network.repositories;
 
 import android.content.Context;
 
+import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
@@ -167,6 +168,22 @@ public class MarketplaceRepository implements UserRepository, CurrencyRepository
 						responseListener.onResponse(null);
 				},
 				badRequestErrorListener,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getCategories(ResponseListener<List<Category>> responseListener) {
+		NetworkService.getInstance()
+			.getCategoryService()
+			.getCategories()
+			.enqueue(new SimpleCallback<>(
+				categories -> {
+					if (responseListener != null)
+						responseListener.onResponse(categories);
+				},
+				null,
 				unauthorizedErrorListener,
 				networkErrorListener
 			));

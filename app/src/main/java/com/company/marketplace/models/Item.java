@@ -8,16 +8,18 @@ public class Item {
 	private String title, description;
 	private BigDecimal price;
 	private Currency currency;
+	private Category category;
 	private User user;
 
 	public Item() {
 
 	}
-	public Item(String title, String description, BigDecimal price, Currency currency) {
+	public Item(String title, String description, BigDecimal price, Currency currency, Category category) {
 		this.title = title;
 		this.description = description;
 		this.price = price;
 		this.currency = currency;
+		this.category = category;
 	}
 
 	public int getId() {
@@ -53,6 +55,13 @@ public class Item {
 	}
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public User getUser() {
