@@ -70,17 +70,20 @@ public class NetworkService {
 		return instance;
 	}
 
-	public UserService getUserService() {
-		return retrofit.create(UserService.class);
-	}
 	public TokenService getTokenService() {
 		return retrofit.create(TokenService.class);
 	}
-	public CurrencyService getCurrencyService() {
-		return retrofit.create(CurrencyService.class);
+	public UserService getUserService() {
+		return retrofit.create(UserService.class);
+	}
+	public LocationService getLocationService() {
+		return retrofit.create(LocationService.class);
 	}
 	public ItemService getItemService() {
 		return retrofit.create(ItemService.class);
+	}
+	public CurrencyService getCurrencyService() {
+		return retrofit.create(CurrencyService.class);
 	}
 	public CategoryService getCategoryService() {
 		return retrofit.create(CategoryService.class);

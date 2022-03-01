@@ -3,6 +3,7 @@ package com.company.marketplace.network.repositories;
 import android.content.Context;
 
 import com.company.marketplace.models.Category;
+import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
@@ -93,6 +94,23 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				ignored -> {
 					if (responseListener != null)
 						responseListener.onResponse(null);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getCountries(ResponseListener<List<Country>> responseListener) {
+
+		NetworkService.getInstance()
+			.getLocationService()
+			.getCountries()
+			.enqueue(new SimpleCallback<>(
+				countries -> {
+					if (responseListener != null)
+						responseListener.onResponse(countries);
 				},
 				null,
 				unauthorizedErrorListener,
