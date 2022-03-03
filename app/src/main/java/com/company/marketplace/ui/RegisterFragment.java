@@ -1,14 +1,13 @@
 package com.company.marketplace.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +24,9 @@ import com.company.marketplace.network.repositories.UserRepository;
 import com.company.marketplace.ui.adapters.AdapterWithNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
 
@@ -57,46 +55,15 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		regionSpinner.setEnabled(false);
 		citySpinner.setEnabled(false);
 
-		countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0) {
-					regionSpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), new ArrayList<>()));
-					regionSpinner.setEnabled(false);
-				}
-				else {
-					regionSpinner.setAdapter(new AdapterWithNull<>(
-						Objects.requireNonNull(getContext()),
-						((Country)countrySpinner.getSelectedItem()).getRegions())
-					);
-					regionSpinner.setEnabled(true);
-				}
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
+		countrySpinner.setOnItemSelectedListener(new LocationSelectedListener<>(getContext(), regionSpinner,
+				() -> ((Country) countrySpinner.getSelectedItem()).getRegions()
+			)
+		);
+		regionSpinner.setOnItemSelectedListener(new LocationSelectedListener<>(getContext(), citySpinner,
+				() -> ((Region) regionSpinner.getSelectedItem()).getCities()
+			)
+		);
 
-			}
-		});
-		regionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0) {
-					citySpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), new ArrayList<>()));
-					citySpinner.setEnabled(false);
-				}
-				else {
-					citySpinner.setAdapter(new AdapterWithNull<>(
-						Objects.requireNonNull(getContext()),
-						((Region)regionSpinner.getSelectedItem()).getCities())
-					);
-					citySpinner.setEnabled(true);
-				}
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
-			}
-		});
 		new MarketplaceRepositoryFactory().create(getActivity()).getCountries(countries -> {
 			countrySpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), countries));
 			countrySpinner.setEnabled(true);
@@ -120,6 +87,36 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 				ignored -> Navigation.findNavController(v).navigate(R.id.nav_login),
 				() -> Toast.makeText(getContext(), R.string.registration_error, Toast.LENGTH_SHORT).show()
 			);
+		}
+	}
+
+	private static class LocationSelectedListener<T> implements AdapterView.OnItemSelectedListener {
+
+		private final Context context;
+		private final Spinner nextSpinner;
+		private final Supplier<List<T>> nextItemsSupplier;
+
+		public LocationSelectedListener(Context context, Spinner nextSpinner, Supplier<List<T>> nextItemsSupplier) {
+			this.context = context;
+			this.nextSpinner = nextSpinner;
+			this.nextItemsSupplier = nextItemsSupplier;
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			if (position == 0) {
+				nextSpinner.setAdapter(new AdapterWithNull<>(context, new ArrayList<>()));
+				nextSpinner.setEnabled(false);
+			}
+			else {
+				nextSpinner.setAdapter(new AdapterWithNull<>(context, nextItemsSupplier.get()));
+				nextSpinner.setEnabled(true);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+
 		}
 	}
 }
