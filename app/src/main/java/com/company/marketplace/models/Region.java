@@ -1,5 +1,7 @@
 package com.company.marketplace.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Region {
@@ -35,5 +37,11 @@ public class Region {
 	}
 	public void setCities(List<City> cities) {
 		this.cities = cities;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return name;
 	}
 }

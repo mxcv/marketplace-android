@@ -1,5 +1,7 @@
 package com.company.marketplace.models;
 
+import androidx.annotation.NonNull;
+
 public class City {
 
 	private int id;
@@ -25,5 +27,11 @@ public class City {
 	}
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return name;
 	}
 }

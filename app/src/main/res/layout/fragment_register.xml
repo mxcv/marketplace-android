@@ -9,9 +9,9 @@
     tools:context=".ui.LoginFragment">
 
     <LinearLayout
+        android:id="@+id/registerLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,56 +20,125 @@
 
         <EditText
             android:id="@+id/registerName"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_name"
-            android:inputType="textPersonName"
             android:autofillHints="name"
-            style="@style/EditTextStyle"/>
+            android:hint="@string/account_name"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/registerPhoneNumber"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_phone_number"
-            android:inputType="phone"
             android:autofillHints="phone"
-            style="@style/EditTextStyle" />
+            android:hint="@string/account_phone_number"
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/registerEmail"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_email"
-            android:inputType="textEmailAddress"
             android:autofillHints="emailAddress"
-            style="@style/EditTextStyle" />
+            android:hint="@string/account_email"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/registerPassword"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_password"
-            android:inputType="textPassword"
             android:autofillHints="password"
-            style="@style/EditTextStyle" />
+            android:hint="@string/account_password"
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/registerConfirmPassword"
+            style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_confirm_password"
-            android:inputType="textPassword"
             android:autofillHints="password"
-            style="@style/EditTextStyle"/>
+            android:hint="@string/account_confirm_password"
+            android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/register"
+        <TableLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:paddingHorizontal="32dp"
-            android:text="@string/menu_register" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/country" />
+
+                <Spinner
+                    android:id="@+id/addItemCountry"
+                    style="@style/SpinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/country" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/region" />
+
+                <Spinner
+                    android:id="@+id/addItemRegion"
+                    style="@style/SpinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/region" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city" />
+
+                <Spinner
+                    android:id="@+id/addItemCity"
+                    style="@style/SpinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/city" />
+            </TableRow>
+
+        </TableLayout>
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="32dp"
+        android:text="@string/menu_register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerLinearLayout"
+        app:layout_constraintVertical_bias="0.05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

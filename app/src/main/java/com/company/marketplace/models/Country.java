@@ -1,5 +1,7 @@
 package com.company.marketplace.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Country {
@@ -27,5 +29,11 @@ public class Country {
 	}
 	public void setRegions(List<Region> regions) {
 		this.regions = regions;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return name;
 	}
 }
