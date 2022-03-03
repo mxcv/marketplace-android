@@ -20,6 +20,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
+import com.company.marketplace.ui.adapters.AdapterWithNull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -45,12 +46,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				currencySpinner.setAdapter(adapter);
 			});
-		itemRepository.getCategories(categories -> {
-			categories.add(0, new Category(0, getString(R.string.category_not_selected)));
-			ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			categorySpinner.setAdapter(adapter);
-		});
+		itemRepository.getCategories(categories -> categorySpinner.setAdapter(new AdapterWithNull<>(getContext(), categories)));
 		return view;
 	}
 
@@ -65,8 +61,6 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			Toast.makeText(getContext(), R.string.price_range, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Category category = categorySpinner.getSelectedItemPosition() == 0
-			? null : (Category) categorySpinner.getSelectedItem();
 
 		new MarketplaceRepositoryFactory().create(getActivity())
 			.addItem(new Item(
@@ -74,7 +68,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 					descriptionEditText.getText().toString(),
 					price,
 					(Currency) currencySpinner.getSelectedItem(),
-					category
+					(Category) categorySpinner.getSelectedItem()
 				),ignored -> Navigation.findNavController(
 						Objects.requireNonNull(getActivity()),
 						R.id.nav_host_fragment_content_main

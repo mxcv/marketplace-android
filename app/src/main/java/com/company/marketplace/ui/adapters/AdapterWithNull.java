@@ -18,7 +18,7 @@ public class AdapterWithNull<T> extends ArrayAdapter<T> {
 
 	private final Context context;
 
-	public AdapterWithNull(@NonNull Context context, @NonNull List<T> list) {
+	public AdapterWithNull(Context context, List<T> list) {
 
 		super(context, android.R.layout.simple_spinner_item, new ArrayList<>(list));
 		setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

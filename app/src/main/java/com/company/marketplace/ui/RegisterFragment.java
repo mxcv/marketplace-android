@@ -47,9 +47,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		regionSpinner = view.findViewById(R.id.addItemRegion);
 		citySpinner = view.findViewById(R.id.addItemCity);
 
-		countrySpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), new ArrayList<>()));
-		regionSpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), new ArrayList<>()));
-		citySpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), new ArrayList<>()));
+		countrySpinner.setAdapter(new AdapterWithNull<>(getContext(), new ArrayList<>()));
+		regionSpinner.setAdapter(new AdapterWithNull<>(getContext(), new ArrayList<>()));
+		citySpinner.setAdapter(new AdapterWithNull<>(getContext(), new ArrayList<>()));
 
 		countrySpinner.setEnabled(false);
 		regionSpinner.setEnabled(false);
@@ -65,7 +65,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		);
 
 		new MarketplaceRepositoryFactory().create(getActivity()).getCountries(countries -> {
-			countrySpinner.setAdapter(new AdapterWithNull<>(Objects.requireNonNull(getContext()), countries));
+			countrySpinner.setAdapter(new AdapterWithNull<>(getContext(), countries));
 			countrySpinner.setEnabled(true);
 		});
 		return view;
