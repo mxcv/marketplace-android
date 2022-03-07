@@ -2,12 +2,14 @@ package com.company.marketplace.network.repositories;
 
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
+import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
 
+import java.io.File;
 import java.util.List;
 
 public interface ItemRepository {
@@ -18,6 +20,9 @@ public interface ItemRepository {
 	void addItem(Item item,
 				 ResponseListener<Void> responseListener,
 				 BadRequestErrorListener badRequestErrorListener);
+
+	void addImage(ImageOutput image,
+				  ResponseListener<Void> responseListener);
 
 	void removeItem(int id,
 					ResponseListener<Void> responseListener,

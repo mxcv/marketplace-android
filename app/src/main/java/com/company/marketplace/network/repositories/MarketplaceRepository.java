@@ -5,6 +5,7 @@ import android.content.Context;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
+import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
@@ -17,7 +18,12 @@ import com.company.marketplace.network.responses.UnauthorizedErrorListener;
 import com.company.marketplace.network.services.NetworkService;
 import com.company.marketplace.network.services.SimpleCallback;
 
+import java.io.File;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class MarketplaceRepository implements UserRepository, ItemRepository {
 
@@ -193,6 +199,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 
 	@Override
 	public void getCategories(ResponseListener<List<Category>> responseListener) {
+
 		NetworkService.getInstance()
 			.getCategoryService()
 			.getCategories()
@@ -200,6 +207,27 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				categories -> {
 					if (responseListener != null)
 						responseListener.onResponse(categories);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void addImage(ImageOutput image,
+						 ResponseListener<Void> responseListener) {
+
+		RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image.getBytes());
+		MultipartBody.Part body = MultipartBody.Part.createFormData("image", image.getFilename(), requestFile);
+
+		NetworkService.getInstance()
+			.getItemService()
+			.postImage(body)
+			.enqueue(new SimpleCallback<>(
+				ignored -> {
+					if (responseListener != null)
+						responseListener.onResponse(null);
 				},
 				null,
 				unauthorizedErrorListener,

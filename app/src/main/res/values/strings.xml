@@ -40,4 +40,5 @@
     <string name="title_empty">Title cannot be empty</string>
     <string name="price_range">Price cannot be less than 0 or too big</string>
     <string name="add_item_error">Could not add this item</string>
+    <string name="permission_error">Could not get the required permission</string>
 </resources>

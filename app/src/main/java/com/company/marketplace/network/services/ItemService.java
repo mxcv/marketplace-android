@@ -4,11 +4,14 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ItemService {
@@ -21,4 +24,8 @@ public interface ItemService {
 
 	@DELETE("items/{id}")
 	Call<Void> deleteItem(@Path("id") int id);
+
+	@Multipart
+	@POST("items/images")
+	Call<Void> postImage(@Part MultipartBody.Part image);
 }
