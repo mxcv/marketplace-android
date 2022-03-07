@@ -18,7 +18,6 @@ import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.network.repositories.ItemRepository;
-import com.company.marketplace.network.repositories.MarketplaceRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.adapters.AdapterWithNull;
 

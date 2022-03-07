@@ -4,6 +4,8 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,5 +29,5 @@ public interface ItemService {
 
 	@Multipart
 	@POST("items/images")
-	Call<Void> postImage(@Part MultipartBody.Part image);
+	Call<Void> postImages(@Part List<MultipartBody.Part> images);
 }

@@ -21,8 +21,8 @@ public interface ItemRepository {
 				 ResponseListener<Void> responseListener,
 				 BadRequestErrorListener badRequestErrorListener);
 
-	void addImage(ImageOutput image,
-				  ResponseListener<Void> responseListener);
+	void addImages(List<ImageOutput> images,
+				   ResponseListener<Void> responseListener);
 
 	void removeItem(int id,
 					ResponseListener<Void> responseListener,

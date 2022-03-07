@@ -19,6 +19,7 @@ import com.company.marketplace.network.services.NetworkService;
 import com.company.marketplace.network.services.SimpleCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -215,15 +216,18 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void addImage(ImageOutput image,
-						 ResponseListener<Void> responseListener) {
+	public void addImages(List<ImageOutput> images,
+						  ResponseListener<Void> responseListener) {
 
-		RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image.getBytes());
-		MultipartBody.Part body = MultipartBody.Part.createFormData("image", image.getFilename(), requestFile);
+		List<MultipartBody.Part> imageParts = new ArrayList<>(images.size());
+		for (ImageOutput image : images) {
+			RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image.getBytes());
+			imageParts.add(MultipartBody.Part.createFormData("images", image.getFilename(), requestFile));
+		}
 
 		NetworkService.getInstance()
 			.getItemService()
-			.postImage(body)
+			.postImages(imageParts)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)
