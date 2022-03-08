@@ -8,10 +8,26 @@ import com.company.marketplace.account.Account;
 
 public class MarketplaceRepositoryFactory {
 
-	public MarketplaceRepository create(Activity activity) {
-		return new MarketplaceRepository(activity, () -> {
-			create(activity).logout();
-			Account.getInstance().setUser(null, activity);
-		}, () -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
+	private final Activity activity;
+
+	public MarketplaceRepositoryFactory(Activity activity) {
+		this.activity = activity;
+	}
+
+	public UserRepository createUserRepository() {
+		return createMarketplaceRepository();
+	}
+
+	public ItemRepository createItemRepository() {
+		return createMarketplaceRepository();
+	}
+
+	private MarketplaceRepository createMarketplaceRepository() {
+		return new MarketplaceRepository(activity,
+			() -> {
+				createUserRepository().logout();
+				Account.getInstance().setUser(null, activity);
+			},
+			() -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
 	}
 }

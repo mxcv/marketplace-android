@@ -24,7 +24,7 @@ public class MyItemsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_my_items, container, false);
 		myItemsRecyclerView = view.findViewById(R.id.myItemsRecyclerView);
 
-		new MarketplaceRepositoryFactory().create(getActivity()).getMyItems(null, null,
+		new MarketplaceRepositoryFactory(getActivity()).createItemRepository().getMyItems(null, null,
 			pageInput -> {
 				myItemsRecyclerView.setAdapter(new MyItemAdapter(getContext(), pageInput.getItems()));
 			});

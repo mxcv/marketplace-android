@@ -27,6 +27,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	private EditText titleEditText, priceEditText, descriptionEditText;
 	private Spinner currencySpinner, categorySpinner;
+	private ItemRepository itemRepository;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,12 +39,12 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 		currencySpinner = view.findViewById(R.id.addItemCurrency);
 		categorySpinner = view.findViewById(R.id.addItemCategory);
 
-		ItemRepository itemRepository = new MarketplaceRepositoryFactory().create(getActivity());
+		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 		itemRepository.getCurrencies(currencies -> {
-				ArrayAdapter<Currency> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				currencySpinner.setAdapter(adapter);
-			});
+			ArrayAdapter<Currency> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			currencySpinner.setAdapter(adapter);
+		});
 		itemRepository.getCategories(categories -> categorySpinner.setAdapter(new AdapterWithNull<>(getContext(), categories)));
 		return view;
 	}
@@ -60,18 +61,15 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			return;
 		}
 
-		new MarketplaceRepositoryFactory().create(getActivity())
-			.addItem(new Item(
-					titleEditText.getText().toString(),
-					descriptionEditText.getText().toString(),
-					price,
-					(Currency) currencySpinner.getSelectedItem(),
-					(Category) categorySpinner.getSelectedItem()
-				),ignored -> Navigation.findNavController(
-						requireActivity(),
-						R.id.nav_host_fragment_content_main
-					).navigate(R.id.nav_my_items),
-				() -> Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show()
-			);
+		itemRepository.addItem(new Item(
+			titleEditText.getText().toString(),
+			descriptionEditText.getText().toString(),
+			price,
+			(Currency) currencySpinner.getSelectedItem(),
+			(Category) categorySpinner.getSelectedItem()
+		),
+			ignored -> Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+				.navigate(R.id.nav_my_items),
+		() -> Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show());
 	}
 }

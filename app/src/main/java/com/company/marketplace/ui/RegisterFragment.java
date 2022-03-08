@@ -31,6 +31,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 	private EditText nameEditText, phoneNumberEditText, emailEditText, passwordEditText, confirmPasswordEditText;
 	private Spinner countrySpinner, regionSpinner, citySpinner;
+	private UserRepository userRepository;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,14 +57,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 		countrySpinner.setOnItemSelectedListener(new LocationSelectedListener<>(getContext(), regionSpinner,
 				() -> ((Country) countrySpinner.getSelectedItem()).getRegions()
-			)
-		);
+			));
 		regionSpinner.setOnItemSelectedListener(new LocationSelectedListener<>(getContext(), citySpinner,
 				() -> ((Region) regionSpinner.getSelectedItem()).getCities()
-			)
-		);
+			));
 
-		new MarketplaceRepositoryFactory().create(getActivity()).getCountries(countries -> {
+		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
+		userRepository.getCountries(countries -> {
 			countrySpinner.setAdapter(new AdapterWithNull<>(getContext(), countries));
 			countrySpinner.setEnabled(true);
 		});
@@ -75,7 +75,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString()))
 			Toast.makeText(getContext(), R.string.passwords_do_not_match, Toast.LENGTH_SHORT).show();
 		else {
-			UserRepository userRepository = new MarketplaceRepositoryFactory().create(getActivity());
 			userRepository.createUser(new User(
 					emailEditText.getText().toString(),
 					passwordEditText.getText().toString(),

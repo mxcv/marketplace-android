@@ -12,7 +12,7 @@ public class LogoutFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new MarketplaceRepositoryFactory().create(getActivity()).logout();
+		new MarketplaceRepositoryFactory(getActivity()).createUserRepository().logout();
 		Account.getInstance().setUser(null, getActivity());
 	}
 }
