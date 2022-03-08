@@ -75,7 +75,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString()))
 			Toast.makeText(getContext(), R.string.passwords_do_not_match, Toast.LENGTH_SHORT).show();
 		else {
-			userRepository.createUser(new User(
+			userRepository.addUser(new User(
 					emailEditText.getText().toString(),
 					passwordEditText.getText().toString(),
 					phoneNumberEditText.getText().toString(),

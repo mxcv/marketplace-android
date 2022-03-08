@@ -88,9 +88,9 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void createUser(User user,
-						   ResponseListener<Void> responseListener,
-						   BadRequestErrorListener badRequestErrorListener) {
+	public void addUser(User user,
+						ResponseListener<Void> responseListener,
+						BadRequestErrorListener badRequestErrorListener) {
 
 		NetworkService.getInstance()
 			.getUserService()
@@ -116,6 +116,24 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				countries -> {
 					if (responseListener != null)
 						responseListener.onResponse(countries);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void setUserImage(ImageOutput image,
+							 ResponseListener<Void> responseListener) {
+
+		NetworkService.getInstance()
+			.getImageService()
+			.putUserImage(createImageForm("image", image))
+			.enqueue(new SimpleCallback<>(
+				ignored -> {
+					if (responseListener != null)
+						responseListener.onResponse(null);
 				},
 				null,
 				unauthorizedErrorListener,
@@ -218,14 +236,12 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 							  ResponseListener<Void> responseListener) {
 
 		List<MultipartBody.Part> imageParts = new ArrayList<>(images.size());
-		for (ImageOutput image : images) {
-			RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), image.getBytes());
-			imageParts.add(MultipartBody.Part.createFormData("images", image.getFilename(), requestFile));
-		}
+		for (ImageOutput image : images)
+			imageParts.add(createImageForm("images", image));
 
 		NetworkService.getInstance()
 			.getImageService()
-			.postImages(itemId, imageParts)
+			.postItemImages(itemId, imageParts)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)
@@ -234,6 +250,16 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				null,
 				unauthorizedErrorListener,
 				networkErrorListener
+			));
+	}
+
+	private MultipartBody.Part createImageForm(String name, ImageOutput image) {
+		return MultipartBody.Part.createFormData(
+			name,
+			image.getFilename(),
+			RequestBody.create(
+				MediaType.parse("multipart/form-data"),
+				image.getBytes()
 			));
 	}
 }
