@@ -2,7 +2,7 @@ package com.company.marketplace.models;
 
 import java.util.List;
 
-public class PageInput {
+public class Page {
 
 	private List<Item> items;
 	private int leftCount;

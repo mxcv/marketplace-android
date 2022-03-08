@@ -55,7 +55,7 @@ public class NetworkService {
 			}).build();
 
 		retrofit = new Retrofit.Builder()
-			.baseUrl(Objects.requireNonNull(getBaseUrl(appContext)))
+			.baseUrl(Objects.requireNonNull(getBaseUrl(appContext)) + "/api/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.client(client)
 			.build();
@@ -88,6 +88,9 @@ public class NetworkService {
 	public CategoryService getCategoryService() {
 		return retrofit.create(CategoryService.class);
 	}
+	public ImageService getImageService() {
+		return retrofit.create(ImageService.class);
+	}
 
 	private String getBaseUrl(Context context) {
 		try {
@@ -95,7 +98,7 @@ public class NetworkService {
 				.getPackageManager()
 				.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
 				.metaData
-				.get("api_url")
+				.get("base_url")
 				.toString();
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();

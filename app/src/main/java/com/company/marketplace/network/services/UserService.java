@@ -5,13 +5,13 @@ import com.company.marketplace.models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.PUT;
+import retrofit2.http.POST;
 
 public interface UserService {
 
 	@GET("users")
 	Call<User> getUser();
 
-	@PUT("users")
-	Call<Void> createUser(@Body User user);
+	@POST("users")
+	Call<Void> postUser(@Body User user);
 }

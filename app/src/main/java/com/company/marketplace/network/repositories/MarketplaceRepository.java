@@ -7,8 +7,7 @@ import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
-import com.company.marketplace.models.PageInput;
-import com.company.marketplace.models.PageOutput;
+import com.company.marketplace.models.Page;
 import com.company.marketplace.models.User;
 import com.company.marketplace.models.JwtType;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
@@ -95,7 +94,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 
 		NetworkService.getInstance()
 			.getUserService()
-			.createUser(user)
+			.postUser(user)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)
@@ -125,16 +124,16 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void getMyItems(PageOutput pageOutput,
-						   ResponseListener<PageInput> responseListener) {
+	public void getMyItems(Integer skipCount, Integer takeCount,
+						   ResponseListener<Page> responseListener) {
 
 		NetworkService.getInstance()
 			.getItemService()
-			.getMyItems(pageOutput)
+			.getMyItems(skipCount, takeCount)
 			.enqueue(new SimpleCallback<>(
-				pageInput -> {
+				page -> {
 					if (responseListener != null)
-						responseListener.onResponse(pageInput);
+						responseListener.onResponse(page);
 				},
 				null,
 				unauthorizedErrorListener,
@@ -144,16 +143,16 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 
 	@Override
 	public void addItem(Item item,
-						ResponseListener<Void> responseListener,
+						ResponseListener<Integer> responseListener,
 						BadRequestErrorListener badRequestErrorListener) {
 
 		NetworkService.getInstance()
 			.getItemService()
-			.putItem(item)
+			.postItem(item)
 			.enqueue(new SimpleCallback<>(
-				ignored -> {
+				id -> {
 					if (responseListener != null)
-						responseListener.onResponse(null);
+						responseListener.onResponse(id);
 				},
 				badRequestErrorListener,
 				unauthorizedErrorListener,
@@ -215,8 +214,8 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void addImages(List<ImageOutput> images,
-						  ResponseListener<Void> responseListener) {
+	public void addItemImages(int itemId, List<ImageOutput> images,
+							  ResponseListener<Void> responseListener) {
 
 		List<MultipartBody.Part> imageParts = new ArrayList<>(images.size());
 		for (ImageOutput image : images) {
@@ -225,8 +224,8 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 		}
 
 		NetworkService.getInstance()
-			.getItemService()
-			.postImages(imageParts)
+			.getImageService()
+			.postImages(itemId, imageParts)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)

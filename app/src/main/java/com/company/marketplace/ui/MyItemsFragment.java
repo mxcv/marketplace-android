@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.company.marketplace.R;
-import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.adapters.MyItemAdapter;
 
@@ -25,7 +24,7 @@ public class MyItemsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_my_items, container, false);
 		myItemsRecyclerView = view.findViewById(R.id.myItemsRecyclerView);
 
-		new MarketplaceRepositoryFactory().create(getActivity()).getMyItems(new PageOutput(0, 100),
+		new MarketplaceRepositoryFactory().create(getActivity()).getMyItems(null, null,
 			pageInput -> {
 				myItemsRecyclerView.setAdapter(new MyItemAdapter(getContext(), pageInput.getItems()));
 			});
