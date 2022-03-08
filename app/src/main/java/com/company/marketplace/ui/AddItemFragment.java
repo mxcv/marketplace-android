@@ -22,7 +22,6 @@ import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory
 import com.company.marketplace.ui.adapters.AdapterWithNull;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class AddItemFragment extends Fragment implements View.OnClickListener {
 
@@ -69,7 +68,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 					(Currency) currencySpinner.getSelectedItem(),
 					(Category) categorySpinner.getSelectedItem()
 				),ignored -> Navigation.findNavController(
-						Objects.requireNonNull(getActivity()),
+						requireActivity(),
 						R.id.nav_host_fragment_content_main
 					).navigate(R.id.nav_my_items),
 				() -> Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show()

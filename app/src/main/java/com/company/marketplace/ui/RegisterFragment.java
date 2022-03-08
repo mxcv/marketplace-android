@@ -25,7 +25,6 @@ import com.company.marketplace.ui.adapters.AdapterWithNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {

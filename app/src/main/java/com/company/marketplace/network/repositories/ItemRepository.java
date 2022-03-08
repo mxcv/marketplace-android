@@ -9,7 +9,6 @@ import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
 
-import java.io.File;
 import java.util.List;
 
 public interface ItemRepository {

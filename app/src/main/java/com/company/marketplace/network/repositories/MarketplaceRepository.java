@@ -18,7 +18,6 @@ import com.company.marketplace.network.responses.UnauthorizedErrorListener;
 import com.company.marketplace.network.services.NetworkService;
 import com.company.marketplace.network.services.SimpleCallback;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

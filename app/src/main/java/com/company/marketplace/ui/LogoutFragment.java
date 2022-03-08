@@ -4,11 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 

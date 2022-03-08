@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.company.marketplace.R;
-import com.company.marketplace.models.PageInput;
 import com.company.marketplace.models.PageOutput;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.network.responses.ResponseListener;
 import com.company.marketplace.ui.adapters.MyItemAdapter;
 
 public class MyItemsFragment extends Fragment {
