@@ -1,6 +1,7 @@
 package com.company.marketplace.models;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Item {
 
@@ -10,9 +11,9 @@ public class Item {
 	private Currency currency;
 	private Category category;
 	private User user;
+	private List<ImageInput> images;
 
 	public Item() {
-
 	}
 	public Item(String title, String description, BigDecimal price, Currency currency, Category category) {
 		this.title = title;
@@ -69,5 +70,12 @@ public class Item {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<ImageInput> getImages() {
+		return images;
+	}
+	public void setImages(List<ImageInput> images) {
+		this.images = images;
 	}
 }

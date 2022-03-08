@@ -7,9 +7,9 @@ public class User {
 	private String phoneNumber;
 	private String name;
 	private City city;
+	private ImageInput image;
 
 	public User() {
-
 	}
 	public User(String email, String password) {
 		this.email = email;
@@ -56,5 +56,12 @@ public class User {
 	}
 	public void setCity(City city) {
 		this.city = city;
+	}
+
+	public ImageInput getImage() {
+		return image;
+	}
+	public void setImage(ImageInput image) {
+		this.image = image;
 	}
 }
