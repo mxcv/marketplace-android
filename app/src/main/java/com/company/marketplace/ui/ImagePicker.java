@@ -31,10 +31,14 @@ public class ImagePicker {
 		Context context = fragment.getContext();
 		contentPickerLauncher = fragment.registerForActivityResult(new ActivityResultContracts.GetMultipleContents(),
 			uris -> {
-				if (maxCount != null && uris.size() > maxCount)
+				if (uris.size() == 0)
+					return;
+				if (maxCount != null && uris.size() > maxCount) {
 					uris.subList(maxCount, uris.size()).clear();
-				List<ImageOutput> images = new ArrayList<>(uris.size());
+					Toast.makeText(context, Objects.requireNonNull(context).getString(R.string.max_images_error, maxCount), Toast.LENGTH_SHORT).show();
+				}
 
+				List<ImageOutput> images = new ArrayList<>(uris.size());
 				for (Uri uri : uris) {
 					try (InputStream stream = Objects.requireNonNull(context).getContentResolver().openInputStream(uri)) {
 						byte[] bytes = new byte[stream.available()];
