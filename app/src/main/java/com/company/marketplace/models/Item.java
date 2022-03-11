@@ -1,6 +1,18 @@
 package com.company.marketplace.models;
 
+import android.content.Context;
+
+import com.company.marketplace.R;
+
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Date;
 import java.util.List;
 
 public class Item {
@@ -8,6 +20,7 @@ public class Item {
 	private int id;
 	private String title, description;
 	private BigDecimal price;
+	private Date created;
 	private Currency currency;
 	private Category category;
 	private User user;
@@ -51,6 +64,13 @@ public class Item {
 		this.price = price;
 	}
 
+	public Date getCreated() {
+		return created;
+	}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
 	public Currency getCurrency() {
 		return currency;
 	}
@@ -77,5 +97,31 @@ public class Item {
 	}
 	public void setImages(List<ImageInput> images) {
 		this.images = images;
+	}
+
+	public String getPriceFormat(Context context) {
+		if (price == null)
+			return "";
+		if (price.compareTo(BigDecimal.ZERO) == 0)
+			return context.getString(R.string.free);
+		return NumberFormat.getCurrencyInstance(currency.getLocale()).format(price);
+	}
+	public String getCreatedDateFormat(Context context) {
+		ZonedDateTime itemCreatedZonedDateTime = created.toInstant().atZone(ZoneId.systemDefault());
+		LocalDate itemCreatedDate = itemCreatedZonedDateTime.toLocalDate();
+		LocalTime itemCreatedTime = itemCreatedZonedDateTime.toLocalTime();
+		LocalDate currentDate = LocalDate.now();
+
+		String itemCreatedDateSting;
+		if (currentDate.isEqual(itemCreatedDate))
+			itemCreatedDateSting = context.getString(R.string.today);
+		else if (currentDate.minusDays(1).isEqual(itemCreatedDate))
+			itemCreatedDateSting = context.getString(R.string.yesterday);
+		else
+			itemCreatedDateSting = itemCreatedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+
+		return String.format("%s %s",
+			itemCreatedDateSting,
+			itemCreatedTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
 	}
 }

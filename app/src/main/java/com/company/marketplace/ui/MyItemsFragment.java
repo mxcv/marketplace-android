@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.company.marketplace.R;
+import com.company.marketplace.account.Account;
+import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.adapters.MyItemAdapter;
 
@@ -25,8 +27,10 @@ public class MyItemsFragment extends Fragment {
 		myItemsRecyclerView = view.findViewById(R.id.myItemsRecyclerView);
 
 		new MarketplaceRepositoryFactory(getActivity()).createItemRepository().getMyItems(null, null,
-			pageInput -> {
-				myItemsRecyclerView.setAdapter(new MyItemAdapter(getContext(), pageInput.getItems()));
+			page -> {
+				User user = Account.getInstance().getUser();
+				page.getItems().forEach(item -> item.setUser(user));
+				myItemsRecyclerView.setAdapter(new MyItemAdapter(getContext(), page.getItems()));
 			});
 
 		return view;

@@ -25,6 +25,7 @@
     <string name="region">Region</string>
     <string name="city">City</string>
     <string name="add_photo">Add a photo</string>
+    <string name="photo">Photo</string>
     <string name="not_selected">(not selected)</string>
 
     <string name="connection_error">Could not connect to the server. Check your network connection and try again later.</string>
@@ -43,4 +44,7 @@
     <string name="add_item_error">Could not add this item</string>
     <string name="permission_error">Could not get the required permission</string>
     <string name="max_images_error">The maximum number of images is %1$d</string>
+    <string name="free">Free</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 </resources>
