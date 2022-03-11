@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.marketplace.R;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.network.services.NetworkService;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class MyItemAdapter extends RecyclerView.Adapter<MyItemAdapter.ViewHolder
 
 		if (item.getImages().size() > 0)
 			Picasso.get()
-				.load(getBaseUrl(context) + item.getImages().get(0).getPath())
+				.load(NetworkService.get().getBaseUrl() + item.getImages().get(0).getPath())
 				.placeholder(R.drawable.ic_hourglass_empty)
 				.into(holder.imageView);
 		else
@@ -62,20 +63,6 @@ public class MyItemAdapter extends RecyclerView.Adapter<MyItemAdapter.ViewHolder
 	@Override
 	public int getItemCount() {
 		return items.size();
-	}
-
-	private String getBaseUrl(Context context) {
-		try {
-			return context
-				.getPackageManager()
-				.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
-				.metaData
-				.get("base_url")
-				.toString();
-		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {

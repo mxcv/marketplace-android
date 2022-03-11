@@ -30,7 +30,7 @@ public class JwtRepository {
 			instance = new JwtRepository(context);
 	}
 
-	public static synchronized JwtRepository getInstance() {
+	public static synchronized JwtRepository get() {
 		return instance;
 	}
 

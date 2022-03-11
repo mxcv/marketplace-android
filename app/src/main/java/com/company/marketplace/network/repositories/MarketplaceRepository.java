@@ -1,15 +1,13 @@
 package com.company.marketplace.network.repositories;
 
-import android.content.Context;
-
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.models.JwtType;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.models.User;
-import com.company.marketplace.models.JwtType;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.NetworkErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
@@ -29,14 +27,11 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
 
-	public MarketplaceRepository(Context context,
-								 UnauthorizedErrorListener unauthorizedErrorListener,
+	public MarketplaceRepository(UnauthorizedErrorListener unauthorizedErrorListener,
 								 NetworkErrorListener networkErrorListener) {
 
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
 		this.networkErrorListener = networkErrorListener;
-		JwtRepository.initialize(context);
-		NetworkService.initialize(context);
 	}
 
 	@Override
@@ -44,12 +39,12 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 					  ResponseListener<Void> responseListener,
 					  BadRequestErrorListener badRequestErrorListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getTokenService()
 			.access(new User(email, password))
 			.enqueue(new SimpleCallback<>(
 				jwt -> {
-					JwtRepository.getInstance().setTokens(jwt);
+					JwtRepository.get().setTokens(jwt);
 					if (responseListener != null)
 						responseListener.onResponse(null);
 				},
@@ -61,19 +56,19 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 
 	@Override
 	public void logout() {
-		JwtRepository.getInstance().setTokens(null);
+		JwtRepository.get().setTokens(null);
 	}
 
 	@Override
 	public void getUser(ResponseListener<User> responseListener) {
 
-		if (JwtRepository.getInstance().getToken(JwtType.ACCESS) == null) {
+		if (JwtRepository.get().getToken(JwtType.ACCESS) == null) {
 			if (unauthorizedErrorListener != null)
 				unauthorizedErrorListener.onUnauthorizedError();
 			return;
 		}
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getUserService()
 			.getUser()
 			.enqueue(new SimpleCallback<>(
@@ -92,7 +87,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 						ResponseListener<Void> responseListener,
 						BadRequestErrorListener badRequestErrorListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getUserService()
 			.postUser(user)
 			.enqueue(new SimpleCallback<>(
@@ -109,7 +104,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	@Override
 	public void getCountries(ResponseListener<List<Country>> responseListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getLocationService()
 			.getCountries()
 			.enqueue(new SimpleCallback<>(
@@ -127,7 +122,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	public void setUserImage(ImageOutput image,
 							 ResponseListener<Void> responseListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getImageService()
 			.putUserImage(createImageForm("image", image))
 			.enqueue(new SimpleCallback<>(
@@ -145,7 +140,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	public void getMyItems(Integer skipCount, Integer takeCount,
 						   ResponseListener<Page> responseListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getItemService()
 			.getMyItems(skipCount, takeCount)
 			.enqueue(new SimpleCallback<>(
@@ -164,7 +159,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 						ResponseListener<Integer> responseListener,
 						BadRequestErrorListener badRequestErrorListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getItemService()
 			.postItem(item)
 			.enqueue(new SimpleCallback<>(
@@ -183,7 +178,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 						   ResponseListener<Void> responseListener,
 						   BadRequestErrorListener badRequestErrorListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getItemService()
 			.deleteItem(id)
 			.enqueue(new SimpleCallback<>(
@@ -200,7 +195,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	@Override
 	public void getCurrencies(ResponseListener<List<Currency>> responseListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getCurrencyService()
 			.getCurrencies()
 			.enqueue(new SimpleCallback<>(
@@ -217,7 +212,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	@Override
 	public void getCategories(ResponseListener<List<Category>> responseListener) {
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getCategoryService()
 			.getCategories()
 			.enqueue(new SimpleCallback<>(
@@ -239,7 +234,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 		for (ImageOutput image : images)
 			imageParts.add(createImageForm("images", image));
 
-		NetworkService.getInstance()
+		NetworkService.get()
 			.getImageService()
 			.postItemImages(itemId, imageParts)
 			.enqueue(new SimpleCallback<>(

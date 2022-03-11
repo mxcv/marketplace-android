@@ -23,11 +23,10 @@ public class MarketplaceRepositoryFactory {
 	}
 
 	private MarketplaceRepository createMarketplaceRepository() {
-		return new MarketplaceRepository(activity,
-			() -> {
-				createUserRepository().logout();
-				Account.getInstance().setUser(null, activity);
-			},
-			() -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
+		return new MarketplaceRepository(() -> {
+			createUserRepository().logout();
+			Account.getInstance().setUser(null, activity);
+		},
+		() -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
 	}
 }

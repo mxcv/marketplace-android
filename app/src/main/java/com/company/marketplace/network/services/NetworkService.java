@@ -23,29 +23,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkService {
 
 	private static NetworkService instance;
+	private final Context context;
 	private final Retrofit retrofit;
 
 	private NetworkService(Context context) {
-		Context appContext = context.getApplicationContext();
-		JwtRepository.initialize(appContext);
-
+		this.context = context.getApplicationContext();
 		OkHttpClient client = getUnsafeOkHttpClient()
 			.addInterceptor(chain -> {
-				String token = JwtRepository.getInstance().getToken(JwtType.ACCESS);
+				String token = JwtRepository.get().getToken(JwtType.ACCESS);
 				return chain.proceed(token == null ? chain.request() : chain.request()
 					.newBuilder()
-					.addHeader("Accept-Language", appContext.getResources().getConfiguration().getLocales().toLanguageTags())
+					.addHeader("Accept-Language", this.context.getResources().getConfiguration().getLocales().toLanguageTags())
 					.addHeader("Authorization", getAuthHeader(token))
 					.build()
 				);
 			}).authenticator((route, response) -> {
-				Response<AccessRefreshJwt> refreshResponse = NetworkService.getInstance()
+				Response<AccessRefreshJwt> refreshResponse = NetworkService.get()
 					.getTokenService()
-					.refresh(JwtRepository.getInstance().getTokens())
+					.refresh(JwtRepository.get().getTokens())
 					.execute();
 				if (refreshResponse.isSuccessful()) {
 					AccessRefreshJwt jwt = refreshResponse.body();
-					JwtRepository.getInstance().setTokens(jwt);
+					JwtRepository.get().setTokens(jwt);
 					return response.request()
 						.newBuilder()
 						.header("Authorization", getAuthHeader(Objects.requireNonNull(jwt).getAccessToken()))
@@ -55,7 +54,7 @@ public class NetworkService {
 			}).build();
 
 		retrofit = new Retrofit.Builder()
-			.baseUrl(Objects.requireNonNull(getBaseUrl(appContext)) + "/api/")
+			.baseUrl(Objects.requireNonNull(getBaseUrl()) + "/api/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.client(client)
 			.build();
@@ -66,7 +65,7 @@ public class NetworkService {
 			instance = new NetworkService(context);
 	}
 
-	public static synchronized NetworkService getInstance() {
+	public static synchronized NetworkService get() {
 		return instance;
 	}
 
@@ -92,7 +91,7 @@ public class NetworkService {
 		return retrofit.create(ImageService.class);
 	}
 
-	private String getBaseUrl(Context context) {
+	public String getBaseUrl() {
 		try {
 			return context
 				.getPackageManager()
