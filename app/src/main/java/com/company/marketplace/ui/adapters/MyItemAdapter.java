@@ -1,8 +1,6 @@
 package com.company.marketplace.ui.adapters;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

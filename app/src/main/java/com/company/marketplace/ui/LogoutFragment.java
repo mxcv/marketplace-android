@@ -13,6 +13,6 @@ public class LogoutFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		new MarketplaceRepositoryFactory(getActivity()).createUserRepository().logout();
-		Account.getInstance().setUser(null, getActivity());
+		Account.get().setUser(null, getActivity());
 	}
 }

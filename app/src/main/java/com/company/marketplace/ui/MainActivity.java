@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		NetworkService.initialize(this);
 		JwtRepository.initialize(this);
 
-		Account.getInstance().addUserChangedListener(this);
+		Account.get().addUserChangedListener(this);
 		new MarketplaceRepositoryFactory(this).createUserRepository().getUser(user ->
-			Account.getInstance().setUser(user, this)
+			Account.get().setUser(user, this)
 		);
 	}
 

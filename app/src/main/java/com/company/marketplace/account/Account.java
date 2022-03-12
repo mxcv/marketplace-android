@@ -18,7 +18,7 @@ public class Account {
 		user = null;
 	}
 
-	public static synchronized Account getInstance(){
+	public static synchronized Account get(){
 		if (instance == null)
 			instance = new Account();
 		return instance;

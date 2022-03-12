@@ -47,4 +47,8 @@
     <string name="free">Free</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="remove_item_title">Remove item</string>
+    <string name="remove_item_message">Are you sure you want to remove this item?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
