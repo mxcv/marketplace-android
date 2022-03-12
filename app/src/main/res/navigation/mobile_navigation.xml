@@ -8,35 +8,35 @@
     <fragment
         android:id="@+id/nav_items"
         android:name="com.company.marketplace.ui.ItemsFragment"
-        android:label="@string/menu_items"
+        android:label="@string/items"
         tools:layout="@layout/fragment_items" />
 
     <fragment
         android:id="@+id/nav_my_items"
         android:name="com.company.marketplace.ui.MyItemsFragment"
-        android:label="@string/menu_my_items"
+        android:label="@string/my_items"
         tools:layout="@layout/fragment_my_items" />
 
     <fragment
         android:id="@+id/nav_add_item"
         android:name="com.company.marketplace.ui.AddItemFragment"
-        android:label="@string/menu_add_item"
+        android:label="@string/add_item"
         tools:layout="@layout/fragment_add_item" />
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.company.marketplace.ui.LoginFragment"
-        android:label="@string/menu_login"
+        android:label="@string/login"
         tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/nav_register"
         android:name="com.company.marketplace.ui.RegisterFragment"
-        android:label="@string/menu_register"
+        android:label="@string/register"
         tools:layout="@layout/fragment_register" />
 
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.company.marketplace.ui.LogoutFragment"
-        android:label="@string/menu_logout" />
+        android:label="@string/logout" />
 </navigation>

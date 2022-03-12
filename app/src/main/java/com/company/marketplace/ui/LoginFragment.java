@@ -33,7 +33,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 		UserRepository userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
 		userRepository.login(emailEditText.getText().toString(), passwordEditText.getText().toString(),
 			ignored -> userRepository.getUser(user -> Account.get().setUser(user, getActivity())),
-			() -> Toast.makeText(getContext(), R.string.invalid_email_or_password, Toast.LENGTH_SHORT).show()
+			() -> Toast.makeText(getContext(), R.string.login_error, Toast.LENGTH_SHORT).show()
 		);
 	}
 }
