@@ -137,12 +137,14 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void getMyItems(Integer skipCount, Integer takeCount,
-						   ResponseListener<Page> responseListener) {
+	public void getItems(Integer userId,
+						 Integer skipCount,
+						 Integer takeCount,
+						 ResponseListener<Page> responseListener) {
 
 		NetworkService.get()
 			.getItemService()
-			.getMyItems(skipCount, takeCount)
+			.getItems(userId, skipCount, takeCount)
 			.enqueue(new SimpleCallback<>(
 				page -> {
 					if (responseListener != null)

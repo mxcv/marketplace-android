@@ -12,8 +12,10 @@ import java.util.List;
 
 public interface ItemRepository {
 
-	void getMyItems(Integer skipCount, Integer takeCount,
-					ResponseListener<Page> responseListener);
+	void getItems(Integer userId,
+				  Integer skipCount,
+				  Integer takeCount,
+				  ResponseListener<Page> responseListener);
 
 	void addItem(Item item,
 				 ResponseListener<Integer> responseListener,

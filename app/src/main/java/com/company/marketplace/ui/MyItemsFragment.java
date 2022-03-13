@@ -66,7 +66,7 @@ public class MyItemsFragment extends Fragment {
 				}
 			});
 
-		itemRepository.getMyItems(null, null,
+		itemRepository.getItems(Account.get().getUser().getId(), null, null,
 			page -> {
 				items = page.getItems();
 				User user = Account.get().getUser();

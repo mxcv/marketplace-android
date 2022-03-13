@@ -2,6 +2,7 @@ package com.company.marketplace.models;
 
 public class User {
 
+	private int id;
 	private String email;
 	private String password;
 	private String phoneNumber;
@@ -21,6 +22,13 @@ public class User {
 		this.phoneNumber = phoneNumber;
 		this.name = name;
 		this.city = city;
+	}
+
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getEmail() {

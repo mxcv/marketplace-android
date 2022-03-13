@@ -13,8 +13,10 @@ import retrofit2.http.Query;
 
 public interface ItemService {
 
-	@GET("items/my")
-	Call<Page> getMyItems(@Query("skipCount") Integer skipCount, @Query("takeCount") Integer takeCount);
+	@GET("items")
+	Call<Page> getItems(@Query("userId") Integer userId,
+						@Query("skipCount") Integer skipCount,
+						@Query("takeCount") Integer takeCount);
 
 	@POST("items")
 	Call<Integer> postItem(@Body Item item);
