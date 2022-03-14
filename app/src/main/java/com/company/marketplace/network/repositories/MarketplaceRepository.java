@@ -1,5 +1,7 @@
 package com.company.marketplace.network.repositories;
 
+import android.content.Context;
+
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
@@ -27,11 +29,15 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
 
-	public MarketplaceRepository(UnauthorizedErrorListener unauthorizedErrorListener,
+	public MarketplaceRepository(Context context,
+								 UnauthorizedErrorListener unauthorizedErrorListener,
 								 NetworkErrorListener networkErrorListener) {
 
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
 		this.networkErrorListener = networkErrorListener;
+
+		NetworkService.initialize(context);
+		JwtRepository.initialize(context);
 	}
 
 	@Override

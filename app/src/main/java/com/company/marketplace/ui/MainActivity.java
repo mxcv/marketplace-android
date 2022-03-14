@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 		NavigationUI.setupWithNavController(navigationView, navController);
 
-		NetworkService.initialize(this);
-		JwtRepository.initialize(this);
-
 		Account.get().addUserChangedListener(this);
 		new MarketplaceRepositoryFactory(this).createUserRepository().getUser(user ->
 			Account.get().setUser(user, this)
