@@ -53,12 +53,15 @@
                 android:id="@+id/displayOptionsQuery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/query">
+                android:hint="@string/query"
+                app:counterEnabled="true"
+                app:counterMaxLength="50">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:maxLength="50" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

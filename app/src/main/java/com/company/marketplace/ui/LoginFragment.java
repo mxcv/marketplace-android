@@ -23,7 +23,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_login, container, false);
-		view.findViewById(R.id.login).setOnClickListener(this);
+		view.findViewById(R.id.loginLogin).setOnClickListener(this);
 		emailView = ((TextInputLayout)view.findViewById(R.id.loginEmail)).getEditText();
 		passwordView = ((TextInputLayout)view.findViewById(R.id.loginPassword)).getEditText();
 		return view;
