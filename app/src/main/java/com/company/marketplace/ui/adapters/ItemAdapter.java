@@ -17,13 +17,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MyItemAdapter extends RecyclerView.Adapter<MyItemAdapter.ViewHolder>{
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
 	private final Context context;
 	private final LayoutInflater inflater;
 	private final List<Item> items;
 
-	public MyItemAdapter(Context context, List<Item> items) {
+	public ItemAdapter(Context context, List<Item> items) {
 		this.context = context;
 		this.items = items;
 		this.inflater = LayoutInflater.from(context);
@@ -31,14 +31,14 @@ public class MyItemAdapter extends RecyclerView.Adapter<MyItemAdapter.ViewHolder
 
 	@NonNull
 	@Override
-	public MyItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 		View view = inflater.inflate(R.layout.list_item, parent, false);
 		return new ViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(MyItemAdapter.ViewHolder holder, int position) {
+	public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
 		Item item = items.get(position);
 		holder.titleTextView.setText(item.getTitle());
 		holder.priceTextView.setText(item.getPriceFormat(context));

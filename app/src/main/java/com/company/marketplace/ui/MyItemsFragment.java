@@ -18,21 +18,21 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.ui.adapters.MyItemAdapter;
+import com.company.marketplace.ui.adapters.ItemAdapter;
 
 import java.util.List;
 import java.util.Objects;
 
 public class MyItemsFragment extends Fragment {
 
-	private RecyclerView myItemsRecyclerView;
+	private RecyclerView myItemsView;
 	private List<Item> items;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.fragment_my_items, container, false);
-		myItemsRecyclerView = view.findViewById(R.id.myItemsRecyclerView);
+		myItemsView = view.findViewById(R.id.myItemsRecyclerView);
 
 		ItemRepository itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 
@@ -55,11 +55,11 @@ public class MyItemsFragment extends Fragment {
 					alertBuilder.setPositiveButton(R.string.yes, (dialog, which) -> {
 						itemRepository.removeItem(items.get(position).getId(), null, null);
 						items.remove(position);
-						Objects.requireNonNull(myItemsRecyclerView.getAdapter()).notifyItemRemoved(position);
+						Objects.requireNonNull(myItemsView.getAdapter()).notifyItemRemoved(position);
 						dialog.dismiss();
 					});
 					alertBuilder.setNegativeButton(R.string.no, (dialog, which) -> {
-						Objects.requireNonNull(myItemsRecyclerView.getAdapter()).notifyItemChanged(position);
+						Objects.requireNonNull(myItemsView.getAdapter()).notifyItemChanged(position);
 						dialog.dismiss();
 					});
 					alertBuilder.create().show();
@@ -72,8 +72,8 @@ public class MyItemsFragment extends Fragment {
 				User user = Account.get().getUser();
 				for (Item item : items)
 					item.setUser(user);
-				myItemsRecyclerView.setAdapter(new MyItemAdapter(getContext(), items));
-				itemTouchHelper.attachToRecyclerView(myItemsRecyclerView);
+				myItemsView.setAdapter(new ItemAdapter(getContext(), items));
+				itemTouchHelper.attachToRecyclerView(myItemsView);
 			});
 
 		return view;
