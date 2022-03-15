@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,22 +23,25 @@ import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.ui.adapters.AdapterWithNull;
 import com.company.marketplace.ui.tools.ImagePicker;
+import com.company.marketplace.ui.tools.ObjectSelector;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public class AddItemFragment extends Fragment implements View.OnClickListener {
 
-	private EditText titleEditText, priceEditText, descriptionEditText;
-	private LinearLayout imageLinearLayout;
-	private Spinner currencySpinner, categorySpinner;
-	private MaterialButton addPhotoButton;
-	private ItemRepository itemRepository;
+	private EditText titleView, priceView, descriptionView;
+	private LinearLayout imageView;
+	private AutoCompleteTextView currencyView, categoryView;
+	private MaterialButton addPhotoView;
 	private ImagePicker imagePicker;
+	private ItemRepository itemRepository;
 	private List<ImageOutput> images;
+	private ObjectSelector<Currency> currencySelector;
+	private ObjectSelector<Category> categorySelector;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,9 +55,9 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 					imageView.setPadding(5, 0, 5, 0);
 					imageView.setImageBitmap(BitmapFactory.decodeByteArray(image.getBytes(), 0, image.getBytes().length));
 					imageView.setAdjustViewBounds(true);
-					imageLinearLayout.addView(imageView);
+					this.imageView.addView(imageView);
 				}
-				addPhotoButton.setIconResource(R.drawable.ic_delete);
+				addPhotoView.setIconResource(R.drawable.ic_delete);
 			}
 		});
 	}
@@ -64,38 +66,36 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_add_item, container, false);
 		view.findViewById(R.id.addItem).setOnClickListener(this);
-		addPhotoButton = view.findViewById(R.id.addItemAddPhoto);
-		titleEditText = view.findViewById(R.id.addItemTitle);
-		priceEditText = view.findViewById(R.id.addItemPrice);
-		imageLinearLayout = view.findViewById(R.id.addItemImages);
-		descriptionEditText = view.findViewById(R.id.addItemDescription);
-		currencySpinner = view.findViewById(R.id.addItemCurrency);
-		categorySpinner = view.findViewById(R.id.addItemCategory);
+		addPhotoView = view.findViewById(R.id.addItemAddPhoto);
+		titleView = ((TextInputLayout)view.findViewById(R.id.addItemTitle)).getEditText();
+		priceView = ((TextInputLayout)view.findViewById(R.id.addItemPrice)).getEditText();
+		descriptionView = ((TextInputLayout)view.findViewById(R.id.addItemDescription)).getEditText();
+		imageView = view.findViewById(R.id.addItemImages);
+		currencyView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.addItemCurrency)).getEditText();
+		categoryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.addItemCategory)).getEditText();
 
-		addPhotoButton.setOnClickListener(v -> {
+		addPhotoView.setOnClickListener(v -> {
 			if (this.images == null)
 				imagePicker.pickImages();
 			else {
 				this.images = null;
-				imageLinearLayout.removeAllViews();
-				addPhotoButton.setIconResource(R.drawable.ic_add_photo);
+				imageView.removeAllViews();
+				addPhotoView.setIconResource(R.drawable.ic_add_photo);
 			}
 		});
 
 		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
-		itemRepository.getCurrencies(currencies -> {
-			ArrayAdapter<Currency> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			currencySpinner.setAdapter(adapter);
-		});
-		itemRepository.getCategories(categories -> categorySpinner.setAdapter(new AdapterWithNull<>(getContext(), categories)));
+		itemRepository.getCurrencies(currencies ->
+			currencySelector = new ObjectSelector<>(currencyView, null, currencies, Currency::toString));
+		itemRepository.getCategories(categories ->
+			categorySelector = new ObjectSelector<>(categoryView, R.string.not_selected, categories, Category::getTitle));
 		return view;
 	}
 
 	@Override
 	public void onClick(View v) {
-		BigDecimal price = new BigDecimal(priceEditText.getText().toString());
-		if (titleEditText.getText().toString().trim().isEmpty()) {
+		BigDecimal price = new BigDecimal(priceView.getText().toString());
+		if (titleView.getText().toString().trim().isEmpty()) {
 			Toast.makeText(getContext(), R.string.title_empty, Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -105,11 +105,11 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 		}
 
 		itemRepository.addItem(new Item(
-				titleEditText.getText().toString(),
-				descriptionEditText.getText().toString(),
+				titleView.getText().toString(),
+				descriptionView.getText().toString(),
 				price,
-				(Currency) currencySpinner.getSelectedItem(),
-				(Category) categorySpinner.getSelectedItem()
+				currencySelector.getSelectedObject(),
+				categorySelector.getSelectedObject()
 			),
 			itemId -> {
 				if (images == null)
