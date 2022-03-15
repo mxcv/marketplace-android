@@ -53,12 +53,12 @@
                 android:id="@+id/displayOptionsQuery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/query"
-                android:inputType="text">
+                android:hint="@string/query">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,12 +96,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="@string/min"
-                    android:inputType="numberDecimal">
+                    android:hint="@string/min">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,14 +109,14 @@
                     android:id="@+id/displayOptionsPriceMax"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:hint="@string/max"
-                    android:inputType="numberDecimal">
+                    android:hint="@string/max">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,8 +125,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1.25"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1.35"
                     android:hint="@string/currency">
 
                     <AutoCompleteTextView

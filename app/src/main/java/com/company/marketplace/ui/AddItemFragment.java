@@ -25,6 +25,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.adapters.AdapterWithNull;
+import com.company.marketplace.ui.tools.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.company.marketplace.ui;
+package com.company.marketplace.ui.tools;
 
 import android.Manifest;
 import android.content.ContentResolver;
