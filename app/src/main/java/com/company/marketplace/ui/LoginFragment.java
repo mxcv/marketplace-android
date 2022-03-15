@@ -14,6 +14,7 @@ import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.network.repositories.UserRepository;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -23,8 +24,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_login, container, false);
 		view.findViewById(R.id.login).setOnClickListener(this);
-		emailView = view.findViewById(R.id.loginEmail);
-		passwordView = view.findViewById(R.id.loginPassword);
+		emailView = ((TextInputLayout)view.findViewById(R.id.loginEmail)).getEditText();
+		passwordView = ((TextInputLayout)view.findViewById(R.id.loginPassword)).getEditText();
 		return view;
 	}
 
