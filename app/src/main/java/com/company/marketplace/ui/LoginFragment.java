@@ -17,21 +17,21 @@ import com.company.marketplace.network.repositories.UserRepository;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
-	private EditText emailEditText, passwordEditText;
+	private EditText emailView, passwordView;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_login, container, false);
 		view.findViewById(R.id.login).setOnClickListener(this);
-		emailEditText = view.findViewById(R.id.loginEmail);
-		passwordEditText = view.findViewById(R.id.loginPassword);
+		emailView = view.findViewById(R.id.loginEmail);
+		passwordView = view.findViewById(R.id.loginPassword);
 		return view;
 	}
 
 	@Override
 	public void onClick(View v) {
 		UserRepository userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
-		userRepository.login(emailEditText.getText().toString(), passwordEditText.getText().toString(),
+		userRepository.login(emailView.getText().toString(), passwordView.getText().toString(),
 			ignored -> userRepository.getUser(user -> Account.get().setUser(user, getActivity())),
 			() -> Toast.makeText(getContext(), R.string.login_error, Toast.LENGTH_SHORT).show()
 		);
