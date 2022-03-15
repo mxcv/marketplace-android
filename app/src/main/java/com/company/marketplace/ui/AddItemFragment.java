@@ -89,6 +89,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			currencySelector = new ObjectSelector<>(currencyView, null, currencies, Currency::toString));
 		itemRepository.getCategories(categories ->
 			categorySelector = new ObjectSelector<>(categoryView, R.string.not_selected, categories, Category::getTitle));
+
 		return view;
 	}
 
