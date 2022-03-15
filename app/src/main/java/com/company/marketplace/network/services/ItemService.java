@@ -3,6 +3,8 @@ package com.company.marketplace.network.services;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.Page;
 
+import java.math.BigDecimal;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -14,7 +16,16 @@ import retrofit2.http.Query;
 public interface ItemService {
 
 	@GET("items")
-	Call<Page> getItems(@Query("userId") Integer userId,
+	Call<Page> getItems(@Query("query") String query,
+						@Query("minPrice") BigDecimal minPrice,
+						@Query("maxPrice") BigDecimal maxPrice,
+						@Query("currencyId") Integer currencyId,
+						@Query("categoryId") Integer categoryId,
+						@Query("countryId") Integer countryId,
+						@Query("regionId") Integer regionId,
+						@Query("cityId") Integer cityId,
+						@Query("userId") Integer userId,
+						@Query("sortType") Integer sortType,
 						@Query("skipCount") Integer skipCount,
 						@Query("takeCount") Integer takeCount);
 

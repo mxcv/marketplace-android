@@ -7,6 +7,7 @@ import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.JwtType;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.models.User;
@@ -143,14 +144,24 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void getItems(Integer userId,
-						 Integer skipCount,
-						 Integer takeCount,
+	public void getItems(ItemRequest itemRequest,
 						 ResponseListener<Page> responseListener) {
 
 		NetworkService.get()
 			.getItemService()
-			.getItems(userId, skipCount, takeCount)
+			.getItems(
+				itemRequest.getQuery(),
+				itemRequest.getMinPrice(),
+				itemRequest.getMaxPrice(),
+				itemRequest.getCurrency() == null ? null : itemRequest.getCurrency().getId(),
+				itemRequest.getCategory() == null ? null : itemRequest.getCategory().getId(),
+				itemRequest.getCountry() == null ? null : itemRequest.getCountry().getId(),
+				itemRequest.getRegion() == null ? null : itemRequest.getRegion().getId(),
+				itemRequest.getCity() == null ? null : itemRequest.getCity().getId(),
+				itemRequest.getUser() == null ? null : itemRequest.getUser().getId(),
+				itemRequest.getSortType(),
+				itemRequest.getSkipCount(),
+				itemRequest.getTakeCount())
 			.enqueue(new SimpleCallback<>(
 				page -> {
 					if (responseListener != null)

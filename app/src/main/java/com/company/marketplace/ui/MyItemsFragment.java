@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
@@ -66,7 +67,9 @@ public class MyItemsFragment extends Fragment {
 				}
 			});
 
-		itemRepository.getItems(Account.get().getUser().getId(), null, null,
+		ItemRequest itemRequest = new ItemRequest();
+		itemRequest.setUser(Account.get().getUser());
+		itemRepository.getItems(itemRequest,
 			page -> {
 				items = page.getItems();
 				User user = Account.get().getUser();

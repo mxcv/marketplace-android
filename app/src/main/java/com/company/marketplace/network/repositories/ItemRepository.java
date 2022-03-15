@@ -4,6 +4,7 @@ import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
@@ -12,9 +13,7 @@ import java.util.List;
 
 public interface ItemRepository {
 
-	void getItems(Integer userId,
-				  Integer skipCount,
-				  Integer takeCount,
+	void getItems(ItemRequest itemRequest,
 				  ResponseListener<Page> responseListener);
 
 	void addItem(Item item,
