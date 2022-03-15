@@ -95,12 +95,12 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		BigDecimal price = new BigDecimal(priceView.getText().toString());
+		BigDecimal price = priceView.getText().toString().equals("") ? null : new BigDecimal(priceView.getText().toString());
 		if (titleView.getText().toString().trim().isEmpty()) {
 			Toast.makeText(getContext(), R.string.title_empty, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		if (price.compareTo(new BigDecimal(0)) < 0 || price.compareTo(new BigDecimal("999999999.99")) > 0) {
+		if (price != null && (price.compareTo(BigDecimal.ZERO) < 0 || price.compareTo(new BigDecimal("999999999.99")) > 0)) {
 			Toast.makeText(getContext(), R.string.price_range, Toast.LENGTH_SHORT).show();
 			return;
 		}
