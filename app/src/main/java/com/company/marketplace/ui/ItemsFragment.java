@@ -24,6 +24,8 @@ import com.company.marketplace.ui.tools.LocationSelector;
 import com.company.marketplace.ui.tools.ObjectSelector;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.math.BigDecimal;
+
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 	private EditText queryView, minPriceView, maxPriceView;
@@ -40,6 +42,9 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_items, container, false);
 		view.findViewById(R.id.displayOptionsApply).setOnClickListener(this);
+		queryView = ((TextInputLayout)view.findViewById(R.id.displayOptionsQuery)).getEditText();
+		minPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMin)).getEditText();
+		maxPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMax)).getEditText();
 		categoryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCategory)).getEditText();
 		currencyView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCurrency)).getEditText();
 		countryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCountry)).getEditText();
@@ -87,6 +92,18 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		ItemRequest itemRequest = new ItemRequest();
+		itemRequest.setQuery(queryView.getText().toString().equals("") ? null
+			: queryView.getText().toString());
+		itemRequest.setMinPrice(minPriceView.getText().toString().equals("") ? null
+			: new BigDecimal(minPriceView.getText().toString()));
+		itemRequest.setMaxPrice(maxPriceView.getText().toString().equals("") ? null
+			: new BigDecimal(maxPriceView.getText().toString()));
+		itemRequest.setCategory(categorySelector == null ? null : categorySelector.getSelectedObject());
+		itemRequest.setCurrency(currencySelector == null ? null : currencySelector.getSelectedObject());
+		itemRequest.setCountry(locationSelector == null ? null : locationSelector.getSelectedCountry());
+		itemRequest.setRegion(locationSelector == null ? null : locationSelector.getSelectedRegion());
+		itemRequest.setCity(locationSelector == null ? null : locationSelector.getSelectedCity());
+		itemRequest.setSortType(sortTypeSelector == null ? null : sortTypeSelector.getSelectedObject());
 		itemRepository.getItems(itemRequest, page -> {
 			itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
 		});
