@@ -107,7 +107,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 		itemRepository.addItem(new Item(
 				titleView.getText().toString(),
-				descriptionView.getText().toString(),
+				descriptionView.getText().toString().equals("") ? null : descriptionView.getText().toString(),
 				price,
 				currencySelector.getSelectedObject(),
 				categorySelector.getSelectedObject()
