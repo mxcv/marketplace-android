@@ -13,7 +13,7 @@ public class ItemRequest {
 	private Region region;
 	private City city;
 	private User user;
-	private Integer sortType;
+	private SortType sortType;
 	private Integer skipCount;
 	private Integer takeCount;
 
@@ -80,10 +80,10 @@ public class ItemRequest {
 		this.user = user;
 	}
 
-	public Integer getSortType() {
+	public SortType getSortType() {
 		return sortType;
 	}
-	public void setSortType(Integer sortType) {
+	public void setSortType(SortType sortType) {
 		this.sortType = sortType;
 	}
 

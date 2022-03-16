@@ -2,6 +2,7 @@ package com.company.marketplace.network.repositories;
 
 import android.content.Context;
 
+import com.company.marketplace.R;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
@@ -10,6 +11,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.JwtType;
 import com.company.marketplace.models.Page;
+import com.company.marketplace.models.SortType;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.NetworkErrorListener;
@@ -20,6 +22,8 @@ import com.company.marketplace.network.services.SimpleCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -27,6 +31,13 @@ import okhttp3.RequestBody;
 
 public class MarketplaceRepository implements UserRepository, ItemRepository {
 
+	private static final int[] sortTypeStringResources = new int[] {
+		R.string.sort_newest,
+		R.string.sort_cheapest,
+		R.string.sort_most_expensive
+	};
+
+	private final Context context;
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
 
@@ -34,6 +45,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 								 UnauthorizedErrorListener unauthorizedErrorListener,
 								 NetworkErrorListener networkErrorListener) {
 
+		this.context = context;
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
 		this.networkErrorListener = networkErrorListener;
 
@@ -159,7 +171,7 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				itemRequest.getRegion() == null ? null : itemRequest.getRegion().getId(),
 				itemRequest.getCity() == null ? null : itemRequest.getCity().getId(),
 				itemRequest.getUser() == null ? null : itemRequest.getUser().getId(),
-				itemRequest.getSortType(),
+				itemRequest.getSortType() == null ? null : itemRequest.getSortType().getId(),
 				itemRequest.getSkipCount(),
 				itemRequest.getTakeCount())
 			.enqueue(new SimpleCallback<>(
@@ -243,6 +255,14 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 				unauthorizedErrorListener,
 				networkErrorListener
 			));
+	}
+
+	@Override
+	public void getSortTypes(ResponseListener<List<SortType>> responseListener) {
+
+		responseListener.onResponse(IntStream.range(0, sortTypeStringResources.length)
+			.mapToObj(i -> new SortType(i + 1, context.getString(sortTypeStringResources[i])))
+			.collect(Collectors.toList()));
 	}
 
 	@Override
