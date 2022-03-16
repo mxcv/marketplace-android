@@ -8,13 +8,16 @@ import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.marketplace.R;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
+import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.network.repositories.UserRepository;
+import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.LocationSelector;
 import com.company.marketplace.ui.tools.ObjectSelector;
 import com.google.android.material.textfield.TextInputLayout;
@@ -22,7 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class ItemsFragment extends Fragment {
+public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 	private static final Integer[] sortTypeResources = new Integer[] {
 		R.string.sort_newest,
@@ -30,6 +33,7 @@ public class ItemsFragment extends Fragment {
 		R.string.sort_most_expensive };
 
 	private AutoCompleteTextView categoryView, currencyView, countryView, regionView, cityView, sortView;
+	private RecyclerView itemsView;
 	private ItemRepository itemRepository;
 	private UserRepository userRepository;
 	private LocationSelector locationSelector;
@@ -40,12 +44,15 @@ public class ItemsFragment extends Fragment {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_items, container, false);
+		view.findViewById(R.id.displayOptionsApply).setOnClickListener(this);
 		categoryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCategory)).getEditText();
 		currencyView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCurrency)).getEditText();
 		countryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCountry)).getEditText();
 		regionView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsRegion)).getEditText();
 		cityView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCity)).getEditText();
 		sortView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsSort)).getEditText();
+		sortView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsSort)).getEditText();
+		itemsView = view.findViewById(R.id.itemsItems);
 
 		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
@@ -77,6 +84,15 @@ public class ItemsFragment extends Fragment {
 				.collect(Collectors.toList()),
 			x -> x);
 
+		onClick(view.findViewById(R.id.displayOptionsApply));
 		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		ItemRequest itemRequest = new ItemRequest();
+		itemRepository.getItems(itemRequest, page -> {
+			itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
+		});
 	}
 }
