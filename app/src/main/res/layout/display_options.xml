@@ -12,8 +12,8 @@
         android:layout_marginBottom="4dp"
         android:background="@drawable/display_options_background"
         android:paddingVertical="8dp"
-        app:expansion_headerIndicator="@id/headerIndicator"
-        app:expansion_layout="@id/expansionLayout"
+        app:expansion_headerIndicator="@id/displayOptionsExpansionHeaderIndicator"
+        app:expansion_layout="@id/displayOptionsExpansionLayout"
         app:expansion_toggleOnClick="true">
 
         <TextView
@@ -26,7 +26,7 @@
             android:textSize="20sp" />
 
         <ImageView
-            android:id="@+id/headerIndicator"
+            android:id="@+id/displayOptionsExpansionHeaderIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
@@ -38,7 +38,7 @@
     </com.github.florent37.expansionpanel.ExpansionHeader>
 
     <com.github.florent37.expansionpanel.ExpansionLayout
-        android:id="@+id/expansionLayout"
+        android:id="@+id/displayOptionsExpansionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

@@ -22,12 +22,14 @@ import com.company.marketplace.network.repositories.UserRepository;
 import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.LocationSelector;
 import com.company.marketplace.ui.tools.ObjectSelector;
+import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
 
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
+	private ExpansionLayout expansionLayoutView;
 	private EditText queryView, minPriceView, maxPriceView;
 	private AutoCompleteTextView categoryView, currencyView, countryView, regionView, cityView, sortView;
 	private RecyclerView itemsView;
@@ -42,6 +44,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_items, container, false);
 		view.findViewById(R.id.displayOptionsApply).setOnClickListener(this);
+		expansionLayoutView = view.findViewById(R.id.displayOptionsExpansionLayout);
 		queryView = ((TextInputLayout)view.findViewById(R.id.displayOptionsQuery)).getEditText();
 		minPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMin)).getEditText();
 		maxPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMax)).getEditText();
@@ -107,5 +110,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRepository.getItems(itemRequest, page -> {
 			itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
 		});
+		expansionLayoutView.collapse(true);
 	}
 }
