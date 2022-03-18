@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Item {
 
@@ -104,9 +105,16 @@ public class Item {
 			return "";
 		if (price.compareTo(BigDecimal.ZERO) == 0)
 			return context.getString(R.string.free);
-		return NumberFormat.getCurrencyInstance(currency.getLocale()).format(price);
+		Locale locale;
+		if (currency == null || (locale = currency.getLocale()) == null)
+			return price.toString();
+
+		return NumberFormat.getCurrencyInstance(locale).format(price);
 	}
 	public String getCreatedDateFormat(Context context) {
+		if (created == null)
+			return null;
+
 		ZonedDateTime itemCreatedZonedDateTime = created.toInstant().atZone(ZoneId.systemDefault());
 		LocalDate itemCreatedDate = itemCreatedZonedDateTime.toLocalDate();
 		LocalTime itemCreatedTime = itemCreatedZonedDateTime.toLocalTime();

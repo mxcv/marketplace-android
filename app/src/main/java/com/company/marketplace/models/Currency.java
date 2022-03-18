@@ -22,10 +22,11 @@ public class Currency {
 	}
 
 	public Locale getLocale() {
-		return Locale.forLanguageTag(languageTag);
+		return languageTag == null ? null : Locale.forLanguageTag(languageTag);
 	}
 
 	public String getSymbol() {
-		return java.util.Currency.getInstance(getLocale()).getSymbol();
+		Locale locale = getLocale();
+		return locale == null ? null : java.util.Currency.getInstance(locale).getSymbol();
 	}
 }
