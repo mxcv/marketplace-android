@@ -24,6 +24,7 @@
             android:layout_height="120dp"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/photo"
+            app:layout_gravity="center_vertical"
             app:layout_rowSpan="2"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -31,7 +32,7 @@
             android:id="@+id/listItemTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
@@ -41,15 +42,16 @@
             android:id="@+id/listItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             tools:text="Price" />
 
         <TextView
             android:id="@+id/listItemLocationDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="11sp"
             app:layout_columnWeight="1"
             tools:text="Location, date" />
     </androidx.gridlayout.widget.GridLayout>
