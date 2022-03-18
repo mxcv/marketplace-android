@@ -1,7 +1,6 @@
 package com.company.marketplace.ui.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 	public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
 		Item item = items.get(position);
 		holder.titleTextView.setText(item.getTitle());
-		Log.e("1", item.getPriceFormat(context));
 		holder.priceTextView.setText(item.getPriceFormat(context));
 
 		if (item.getImages().size() > 0)
