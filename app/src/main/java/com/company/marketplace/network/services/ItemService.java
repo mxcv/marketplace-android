@@ -25,7 +25,7 @@ public interface ItemService {
 						@Query("regionId") Integer regionId,
 						@Query("cityId") Integer cityId,
 						@Query("userId") Integer userId,
-						@Query("sortType") Integer sortType,
+						@Query("sortTypeId") Integer sortTypeId,
 						@Query("skipCount") Integer skipCount,
 						@Query("takeCount") Integer takeCount);
 
