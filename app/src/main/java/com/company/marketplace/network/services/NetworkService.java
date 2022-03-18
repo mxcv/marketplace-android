@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import com.company.marketplace.models.AccessRefreshJwt;
-import com.company.marketplace.network.repositories.JwtRepository;
 import com.company.marketplace.models.JwtType;
+import com.company.marketplace.network.repositories.JwtRepository;
 
 import java.util.Objects;
 
@@ -72,21 +72,27 @@ public class NetworkService {
 	public TokenService getTokenService() {
 		return retrofit.create(TokenService.class);
 	}
+
 	public UserService getUserService() {
 		return retrofit.create(UserService.class);
 	}
+
 	public LocationService getLocationService() {
 		return retrofit.create(LocationService.class);
 	}
+
 	public ItemService getItemService() {
 		return retrofit.create(ItemService.class);
 	}
+
 	public CurrencyService getCurrencyService() {
 		return retrofit.create(CurrencyService.class);
 	}
+
 	public CategoryService getCategoryService() {
 		return retrofit.create(CategoryService.class);
 	}
+
 	public ImageService getImageService() {
 		return retrofit.create(ImageService.class);
 	}
@@ -99,7 +105,8 @@ public class NetworkService {
 				.metaData
 				.get("base_url")
 				.toString();
-		} catch (PackageManager.NameNotFoundException e) {
+		}
+		catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -126,7 +133,7 @@ public class NetworkService {
 
 					@Override
 					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-						return new java.security.cert.X509Certificate[]{};
+						return new java.security.cert.X509Certificate[] {};
 					}
 				}
 			};
@@ -142,7 +149,8 @@ public class NetworkService {
 			builder.hostnameVerifier((hostname, session) -> true);
 
 			return builder;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

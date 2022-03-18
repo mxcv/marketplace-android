@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
 	private final Context context;
 	private final LayoutInflater inflater;
@@ -70,7 +70,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 		private final TextView titleTextView, priceTextView, locationDateTextView;
 		private final ImageView imageView;
 
-		ViewHolder(View view){
+		ViewHolder(View view) {
 			super(view);
 			titleTextView = view.findViewById(R.id.listItemTitle);
 			priceTextView = view.findViewById(R.id.listItemPrice);

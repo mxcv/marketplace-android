@@ -27,7 +27,8 @@ public class ObjectSelector<T> {
 		if (defaultStringResource != null)
 			strings.add(0, textView.getContext().getString(defaultStringResource));
 
-		textView.setAdapter(new ArrayAdapter<>(textView.getContext(),
+		textView.setAdapter(new ArrayAdapter<>(
+			textView.getContext(),
 			android.R.layout.simple_spinner_dropdown_item,
 			new ArrayList<>(strings)));
 		if (strings.size() != 0)

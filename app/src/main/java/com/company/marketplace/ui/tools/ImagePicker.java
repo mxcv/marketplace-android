@@ -29,7 +29,8 @@ public class ImagePicker {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public ImagePicker(Fragment fragment, Integer maxCount, Consumer<List<ImageOutput>> imageConsumer) {
 		Context context = fragment.getContext();
-		contentPickerLauncher = fragment.registerForActivityResult(new ActivityResultContracts.GetMultipleContents(),
+		contentPickerLauncher = fragment.registerForActivityResult(
+			new ActivityResultContracts.GetMultipleContents(),
 			uris -> {
 				if (uris.size() == 0)
 					return;
@@ -44,13 +45,15 @@ public class ImagePicker {
 						byte[] bytes = new byte[stream.available()];
 						stream.read(bytes);
 						images.add(new ImageOutput("image." + getExtension(context, uri), bytes));
-					} catch (IOException e) {
+					}
+					catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 				imageConsumer.accept(images);
 			});
-		permissionLauncher = fragment.registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+		permissionLauncher = fragment.registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(),
 			isGranted -> {
 				if (isGranted)
 					contentPickerLauncher.launch("image/*");

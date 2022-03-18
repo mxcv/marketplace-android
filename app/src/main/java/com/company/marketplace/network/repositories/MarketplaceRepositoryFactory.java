@@ -23,7 +23,8 @@ public class MarketplaceRepositoryFactory {
 	}
 
 	private MarketplaceRepository createMarketplaceRepository() {
-		return new MarketplaceRepository(activity,
+		return new MarketplaceRepository(
+			activity,
 			() -> {
 				createUserRepository().logout();
 				Account.get().setUser(null, activity);

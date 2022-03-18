@@ -17,9 +17,7 @@ import com.company.marketplace.account.Account;
 import com.company.marketplace.account.UserChangedListener;
 import com.company.marketplace.databinding.ActivityMainBinding;
 import com.company.marketplace.models.User;
-import com.company.marketplace.network.repositories.JwtRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
-import com.company.marketplace.network.services.NetworkService;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements UserChangedListener {
@@ -73,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		if (user == null) {
 			navigationView.inflateMenu(R.menu.guest_drawer);
 			Navigation.findNavController(activity, R.id.nav_host_fragment_content_main).navigate(R.id.nav_login);
-		} else {
+		}
+		else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
 			Navigation.findNavController(activity, R.id.nav_host_fragment_content_main).navigate(R.id.nav_items);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);

@@ -159,7 +159,8 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 							.orElse(item.getUser().getCity()));
 				}
 				requireActivity().runOnUiThread(() -> itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems())));
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}).start());

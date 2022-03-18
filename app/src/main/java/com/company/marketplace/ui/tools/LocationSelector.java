@@ -52,7 +52,8 @@ public class LocationSelector {
 				.map(City::getName)
 				.collect(Collectors.toList())));
 
-		setAdapterWithDefault(countryTextView,
+		setAdapterWithDefault(
+			countryTextView,
 			countries.stream()
 				.map(Country::getName)
 				.collect(Collectors.toList()));
@@ -68,6 +69,7 @@ public class LocationSelector {
 			.findFirst()
 			.orElse(null);
 	}
+
 	public Region getSelectedRegion() {
 		return countries.stream()
 			.flatMap(c -> c.getRegions().stream())
@@ -75,6 +77,7 @@ public class LocationSelector {
 			.findFirst()
 			.orElse(null);
 	}
+
 	public City getSelectedCity() {
 		return countries.stream()
 			.flatMap(c -> c.getRegions().stream())
@@ -86,7 +89,8 @@ public class LocationSelector {
 
 	private static void setAdapterWithDefault(AutoCompleteTextView textView, List<String> strings) {
 		strings.add(0, textView.getContext().getString(R.string.not_selected));
-		textView.setAdapter(new ArrayAdapter<>(textView.getContext(),
+		textView.setAdapter(new ArrayAdapter<>(
+			textView.getContext(),
 			android.R.layout.simple_spinner_dropdown_item,
 			new ArrayList<>(strings)));
 		textView.setText(strings.get(0), false);
@@ -116,7 +120,8 @@ public class LocationSelector {
 
 		@Override
 		public void afterTextChanged(Editable s) {
-			setAdapterWithDefault(nextTextView,
+			setAdapterWithDefault(
+				nextTextView,
 				s.toString().equals(defaultString) ? new ArrayList<>() : nextItemsMapper.get());
 		}
 	}

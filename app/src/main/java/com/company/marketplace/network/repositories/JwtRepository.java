@@ -36,13 +36,15 @@ public class JwtRepository {
 
 	public synchronized String getToken(JwtType type) {
 		try (FileInputStream stream = context.openFileInput(
-				type == JwtType.ACCESS ? accessTokenFilename : refreshTokenFilename)) {
+			type == JwtType.ACCESS ? accessTokenFilename : refreshTokenFilename)) {
 			byte[] b = new byte[stream.available()];
 			stream.read(b);
 			return new String(b);
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			return null;
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -59,7 +61,8 @@ public class JwtRepository {
 		else {
 			try (FileOutputStream stream = context.openFileOutput(fileName, Context.MODE_PRIVATE)) {
 				stream.write(token.getBytes());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
 			Log.i("JWT", (type == JwtType.ACCESS ? "Access" : "Refresh") + " token was updated.");
