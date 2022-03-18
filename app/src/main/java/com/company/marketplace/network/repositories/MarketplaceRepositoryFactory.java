@@ -3,6 +3,8 @@ package com.company.marketplace.network.repositories;
 import android.app.Activity;
 import android.widget.Toast;
 
+import androidx.navigation.Navigation;
+
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
 
@@ -28,6 +30,8 @@ public class MarketplaceRepositoryFactory {
 			() -> {
 				createUserRepository().logout();
 				Account.get().setUser(null, activity);
+				Navigation.findNavController(activity, R.id.nav_host_fragment_content_main)
+					.navigate(R.id.nav_login);
 			},
 			() -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
 	}
