@@ -34,6 +34,10 @@ public class ObjectSelector<T> {
 			textView.setText(strings.get(0), false);
 	}
 
+	public List<T> getObjects() {
+		return list;
+	}
+
 	public T getSelectedObject() {
 		return list.stream()
 			.filter(x -> textView.getText().toString().equals(mapper.apply(x)))

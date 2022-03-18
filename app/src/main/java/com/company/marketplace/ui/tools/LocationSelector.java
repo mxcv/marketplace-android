@@ -19,8 +19,6 @@ public class LocationSelector {
 
 	private final AutoCompleteTextView countryTextView, regionTextView, cityTextView;
 	private final List<Country> countries;
-	private final List<Region> regions;
-	private final List<City> cities;
 
 	public LocationSelector(AutoCompleteTextView countryTextView,
 							AutoCompleteTextView regionTextView,
@@ -31,12 +29,6 @@ public class LocationSelector {
 		this.regionTextView = regionTextView;
 		this.cityTextView = cityTextView;
 		this.countries = countries;
-		this.regions = countries.stream()
-			.flatMap(c -> c.getRegions().stream())
-			.collect(Collectors.toList());
-		this.cities = regions.stream()
-			.flatMap(r -> r.getCities().stream())
-			.collect(Collectors.toList());
 
 		countryTextView.addTextChangedListener(new LocationClickListener(
 			regionTextView,
@@ -50,7 +42,8 @@ public class LocationSelector {
 				.collect(Collectors.toList())));
 		regionTextView.addTextChangedListener(new LocationClickListener(
 			cityTextView,
-			() -> regions.stream()
+			() -> countries.stream()
+				.flatMap(c -> c.getRegions().stream())
 				.filter(c -> c.getName().contentEquals(regionTextView.getText()))
 				.findFirst()
 				.get()
@@ -65,6 +58,10 @@ public class LocationSelector {
 				.collect(Collectors.toList()));
 	}
 
+	public List<Country> getCountries() {
+		return countries;
+	}
+
 	public Country getSelectedCountry() {
 		return countries.stream()
 			.filter(c -> countryTextView.getText().toString().equals(c.getName()))
@@ -72,13 +69,16 @@ public class LocationSelector {
 			.orElse(null);
 	}
 	public Region getSelectedRegion() {
-		return regions.stream()
+		return countries.stream()
+			.flatMap(c -> c.getRegions().stream())
 			.filter(r -> regionTextView.getText().toString().equals(r.getName()))
 			.findFirst()
 			.orElse(null);
 	}
 	public City getSelectedCity() {
-		return cities.stream()
+		return countries.stream()
+			.flatMap(c -> c.getRegions().stream())
+			.flatMap(r -> r.getCities().stream())
 			.filter(c -> cityTextView.getText().toString().equals(c.getName()))
 			.findFirst()
 			.orElse(null);

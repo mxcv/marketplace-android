@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.company.marketplace.R;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
+import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.SortType;
 import com.company.marketplace.network.repositories.ItemRepository;
@@ -60,26 +61,34 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
 
-		itemRepository.getCategories(categories ->
-			categorySelector = new ObjectSelector<>(
-				categoryView,
-				R.string.not_selected,
-				categories,
-				Category::getTitle));
+		itemRepository.getCategories(categories -> {
+			synchronized (this) {
+				categorySelector = new ObjectSelector<>(
+					categoryView,
+					R.string.not_selected,
+					categories,
+					Category::getTitle);
+				notify();
+			}
+		});
 
-		itemRepository.getCurrencies(currencies ->
-			currencySelector = new ObjectSelector<>(
-				currencyView,
-				R.string.default_option,
-				currencies,
-				Currency::toString));
+		itemRepository.getCurrencies(currencies -> {
+			synchronized (this) {
+				currencySelector = new ObjectSelector<>(
+					currencyView,
+					R.string.default_option,
+					currencies,
+					Currency::toString);
+				notify();
+			}
+		});
 
-		userRepository.getCountries(countries ->
-			locationSelector = new LocationSelector(
-				countryView,
-				regionView,
-				cityView,
-				countries));
+		userRepository.getCountries(countries -> {
+			synchronized (this) {
+				locationSelector = new LocationSelector(countryView, regionView, cityView, countries);
+				notify();
+			}
+		});
 
 		itemRepository.getSortTypes(sortTypes ->
 			sortTypeSelector = new ObjectSelector<>(
@@ -88,7 +97,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 				sortTypes,
 				SortType::getName));
 
-		onClick(view.findViewById(R.id.displayOptionsApply));
+		getItems(new ItemRequest());
 		return view;
 	}
 
@@ -107,9 +116,52 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRequest.setRegion(locationSelector == null ? null : locationSelector.getSelectedRegion());
 		itemRequest.setCity(locationSelector == null ? null : locationSelector.getSelectedCity());
 		itemRequest.setSortType(sortTypeSelector == null ? null : sortTypeSelector.getSelectedObject());
-		itemRepository.getItems(itemRequest, page -> {
-			itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
-		});
+
 		expansionLayoutView.collapse(true);
+		getItems(itemRequest);
+	}
+
+	private void getItems(ItemRequest itemRequest) {
+		itemRepository.getItems(itemRequest, page -> new Thread(() -> {
+			try {
+				synchronized (this) {
+					while (currencySelector == null
+						|| categorySelector == null
+						|| locationSelector == null)
+						wait();
+				}
+
+				for (Item item : page.getItems()) {
+					if (item.getCurrency() != null)
+						item.setCurrency(currencySelector
+							.getObjects()
+							.stream()
+							.filter(c -> c.getId() == item.getCurrency().getId())
+							.findFirst()
+							.orElse(item.getCurrency()));
+
+					if (item.getCategory() != null)
+						item.setCategory(categorySelector
+							.getObjects()
+							.stream()
+							.filter(c -> c.getId() == item.getCategory().getId())
+							.findFirst()
+							.orElse(item.getCategory()));
+
+					if (item.getUser().getCity() != null)
+						item.getUser().setCity(locationSelector
+							.getCountries()
+							.stream()
+							.flatMap(c -> c.getRegions().stream())
+							.flatMap(r -> r.getCities().stream())
+							.filter(c -> c.getId() == item.getUser().getCity().getId())
+							.findFirst()
+							.orElse(item.getUser().getCity()));
+				}
+				requireActivity().runOnUiThread(() -> itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems())));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start());
 	}
 }

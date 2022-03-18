@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.company.marketplace.R;
 import com.company.marketplace.models.Category;
+import com.company.marketplace.models.City;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
@@ -11,6 +12,7 @@ import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.JwtType;
 import com.company.marketplace.models.Page;
+import com.company.marketplace.models.Region;
 import com.company.marketplace.models.SortType;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
@@ -128,6 +130,12 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 			.getCountries()
 			.enqueue(new SimpleCallback<>(
 				countries -> {
+					for (Country country : countries)
+						for (Region region : country.getRegions()) {
+							for (City city : region.getCities())
+								city.setRegion(region);
+							region.setCountry(country);
+						}
 					if (responseListener != null)
 						responseListener.onResponse(countries);
 				},
