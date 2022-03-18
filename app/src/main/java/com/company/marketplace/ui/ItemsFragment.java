@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ import java.math.BigDecimal;
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 	private ExpansionLayout expansionLayoutView;
+	private TextView foundView;
 	private EditText queryView, minPriceView, maxPriceView;
 	private AutoCompleteTextView categoryView, currencyView, countryView, regionView, cityView, sortView;
 	private RecyclerView itemsView;
@@ -46,6 +48,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_items, container, false);
 		view.findViewById(R.id.displayOptionsApply).setOnClickListener(this);
 		expansionLayoutView = view.findViewById(R.id.displayOptionsExpansionLayout);
+		foundView = view.findViewById(R.id.itemsFoundValue);
 		queryView = ((TextInputLayout)view.findViewById(R.id.displayOptionsQuery)).getEditText();
 		minPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMin)).getEditText();
 		maxPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMax)).getEditText();
@@ -158,7 +161,10 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 							.findFirst()
 							.orElse(item.getUser().getCity()));
 				}
-				requireActivity().runOnUiThread(() -> itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems())));
+				requireActivity().runOnUiThread(() -> {
+					foundView.setText(String.valueOf(page.getItems().size() + page.getLeftCount()));
+					itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
+				});
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
