@@ -28,10 +28,4 @@ public class City {
 	public void setRegion(Region region) {
 		this.region = region;
 	}
-
-	@NonNull
-	@Override
-	public String toString() {
-		return name;
-	}
 }

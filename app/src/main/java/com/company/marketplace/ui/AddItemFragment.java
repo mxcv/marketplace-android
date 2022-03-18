@@ -86,7 +86,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 		itemRepository.getCurrencies(currencies ->
-			currencySelector = new ObjectSelector<>(currencyView, null, currencies, Currency::toString));
+			currencySelector = new ObjectSelector<>(currencyView, null, currencies, Currency::getSymbol));
 		itemRepository.getCategories(categories ->
 			categorySelector = new ObjectSelector<>(categoryView, R.string.not_selected, categories, Category::getTitle));
 

@@ -30,10 +30,4 @@ public class Country {
 	public void setRegions(List<Region> regions) {
 		this.regions = regions;
 	}
-
-	@NonNull
-	@Override
-	public String toString() {
-		return name;
-	}
 }

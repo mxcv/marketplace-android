@@ -78,7 +78,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 					currencyView,
 					R.string.default_option,
 					currencies,
-					Currency::toString);
+					Currency::getSymbol);
 				notify();
 			}
 		});

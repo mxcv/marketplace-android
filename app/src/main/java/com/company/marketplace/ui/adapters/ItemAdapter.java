@@ -53,7 +53,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
 		StringBuilder sb = new StringBuilder();
 		if (item.getUser().getCity() != null)
-			sb.append(item.getUser().getCity().toString()).append(", ");
+			sb.append(item.getUser().getCity().getName()).append(", ");
 		sb.append(item.getCreatedDateFormat(context));
 		holder.locationDateTextView.setText(sb.toString());
 	}

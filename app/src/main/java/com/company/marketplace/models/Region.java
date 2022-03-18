@@ -38,10 +38,4 @@ public class Region {
 	public void setCities(List<City> cities) {
 		this.cities = cities;
 	}
-
-	@NonNull
-	@Override
-	public String toString() {
-		return name;
-	}
 }

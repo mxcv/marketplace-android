@@ -1,7 +1,5 @@
 package com.company.marketplace.models;
 
-import androidx.annotation.NonNull;
-
 import java.util.Locale;
 
 public class Currency {
@@ -27,9 +25,7 @@ public class Currency {
 		return Locale.forLanguageTag(languageTag);
 	}
 
-	@NonNull
-	@Override
-	public String toString() {
+	public String getSymbol() {
 		return java.util.Currency.getInstance(getLocale()).getSymbol();
 	}
 }
