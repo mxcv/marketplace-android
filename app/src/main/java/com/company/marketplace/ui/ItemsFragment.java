@@ -97,12 +97,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 	}
 
 	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		String query = Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsQuery.getText()).toString();
 		String minPrice = Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsPriceMin.getText()).toString();

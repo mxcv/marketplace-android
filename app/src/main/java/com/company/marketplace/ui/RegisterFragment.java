@@ -45,12 +45,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 	}
 
 	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		if (!Objects.requireNonNull(binding.registerPassword.getText()).toString().equals(
 			Objects.requireNonNull(binding.registerConfirmPassword.getText()).toString()))

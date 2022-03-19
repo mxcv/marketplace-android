@@ -101,12 +101,6 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 	}
 
 	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		String title = Objects.requireNonNull(binding.addItemTitle.getText()).toString();
 		String description = Objects.requireNonNull(binding.addItemDescription.getText()).toString();

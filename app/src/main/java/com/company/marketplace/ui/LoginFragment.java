@@ -32,12 +32,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	}
 
 	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
-	}
-
-	@Override
 	public void onClick(View v) {
 		UserRepository userRepository = new MarketplaceRepositoryFactory(getContext()).createUserRepository();
 		userRepository.login(
