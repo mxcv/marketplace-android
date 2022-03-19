@@ -31,7 +31,13 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class MarketplaceRepository implements UserRepository, ItemRepository {
+public class NetworkMarketplaceRepository implements CategoryRepository,
+													 CurrencyRepository,
+													 ImageRepository,
+													 ItemRepository,
+													 LocationRepository,
+													 SortTypeRepository,
+													 UserRepository {
 
 	private static final int[] sortTypeStringResources = new int[] {
 		R.string.sort_newest,
@@ -43,9 +49,9 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	private final UnauthorizedErrorListener unauthorizedErrorListener;
 	private final NetworkErrorListener networkErrorListener;
 
-	public MarketplaceRepository(Context context,
-								 UnauthorizedErrorListener unauthorizedErrorListener,
-								 NetworkErrorListener networkErrorListener) {
+	public NetworkMarketplaceRepository(Context context,
+										UnauthorizedErrorListener unauthorizedErrorListener,
+										NetworkErrorListener networkErrorListener) {
 
 		this.context = context;
 		this.unauthorizedErrorListener = unauthorizedErrorListener;
@@ -56,46 +62,15 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void login(String email, String password,
-					  ResponseListener<Void> responseListener,
-					  BadRequestErrorListener badRequestErrorListener) {
+	public void getCategories(ResponseListener<List<Category>> responseListener) {
 
 		NetworkService.get()
-			.getTokenService()
-			.access(new User(email, password))
+			.getCategoryService()
+			.getCategories()
 			.enqueue(new SimpleCallback<>(
-				jwt -> {
-					JwtRepository.get().setTokens(jwt);
+				categories -> {
 					if (responseListener != null)
-						responseListener.onResponse(null);
-				},
-				badRequestErrorListener,
-				unauthorizedErrorListener,
-				networkErrorListener
-			));
-	}
-
-	@Override
-	public void logout() {
-		JwtRepository.get().setTokens(null);
-	}
-
-	@Override
-	public void getUser(ResponseListener<User> responseListener) {
-
-		if (JwtRepository.get().getToken(JwtType.ACCESS) == null) {
-			if (unauthorizedErrorListener != null)
-				unauthorizedErrorListener.onUnauthorizedError();
-			return;
-		}
-
-		NetworkService.get()
-			.getUserService()
-			.getUser()
-			.enqueue(new SimpleCallback<>(
-				user -> {
-					if (responseListener != null)
-						responseListener.onResponse(user);
+						responseListener.onResponse(categories);
 				},
 				null,
 				unauthorizedErrorListener,
@@ -104,40 +79,38 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void addUser(User user,
-						ResponseListener<Void> responseListener,
-						BadRequestErrorListener badRequestErrorListener) {
+	public void getCurrencies(ResponseListener<List<Currency>> responseListener) {
 
 		NetworkService.get()
-			.getUserService()
-			.postUser(user)
+			.getCurrencyService()
+			.getCurrencies()
+			.enqueue(new SimpleCallback<>(
+				currencies -> {
+					if (responseListener != null)
+						responseListener.onResponse(currencies);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void addItemImages(int itemId,
+							  List<ImageOutput> images,
+							  ResponseListener<Void> responseListener) {
+
+		List<MultipartBody.Part> imageParts = new ArrayList<>(images.size());
+		for (ImageOutput image : images)
+			imageParts.add(createImageForm("images", image));
+
+		NetworkService.get()
+			.getImageService()
+			.postItemImages(itemId, imageParts)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)
 						responseListener.onResponse(null);
-				},
-				null,
-				unauthorizedErrorListener,
-				networkErrorListener
-			));
-	}
-
-	@Override
-	public void getCountries(ResponseListener<List<Country>> responseListener) {
-
-		NetworkService.get()
-			.getLocationService()
-			.getCountries()
-			.enqueue(new SimpleCallback<>(
-				countries -> {
-					for (Country country : countries)
-						for (Region region : country.getRegions()) {
-							for (City city : region.getCities())
-								city.setRegion(region);
-							region.setCountry(country);
-						}
-					if (responseListener != null)
-						responseListener.onResponse(countries);
 				},
 				null,
 				unauthorizedErrorListener,
@@ -232,32 +205,21 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void getCurrencies(ResponseListener<List<Currency>> responseListener) {
+	public void getCountries(ResponseListener<List<Country>> responseListener) {
 
 		NetworkService.get()
-			.getCurrencyService()
-			.getCurrencies()
+			.getLocationService()
+			.getCountries()
 			.enqueue(new SimpleCallback<>(
-				currencies -> {
+				countries -> {
+					for (Country country : countries)
+						for (Region region : country.getRegions()) {
+							for (City city : region.getCities())
+								city.setRegion(region);
+							region.setCountry(country);
+						}
 					if (responseListener != null)
-						responseListener.onResponse(currencies);
-				},
-				null,
-				unauthorizedErrorListener,
-				networkErrorListener
-			));
-	}
-
-	@Override
-	public void getCategories(ResponseListener<List<Category>> responseListener) {
-
-		NetworkService.get()
-			.getCategoryService()
-			.getCategories()
-			.enqueue(new SimpleCallback<>(
-				categories -> {
-					if (responseListener != null)
-						responseListener.onResponse(categories);
+						responseListener.onResponse(countries);
 				},
 				null,
 				unauthorizedErrorListener,
@@ -274,16 +236,64 @@ public class MarketplaceRepository implements UserRepository, ItemRepository {
 	}
 
 	@Override
-	public void addItemImages(int itemId, List<ImageOutput> images,
-							  ResponseListener<Void> responseListener) {
-
-		List<MultipartBody.Part> imageParts = new ArrayList<>(images.size());
-		for (ImageOutput image : images)
-			imageParts.add(createImageForm("images", image));
+	public void login(String email,
+					  String password,
+					  ResponseListener<Void> responseListener,
+					  BadRequestErrorListener badRequestErrorListener) {
 
 		NetworkService.get()
-			.getImageService()
-			.postItemImages(itemId, imageParts)
+			.getTokenService()
+			.access(new User(email, password))
+			.enqueue(new SimpleCallback<>(
+				jwt -> {
+					JwtRepository.get().setTokens(jwt);
+					if (responseListener != null)
+						responseListener.onResponse(null);
+				},
+				badRequestErrorListener,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void logout(ResponseListener<Void> responseListener) {
+		JwtRepository.get().setTokens(null);
+		if (responseListener != null)
+			responseListener.onResponse(null);
+	}
+
+	@Override
+	public void getUser(ResponseListener<User> responseListener) {
+
+		if (JwtRepository.get().getToken(JwtType.ACCESS) == null) {
+			if (unauthorizedErrorListener != null)
+				unauthorizedErrorListener.onUnauthorizedError();
+			return;
+		}
+
+		NetworkService.get()
+			.getUserService()
+			.getUser()
+			.enqueue(new SimpleCallback<>(
+				user -> {
+					if (responseListener != null)
+						responseListener.onResponse(user);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void addUser(User user,
+						ResponseListener<Void> responseListener,
+						BadRequestErrorListener badRequestErrorListener) {
+
+		NetworkService.get()
+			.getUserService()
+			.postUser(user)
 			.enqueue(new SimpleCallback<>(
 				ignored -> {
 					if (responseListener != null)

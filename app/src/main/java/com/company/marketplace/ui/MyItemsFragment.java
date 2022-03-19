@@ -33,7 +33,7 @@ public class MyItemsFragment extends Fragment {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentMyItemsBinding.inflate(inflater, container, false);
 
-		ItemRepository itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
+		ItemRepository itemRepository = new MarketplaceRepositoryFactory(getContext()).createItemRepository();
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
 			new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 				@Override

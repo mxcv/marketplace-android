@@ -1,16 +1,10 @@
 package com.company.marketplace.network.repositories;
 
-import com.company.marketplace.models.Category;
-import com.company.marketplace.models.Currency;
-import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.Page;
-import com.company.marketplace.models.SortType;
 import com.company.marketplace.network.responses.BadRequestErrorListener;
 import com.company.marketplace.network.responses.ResponseListener;
-
-import java.util.List;
 
 public interface ItemRepository {
 
@@ -24,13 +18,4 @@ public interface ItemRepository {
 	void removeItem(int id,
 					ResponseListener<Void> responseListener,
 					BadRequestErrorListener badRequestErrorListener);
-
-	void getCurrencies(ResponseListener<List<Currency>> responseListener);
-
-	void getCategories(ResponseListener<List<Category>> responseListener);
-
-	void getSortTypes(ResponseListener<List<SortType>> responseListener);
-
-	void addItemImages(int itemId, List<ImageOutput> images,
-					   ResponseListener<Void> responseListener);
 }

@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 import com.company.marketplace.R;
 import com.company.marketplace.databinding.FragmentRegisterBinding;
 import com.company.marketplace.models.User;
+import com.company.marketplace.network.repositories.LocationRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.network.repositories.UserRepository;
 import com.company.marketplace.ui.tools.LocationSelector;
@@ -24,6 +25,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 	private FragmentRegisterBinding binding;
 	private LocationSelector locationSelector;
+	private LocationRepository locationRepository;
 	private UserRepository userRepository;
 
 	@Override
@@ -31,8 +33,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		binding = FragmentRegisterBinding.inflate(inflater, container, false);
 		binding.registerRegister.setOnClickListener(this);
 
-		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
-		userRepository.getCountries(countries ->
+		locationRepository = new MarketplaceRepositoryFactory(getContext()).createLocationRepository();
+		userRepository = new MarketplaceRepositoryFactory(getContext()).createUserRepository();
+		locationRepository.getCountries(countries ->
 			locationSelector = new LocationSelector(
 				(AutoCompleteTextView)Objects.requireNonNull(binding.registerCountry.getEditText()),
 				(AutoCompleteTextView)Objects.requireNonNull(binding.registerRegion.getEditText()),

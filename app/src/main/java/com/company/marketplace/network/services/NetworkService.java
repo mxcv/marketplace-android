@@ -69,32 +69,26 @@ public class NetworkService {
 		return instance;
 	}
 
-	public TokenService getTokenService() {
-		return retrofit.create(TokenService.class);
-	}
-
-	public UserService getUserService() {
-		return retrofit.create(UserService.class);
-	}
-
-	public LocationService getLocationService() {
-		return retrofit.create(LocationService.class);
-	}
-
-	public ItemService getItemService() {
-		return retrofit.create(ItemService.class);
-	}
-
-	public CurrencyService getCurrencyService() {
-		return retrofit.create(CurrencyService.class);
-	}
-
 	public CategoryService getCategoryService() {
 		return retrofit.create(CategoryService.class);
 	}
-
+	public CurrencyService getCurrencyService() {
+		return retrofit.create(CurrencyService.class);
+	}
 	public ImageService getImageService() {
 		return retrofit.create(ImageService.class);
+	}
+	public ItemService getItemService() {
+		return retrofit.create(ItemService.class);
+	}
+	public LocationService getLocationService() {
+		return retrofit.create(LocationService.class);
+	}
+	public TokenService getTokenService() {
+		return retrofit.create(TokenService.class);
+	}
+	public UserService getUserService() {
+		return retrofit.create(UserService.class);
 	}
 
 	public String getBaseUrl() {

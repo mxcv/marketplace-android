@@ -16,8 +16,12 @@ import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.SortType;
+import com.company.marketplace.network.repositories.CategoryRepository;
+import com.company.marketplace.network.repositories.CurrencyRepository;
 import com.company.marketplace.network.repositories.ItemRepository;
+import com.company.marketplace.network.repositories.LocationRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
+import com.company.marketplace.network.repositories.SortTypeRepository;
 import com.company.marketplace.network.repositories.UserRepository;
 import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.LocationSelector;
@@ -29,8 +33,11 @@ import java.util.Objects;
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 	private FragmentItemsBinding binding;
+	private CategoryRepository categoryRepository;
+	private CurrencyRepository currencyRepository;
 	private ItemRepository itemRepository;
-	private UserRepository userRepository;
+	private LocationRepository locationRepository;
+	private SortTypeRepository sortTypeRepository;
 	private LocationSelector locationSelector;
 	private ObjectSelector<Category> categorySelector;
 	private ObjectSelector<Currency> currencySelector;
@@ -39,12 +46,15 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentItemsBinding.inflate(inflater, container, false);
-
 		binding.itemsDisplayOptions.displayOptionsApply.setOnClickListener(this);
-		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
-		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
 
-		itemRepository.getCategories(categories -> {
+		categoryRepository = new MarketplaceRepositoryFactory(getContext()).createCategoryRepository();
+		currencyRepository = new MarketplaceRepositoryFactory(getContext()).createCurrencyRepository();
+		itemRepository = new MarketplaceRepositoryFactory(getContext()).createItemRepository();
+		locationRepository = new MarketplaceRepositoryFactory(getContext()).createLocationRepository();
+		sortTypeRepository = new MarketplaceRepositoryFactory(getContext()).createSortTypeRepository();
+
+		categoryRepository.getCategories(categories -> {
 			synchronized (this) {
 				categorySelector = new ObjectSelector<>(
 					(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsCategory.getEditText(),
@@ -55,7 +65,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 			}
 		});
 
-		itemRepository.getCurrencies(currencies -> {
+		currencyRepository.getCurrencies(currencies -> {
 			synchronized (this) {
 				currencySelector = new ObjectSelector<>(
 					(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsCurrency.getEditText(),
@@ -66,7 +76,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 			}
 		});
 
-		userRepository.getCountries(countries -> {
+		locationRepository.getCountries(countries -> {
 			synchronized (this) {
 				locationSelector = new LocationSelector(
 					(AutoCompleteTextView)Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsCountry.getEditText()),
@@ -77,7 +87,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 			}
 		});
 
-		itemRepository.getSortTypes(sortTypes ->
+		sortTypeRepository.getSortTypes(sortTypes ->
 			sortTypeSelector = new ObjectSelector<>(
 				(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsSort.getEditText(),
 				null,

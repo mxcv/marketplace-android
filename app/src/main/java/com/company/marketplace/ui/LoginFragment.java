@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		UserRepository userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
+		UserRepository userRepository = new MarketplaceRepositoryFactory(getContext()).createUserRepository();
 		userRepository.login(
 			Objects.requireNonNull(binding.loginEmail.getEditText()).getText().toString(),
 			Objects.requireNonNull(binding.loginPassword.getEditText()).getText().toString(),

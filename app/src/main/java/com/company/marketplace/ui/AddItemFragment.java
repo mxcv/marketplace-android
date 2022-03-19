@@ -21,6 +21,9 @@ import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
+import com.company.marketplace.network.repositories.CategoryRepository;
+import com.company.marketplace.network.repositories.CurrencyRepository;
+import com.company.marketplace.network.repositories.ImageRepository;
 import com.company.marketplace.network.repositories.ItemRepository;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.tools.ImagePicker;
@@ -34,6 +37,9 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	private FragmentAddItemBinding binding;
 	private ImagePicker imagePicker;
+	private CategoryRepository categoryRepository;
+	private CurrencyRepository currencyRepository;
+	private ImageRepository imageRepository;
 	private ItemRepository itemRepository;
 	private List<ImageOutput> images;
 	private ObjectSelector<Currency> currencySelector;
@@ -73,15 +79,19 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			}
 		});
 
-		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
-		itemRepository.getCurrencies(currencies ->
+		categoryRepository = new MarketplaceRepositoryFactory(getContext()).createCategoryRepository();
+		currencyRepository = new MarketplaceRepositoryFactory(getContext()).createCurrencyRepository();
+		imageRepository = new MarketplaceRepositoryFactory(getContext()).createImageRepository();
+		itemRepository = new MarketplaceRepositoryFactory(getContext()).createItemRepository();
+
+		currencyRepository.getCurrencies(currencies ->
 			currencySelector = new ObjectSelector<>(
 				(AutoCompleteTextView)(binding.addItemCurrency.getEditText()),
 				null,
 				currencies,
 				Currency::getSymbol));
 
-		itemRepository.getCategories(categories ->
+		categoryRepository.getCategories(categories ->
 			categorySelector = new ObjectSelector<>(
 				(AutoCompleteTextView)(binding.addItemCategory.getEditText()),
 				R.string.not_selected,
@@ -126,7 +136,7 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 					Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
 						.navigate(R.id.nav_my_items);
 				else {
-					itemRepository.addItemImages(itemId, images, ignored ->
+					imageRepository.addItemImages(itemId, images, ignored ->
 						Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
 							.navigate(R.id.nav_my_items));
 				}
