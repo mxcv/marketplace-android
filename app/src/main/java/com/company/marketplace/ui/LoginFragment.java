@@ -41,8 +41,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 	public void onClick(View v) {
 		UserRepository userRepository = new MarketplaceRepositoryFactory(getContext()).createUserRepository();
 		userRepository.login(
-			Objects.requireNonNull(binding.loginEmail.getEditText()).getText().toString(),
-			Objects.requireNonNull(binding.loginPassword.getEditText()).getText().toString(),
+			Objects.requireNonNull(binding.loginEmail.getText()).toString(),
+			Objects.requireNonNull(binding.loginPassword.getText()).toString(),
 			ignored -> userRepository.getUser(user -> {
 				Account.get().setUser(user);
 				Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)

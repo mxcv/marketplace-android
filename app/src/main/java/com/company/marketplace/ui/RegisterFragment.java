@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,9 +36,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 		userRepository = new MarketplaceRepositoryFactory(getContext()).createUserRepository();
 		locationRepository.getCountries(countries ->
 			locationSelector = new LocationSelector(
-				(AutoCompleteTextView)Objects.requireNonNull(binding.registerCountry.getEditText()),
-				(AutoCompleteTextView)Objects.requireNonNull(binding.registerRegion.getEditText()),
-				(AutoCompleteTextView)Objects.requireNonNull(binding.registerCity.getEditText()),
+				binding.registerCountry,
+				binding.registerRegion,
+				binding.registerCity,
 				countries));
 
 		return binding.getRoot();
@@ -53,16 +52,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (!Objects.requireNonNull(binding.registerPassword.getEditText()).getText().toString().equals(
-			Objects.requireNonNull(binding.registerConfirmPassword.getEditText()).getText().toString()))
+		if (!Objects.requireNonNull(binding.registerPassword.getText()).toString().equals(
+			Objects.requireNonNull(binding.registerConfirmPassword.getText()).toString()))
 			Toast.makeText(getContext(), R.string.passwords_do_not_match, Toast.LENGTH_SHORT).show();
 		else {
 			userRepository.addUser(
 				new User(
-					Objects.requireNonNull(binding.registerEmail.getEditText()).getText().toString(),
-					Objects.requireNonNull(binding.registerPassword.getEditText()).getText().toString(),
-					Objects.requireNonNull(binding.registerPhoneNumber.getEditText()).getText().toString(),
-					Objects.requireNonNull(binding.registerName.getEditText()).getText().toString(),
+					Objects.requireNonNull(binding.registerEmail.getText()).toString(),
+					Objects.requireNonNull(binding.registerPassword.getText()).toString(),
+					Objects.requireNonNull(binding.registerPhoneNumber.getText()).toString(),
+					Objects.requireNonNull(binding.registerName.getText()).toString(),
 					locationSelector.getSelectedCity()
 				),
 				ignored -> Navigation.findNavController(v).navigate(R.id.nav_login),

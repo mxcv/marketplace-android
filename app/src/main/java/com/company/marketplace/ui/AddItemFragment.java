@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -86,14 +85,14 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 		currencyRepository.getCurrencies(currencies ->
 			currencySelector = new ObjectSelector<>(
-				(AutoCompleteTextView)(binding.addItemCurrency.getEditText()),
+				binding.addItemCurrency,
 				null,
 				currencies,
 				Currency::getSymbol));
 
 		categoryRepository.getCategories(categories ->
 			categorySelector = new ObjectSelector<>(
-				(AutoCompleteTextView)(binding.addItemCategory.getEditText()),
+				binding.addItemCategory,
 				R.string.not_selected,
 				categories,
 				Category::getTitle));
@@ -109,9 +108,9 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		String title = Objects.requireNonNull(binding.addItemTitle.getEditText()).getText().toString();
-		String description = Objects.requireNonNull(binding.addItemDescription.getEditText()).getText().toString();
-		String priceString = Objects.requireNonNull(binding.addItemPrice.getEditText()).getText().toString();
+		String title = Objects.requireNonNull(binding.addItemTitle.getText()).toString();
+		String description = Objects.requireNonNull(binding.addItemDescription.getText()).toString();
+		String priceString = Objects.requireNonNull(binding.addItemPrice.getText()).toString();
 		BigDecimal price = priceString.equals("") ? null : new BigDecimal(priceString);
 
 		if (title.trim().isEmpty()) {
