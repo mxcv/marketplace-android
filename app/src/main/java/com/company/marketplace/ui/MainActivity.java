@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements Observer<User> {
 		else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);
-			((TextView)findViewById(R.id.navName)).setText(user.getName());
-			((TextView)findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
+			((TextView)navigationView.getHeaderView(0).findViewById(R.id.navName)).setText(user.getName());
+			((TextView)navigationView.getHeaderView(0).findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
 		}
 	}
 }
