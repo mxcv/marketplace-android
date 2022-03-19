@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.marketplace.R;
+import com.company.marketplace.databinding.FragmentItemsBinding;
 import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
@@ -24,18 +22,13 @@ import com.company.marketplace.network.repositories.UserRepository;
 import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.LocationSelector;
 import com.company.marketplace.ui.tools.ObjectSelector;
-import com.github.florent37.expansionpanel.ExpansionLayout;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
-	private ExpansionLayout expansionLayoutView;
-	private TextView foundView;
-	private EditText queryView, minPriceView, maxPriceView;
-	private AutoCompleteTextView categoryView, currencyView, countryView, regionView, cityView, sortView;
-	private RecyclerView itemsView;
+	private FragmentItemsBinding binding;
 	private ItemRepository itemRepository;
 	private UserRepository userRepository;
 	private LocationSelector locationSelector;
@@ -45,29 +38,16 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_items, container, false);
-		view.findViewById(R.id.displayOptionsApply).setOnClickListener(this);
-		expansionLayoutView = view.findViewById(R.id.displayOptionsExpansionLayout);
-		foundView = view.findViewById(R.id.itemsFoundValue);
-		queryView = ((TextInputLayout)view.findViewById(R.id.displayOptionsQuery)).getEditText();
-		minPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMin)).getEditText();
-		maxPriceView = ((TextInputLayout)view.findViewById(R.id.displayOptionsPriceMax)).getEditText();
-		categoryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCategory)).getEditText();
-		currencyView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCurrency)).getEditText();
-		countryView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCountry)).getEditText();
-		regionView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsRegion)).getEditText();
-		cityView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsCity)).getEditText();
-		sortView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsSort)).getEditText();
-		sortView = (AutoCompleteTextView)((TextInputLayout)view.findViewById(R.id.displayOptionsSort)).getEditText();
-		itemsView = view.findViewById(R.id.itemsItems);
+		binding = FragmentItemsBinding.inflate(inflater, container, false);
 
+		binding.itemsDisplayOptions.displayOptionsApply.setOnClickListener(this);
 		itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
 		userRepository = new MarketplaceRepositoryFactory(getActivity()).createUserRepository();
 
 		itemRepository.getCategories(categories -> {
 			synchronized (this) {
 				categorySelector = new ObjectSelector<>(
-					categoryView,
+					(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsCategory.getEditText(),
 					R.string.not_selected,
 					categories,
 					Category::getTitle);
@@ -78,7 +58,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRepository.getCurrencies(currencies -> {
 			synchronized (this) {
 				currencySelector = new ObjectSelector<>(
-					currencyView,
+					(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsCurrency.getEditText(),
 					R.string.default_option,
 					currencies,
 					Currency::getSymbol);
@@ -88,31 +68,36 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 		userRepository.getCountries(countries -> {
 			synchronized (this) {
-				locationSelector = new LocationSelector(countryView, regionView, cityView, countries);
+				locationSelector = new LocationSelector(
+					(AutoCompleteTextView)Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsCountry.getEditText()),
+					(AutoCompleteTextView)Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsRegion.getEditText()),
+					(AutoCompleteTextView)Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsCity.getEditText()),
+					countries);
 				notify();
 			}
 		});
 
 		itemRepository.getSortTypes(sortTypes ->
 			sortTypeSelector = new ObjectSelector<>(
-				sortView,
+				(AutoCompleteTextView)binding.itemsDisplayOptions.displayOptionsSort.getEditText(),
 				null,
 				sortTypes,
 				SortType::getName));
 
 		getItems(new ItemRequest());
-		return view;
+		return binding.getRoot();
 	}
 
 	@Override
 	public void onClick(View v) {
+		String query = Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsQuery.getEditText()).getText().toString();
+		String minPrice = Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsPriceMin.getEditText()).getText().toString();
+		String maxPrice = Objects.requireNonNull(binding.itemsDisplayOptions.displayOptionsPriceMax.getEditText()).getText().toString();
+
 		ItemRequest itemRequest = new ItemRequest();
-		itemRequest.setQuery(queryView.getText().toString().equals("") ? null
-			: queryView.getText().toString());
-		itemRequest.setMinPrice(minPriceView.getText().toString().equals("") ? null
-			: new BigDecimal(minPriceView.getText().toString()));
-		itemRequest.setMaxPrice(maxPriceView.getText().toString().equals("") ? null
-			: new BigDecimal(maxPriceView.getText().toString()));
+		itemRequest.setQuery(query.equals("") ? null : query);
+		itemRequest.setMinPrice(minPrice.equals("") ? null : new BigDecimal(minPrice));
+		itemRequest.setMaxPrice(maxPrice.equals("") ? null : new BigDecimal(maxPrice));
 		itemRequest.setCategory(categorySelector == null ? null : categorySelector.getSelectedObject());
 		itemRequest.setCurrency(currencySelector == null ? null : currencySelector.getSelectedObject());
 		itemRequest.setCountry(locationSelector == null ? null : locationSelector.getSelectedCountry());
@@ -120,7 +105,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRequest.setCity(locationSelector == null ? null : locationSelector.getSelectedCity());
 		itemRequest.setSortType(sortTypeSelector == null ? null : sortTypeSelector.getSelectedObject());
 
-		expansionLayoutView.collapse(true);
+		binding.itemsDisplayOptions.displayOptionsExpansionLayout.collapse(true);
 		getItems(itemRequest);
 	}
 
@@ -162,8 +147,8 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 							.orElse(item.getUser().getCity()));
 				}
 				requireActivity().runOnUiThread(() -> {
-					foundView.setText(String.valueOf(page.getItems().size() + page.getLeftCount()));
-					itemsView.setAdapter(new ItemAdapter(getContext(), page.getItems()));
+					binding.itemsFoundValue.setText(String.valueOf(page.getItems().size() + page.getLeftCount()));
+					binding.itemsItems.setAdapter(new ItemAdapter(getContext(), page.getItems()));
 				});
 			}
 			catch (InterruptedException e) {

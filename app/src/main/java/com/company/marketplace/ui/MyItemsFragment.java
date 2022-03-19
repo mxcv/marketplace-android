@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.marketplace.R;
 import com.company.marketplace.account.Account;
+import com.company.marketplace.databinding.FragmentMyItemsBinding;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.User;
@@ -25,17 +26,14 @@ import java.util.Objects;
 
 public class MyItemsFragment extends Fragment {
 
-	private RecyclerView myItemsView;
+	private FragmentMyItemsBinding binding;
 	private List<Item> items;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-		View view = inflater.inflate(R.layout.fragment_my_items, container, false);
-		myItemsView = view.findViewById(R.id.myItemsRecyclerView);
+		binding = FragmentMyItemsBinding.inflate(inflater, container, false);
 
 		ItemRepository itemRepository = new MarketplaceRepositoryFactory(getActivity()).createItemRepository();
-
 		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
 			new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 				@Override
@@ -55,11 +53,11 @@ public class MyItemsFragment extends Fragment {
 					alertBuilder.setPositiveButton(R.string.yes, (dialog, which) -> {
 						itemRepository.removeItem(items.get(position).getId(), null, null);
 						items.remove(position);
-						Objects.requireNonNull(myItemsView.getAdapter()).notifyItemRemoved(position);
+						Objects.requireNonNull(binding.myItemsRecyclerView.getAdapter()).notifyItemRemoved(position);
 						dialog.dismiss();
 					});
 					alertBuilder.setNegativeButton(R.string.no, (dialog, which) -> {
-						Objects.requireNonNull(myItemsView.getAdapter()).notifyItemChanged(position);
+						Objects.requireNonNull(binding.myItemsRecyclerView.getAdapter()).notifyItemChanged(position);
 						dialog.dismiss();
 					});
 					alertBuilder.create().show();
@@ -75,10 +73,10 @@ public class MyItemsFragment extends Fragment {
 				User user = Account.get().getUser();
 				for (Item item : items)
 					item.setUser(user);
-				myItemsView.setAdapter(new ItemAdapter(getContext(), items));
-				itemTouchHelper.attachToRecyclerView(myItemsView);
+				binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), items));
+				itemTouchHelper.attachToRecyclerView(binding.myItemsRecyclerView);
 			});
 
-		return view;
+		return binding.getRoot();
 	}
 }
