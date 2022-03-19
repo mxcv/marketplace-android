@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.marketplace.R;
-import com.company.marketplace.account.Account;
+import com.company.marketplace.models.Account;
 import com.company.marketplace.databinding.FragmentMyItemsBinding;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
@@ -65,12 +65,12 @@ public class MyItemsFragment extends Fragment {
 			});
 
 		ItemRequest itemRequest = new ItemRequest();
-		itemRequest.setUser(Account.get().getUser());
+		itemRequest.setUser(Account.get().getUser().getValue());
 		itemRepository.getItems(
 			itemRequest,
 			page -> {
 				items = page.getItems();
-				User user = Account.get().getUser();
+				User user = Account.get().getUser().getValue();
 				for (Item item : items)
 					item.setUser(user);
 				binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), items));

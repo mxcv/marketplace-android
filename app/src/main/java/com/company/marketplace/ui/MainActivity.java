@@ -1,26 +1,25 @@
 package com.company.marketplace.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.company.marketplace.R;
-import com.company.marketplace.account.Account;
-import com.company.marketplace.account.UserChangedListener;
+import com.company.marketplace.models.Account;
 import com.company.marketplace.databinding.ActivityMainBinding;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements UserChangedListener {
+public class MainActivity extends AppCompatActivity implements Observer<User> {
 
 	private AppBarConfiguration appBarConfiguration;
 
@@ -44,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 		NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 		NavigationUI.setupWithNavController(navigationView, navController);
 
-		Account.get().addUserChangedListener(this);
+		Account.get().getUser().observe(this, this);
 		new MarketplaceRepositoryFactory(this).createUserRepository().getUser(user ->
-			Account.get().setUser(user, this));
+			Account.get().setUser(user));
 	}
 
 	@Override
@@ -62,18 +61,21 @@ public class MainActivity extends AppCompatActivity implements UserChangedListen
 	}
 
 	@Override
-	public void onUserChanged(User user, Activity activity) {
-		NavigationView navigationView = activity.findViewById(R.id.nav_view);
+	public void onChanged(User user) {
+		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.removeHeaderView(navigationView.getHeaderView(0));
 		navigationView.getMenu().clear();
 
-		if (user == null)
+		if (user == null) {
 			navigationView.inflateMenu(R.menu.guest_drawer);
+			Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+				.navigate(R.id.nav_login);
+		}
 		else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);
-			((TextView)activity.findViewById(R.id.navName)).setText(user.getName());
-			((TextView)activity.findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
+			((TextView)findViewById(R.id.navName)).setText(user.getName());
+			((TextView)findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
 		}
 	}
 }

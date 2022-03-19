@@ -1,19 +1,20 @@
 package com.company.marketplace.network.repositories;
 
 import android.app.Activity;
+import android.content.Context;
 import android.widget.Toast;
 
 import androidx.navigation.Navigation;
 
 import com.company.marketplace.R;
-import com.company.marketplace.account.Account;
+import com.company.marketplace.models.Account;
 
 public class MarketplaceRepositoryFactory {
 
-	private final Activity activity;
+	private final Context context;
 
-	public MarketplaceRepositoryFactory(Activity activity) {
-		this.activity = activity;
+	public MarketplaceRepositoryFactory(Context context) {
+		this.context = context;
 	}
 
 	public UserRepository createUserRepository() {
@@ -26,13 +27,11 @@ public class MarketplaceRepositoryFactory {
 
 	private MarketplaceRepository createMarketplaceRepository() {
 		return new MarketplaceRepository(
-			activity,
+			context,
 			() -> {
 				createUserRepository().logout();
-				Account.get().setUser(null, activity);
-				Navigation.findNavController(activity, R.id.nav_host_fragment_content_main)
-					.navigate(R.id.nav_login);
+				Account.get().setUser(null);
 			},
-			() -> Toast.makeText(activity, R.string.connection_error, Toast.LENGTH_LONG).show());
+			() -> Toast.makeText(context, R.string.connection_error, Toast.LENGTH_LONG).show());
 	}
 }
