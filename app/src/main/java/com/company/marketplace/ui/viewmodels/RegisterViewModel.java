@@ -1,39 +1,35 @@
 package com.company.marketplace.ui.viewmodels;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.company.marketplace.R;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
 public class RegisterViewModel extends AndroidViewModel {
 
-	private final MutableLiveData<Void> success;
-	private final MutableLiveData<Void> error;
+	private final MutableLiveData<Integer> userId;
 
 	public RegisterViewModel(@NonNull Application application) {
 		super(application);
-		success = new MutableLiveData<>();
-		error = new MutableLiveData<>();
+		userId = new MutableLiveData<>();
 	}
 
 	public void register(User user) {
 		new MarketplaceRepositoryFactory(getApplication())
 			.createUserRepository()
 			.addUser(user,
-				success::setValue,
-				() -> error.setValue(null));
+				userId::setValue,
+				() -> Toast.makeText(getApplication(), R.string.registration_error, Toast.LENGTH_LONG).show());
 	}
 
-	public LiveData<Void> getSuccess() {
-		return success;
-	}
-
-	public LiveData<Void> getError() {
-		return error;
+	public LiveData<Integer> getUserId() {
+		return userId;
 	}
 }
