@@ -13,5 +13,5 @@ public interface UserService {
 	Call<User> getUser();
 
 	@POST("users")
-	Call<Void> postUser(@Body User user);
+	Call<Integer> postUser(@Body User user);
 }

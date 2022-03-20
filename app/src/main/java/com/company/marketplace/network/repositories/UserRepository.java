@@ -15,6 +15,6 @@ public interface UserRepository {
 	void getUser(ResponseListener<User> responseListener);
 
 	void addUser(User user,
-				 ResponseListener<Void> responseListener,
+				 ResponseListener<Integer> responseListener,
 				 BadRequestErrorListener badRequestErrorListener);
 }

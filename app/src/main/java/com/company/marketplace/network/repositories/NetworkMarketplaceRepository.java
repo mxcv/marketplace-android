@@ -287,18 +287,18 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 
 	@Override
 	public void addUser(User user,
-						ResponseListener<Void> responseListener,
+						ResponseListener<Integer> responseListener,
 						BadRequestErrorListener badRequestErrorListener) {
 
 		NetworkService.get()
 			.getUserService()
 			.postUser(user)
 			.enqueue(new SimpleCallback<>(
-				ignored -> {
+				userId -> {
 					if (responseListener != null)
-						responseListener.onResponse(null);
+						responseListener.onResponse(userId);
 				},
-				null,
+				badRequestErrorListener,
 				unauthorizedErrorListener,
 				networkErrorListener
 			));
