@@ -1,4 +1,4 @@
-package com.company.marketplace.ui;
+package com.company.marketplace.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
