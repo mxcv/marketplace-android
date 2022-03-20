@@ -6,8 +6,7 @@ import com.company.marketplace.network.responses.ResponseListener;
 
 public interface UserRepository {
 
-	void login(String email,
-			   String password,
+	void login(User user,
 			   ResponseListener<Void> responseListener,
 			   BadRequestErrorListener badRequestErrorListener);
 

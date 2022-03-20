@@ -236,14 +236,13 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 	}
 
 	@Override
-	public void login(String email,
-					  String password,
+	public void login(User user,
 					  ResponseListener<Void> responseListener,
 					  BadRequestErrorListener badRequestErrorListener) {
 
 		NetworkService.get()
 			.getTokenService()
-			.access(new User(email, password))
+			.access(user)
 			.enqueue(new SimpleCallback<>(
 				jwt -> {
 					JwtRepository.get().setTokens(jwt);
