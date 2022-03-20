@@ -1,4 +1,4 @@
-package com.company.marketplace.ui;
+package com.company.marketplace.ui.fragments;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.company.marketplace.R;
@@ -20,27 +21,19 @@ import com.company.marketplace.models.Category;
 import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
-import com.company.marketplace.network.repositories.CategoryRepository;
-import com.company.marketplace.network.repositories.CurrencyRepository;
-import com.company.marketplace.network.repositories.ImageRepository;
-import com.company.marketplace.network.repositories.ItemRepository;
-import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.company.marketplace.ui.tools.ImagePicker;
 import com.company.marketplace.ui.tools.ObjectSelector;
+import com.company.marketplace.ui.viewmodels.AddItemViewModel;
+import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 
 public class AddItemFragment extends Fragment implements View.OnClickListener {
 
 	private FragmentAddItemBinding binding;
 	private ImagePicker imagePicker;
-	private CategoryRepository categoryRepository;
-	private CurrencyRepository currencyRepository;
-	private ImageRepository imageRepository;
-	private ItemRepository itemRepository;
-	private List<ImageOutput> images;
+	private AddItemViewModel addItemViewModel;
 	private ObjectSelector<Currency> currencySelector;
 	private ObjectSelector<Category> categorySelector;
 
@@ -48,8 +41,33 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		imagePicker = new ImagePicker(this, 7, images -> {
-			if (images.size() > 0) {
-				this.images = images;
+			if (images.size() > 0)
+				addItemViewModel.setImages(images);
+		});
+	}
+
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		binding = FragmentAddItemBinding.inflate(inflater, container, false);
+		binding.addItem.setOnClickListener(this);
+
+		binding.addItemAddPhoto.setOnClickListener(v -> {
+			if (addItemViewModel.getImages().getValue() == null)
+				imagePicker.pickImages();
+			else addItemViewModel.setImages(null);
+		});
+
+		addItemViewModel = new ViewModelProvider(this).get(AddItemViewModel.class);
+		addItemViewModel.getItemId().observe(getViewLifecycleOwner(), itemId -> {
+			if (itemId != null)
+				Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+					.navigate(R.id.nav_my_items);
+		});
+		addItemViewModel.getImages().observe(getViewLifecycleOwner(), images -> {
+			binding.addItemImages.removeAllViews();
+			if (images == null)
+				binding.addItemAddPhoto.setIconResource(R.drawable.ic_add_photo);
+			else {
 				for (ImageOutput image : images) {
 					ImageView imageView = new ImageView(getContext());
 					imageView.setLayoutParams(new LinearLayout.LayoutParams(200, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -61,41 +79,23 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 				binding.addItemAddPhoto.setIconResource(R.drawable.ic_delete);
 			}
 		});
-	}
 
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		binding = FragmentAddItemBinding.inflate(inflater, container, false);
-		binding.addItem.setOnClickListener(this);
+		MarketplaceViewModel marketplaceViewModel = new ViewModelProvider(requireActivity())
+			.get(MarketplaceViewModel.class);
 
-		binding.addItemAddPhoto.setOnClickListener(v -> {
-			if (this.images == null)
-				imagePicker.pickImages();
-			else {
-				this.images = null;
-				binding.addItemImages.removeAllViews();
-				binding.addItemAddPhoto.setIconResource(R.drawable.ic_add_photo);
-			}
-		});
-
-		categoryRepository = new MarketplaceRepositoryFactory(getContext()).createCategoryRepository();
-		currencyRepository = new MarketplaceRepositoryFactory(getContext()).createCurrencyRepository();
-		imageRepository = new MarketplaceRepositoryFactory(getContext()).createImageRepository();
-		itemRepository = new MarketplaceRepositoryFactory(getContext()).createItemRepository();
-
-		currencyRepository.getCurrencies(currencies ->
+		marketplaceViewModel.getCurrencies().observe(getViewLifecycleOwner(), currencies ->
 			currencySelector = new ObjectSelector<>(
 				binding.addItemCurrency,
 				null,
 				currencies,
 				Currency::getSymbol));
 
-		categoryRepository.getCategories(categories ->
+		marketplaceViewModel.getCategories().observe(getViewLifecycleOwner(), (categories ->
 			categorySelector = new ObjectSelector<>(
 				binding.addItemCategory,
 				R.string.not_selected,
 				categories,
-				Category::getTitle));
+				Category::getTitle)));
 
 		return binding.getRoot();
 	}
@@ -116,24 +116,12 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 			return;
 		}
 
-		itemRepository.addItem(
-			new Item(
-				title,
-				description.equals("") ? null : description,
-				price,
-				currencySelector.getSelectedObject(),
-				categorySelector.getSelectedObject()
-			),
-			itemId -> {
-				if (images == null)
-					Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
-						.navigate(R.id.nav_my_items);
-				else {
-					imageRepository.addItemImages(itemId, images, ignored ->
-						Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
-							.navigate(R.id.nav_my_items));
-				}
-			},
-			() -> Toast.makeText(getContext(), R.string.add_item_error, Toast.LENGTH_SHORT).show());
+		addItemViewModel.add(new Item(
+			title,
+			description.equals("") ? null : description,
+			price,
+			currencySelector == null ? null : currencySelector.getSelectedObject(),
+			categorySelector == null ? null : categorySelector.getSelectedObject()
+		));
 	}
 }
