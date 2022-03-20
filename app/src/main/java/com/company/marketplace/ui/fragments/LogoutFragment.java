@@ -1,11 +1,9 @@
-package com.company.marketplace.ui;
+package com.company.marketplace.ui.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
-import com.company.marketplace.R;
 import com.company.marketplace.models.Account;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
