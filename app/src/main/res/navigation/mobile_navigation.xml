@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_my_items"
-        android:name="com.company.marketplace.ui.MyItemsFragment"
+        android:name="com.company.marketplace.ui.fragments.MyItemsFragment"
         android:label="@string/my_items"
         tools:layout="@layout/fragment_my_items" />
 
