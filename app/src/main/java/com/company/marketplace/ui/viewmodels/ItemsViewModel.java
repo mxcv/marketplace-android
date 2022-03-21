@@ -7,44 +7,44 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
+import com.company.marketplace.models.Page;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class ItemsViewModel extends AndroidViewModel {
 
-	private static final int TAKE_COUNT = 20;
-	private final MutableLiveData<List<Item>> items;
-	private Integer leftCount;
+	private static final int TAKE_COUNT = 10;
+	private final MutableLiveData<Page> page;
+	private boolean isLoading;
 
 	public ItemsViewModel(@NonNull Application application) {
 		super(application);
-		items = new MutableLiveData<>(new ArrayList<>());
+		this.page = new MutableLiveData<>();
 	}
 
-	public LiveData<List<Item>> getItems() {
-		return items;
+	public LiveData<Page> getPage() {
+		return page;
 	}
 
-	public Integer getLeftItemsCount() {
-		return leftCount;
+	public void clearPage() {
+		this.page.setValue(null);
 	}
 
-	public void clearItems() {
-		items.setValue(new ArrayList<>());
-	}
+	public synchronized void loadMoreItems(ItemRequest itemRequest) {
+		if (!isLoading && (page.getValue() == null || page.getValue().getLeftCount() != 0)) {
+			isLoading = true;
+			if (page.getValue() != null)
+				itemRequest.setSkipCount(page.getValue().getItems().size());
+			itemRequest.setTakeCount(TAKE_COUNT);
 
-	public void loadMoreItems(ItemRequest itemRequest) {
-		itemRequest.setSkipCount(Objects.requireNonNull(items.getValue()).size());
-		itemRequest.setTakeCount(TAKE_COUNT);
-		new MarketplaceRepositoryFactory(getApplication()).createItemRepository().getItems(itemRequest, page -> {
-			leftCount = page.getLeftCount();
-			items.getValue().addAll(page.getItems());
-			items.setValue(items.getValue());
-		});
+			new MarketplaceRepositoryFactory(getApplication())
+				.createItemRepository()
+				.getItems(itemRequest, page -> {
+					if (this.page.getValue() != null)
+						page.getItems().addAll(0, this.page.getValue().getItems());
+					this.page.setValue(page);
+					isLoading = false;
+				});
+		}
 	}
 }

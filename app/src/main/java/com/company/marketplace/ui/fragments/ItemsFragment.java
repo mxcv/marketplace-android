@@ -57,26 +57,36 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		});
 
 		itemsViewModel = new ViewModelProvider(this).get(ItemsViewModel.class);
-		itemsViewModel.getItems().observe(getViewLifecycleOwner(), newItems -> new Thread(() -> {
+		itemsViewModel.getPage().observe(getViewLifecycleOwner(), page -> new Thread(() -> {
 			try {
-				List<Item> addedItems = newItems.subList(items.size(), newItems.size());
-				int start = items.size(), count = addedItems.size();
 				synchronized (this) {
 					while (categorySelector == null
 						|| currencySelector == null
-						|| sortTypeSelector == null
 						|| locationSelector == null)
 						wait();
 				}
-				new ItemInfoFiller(addedItems)
-					.fillCategories(categorySelector.getObjects())
-					.fillCurrencies(currencySelector.getObjects())
-					.fillCities(locationSelector.getCountries());
-				items.addAll(addedItems);
-
 				requireActivity().runOnUiThread(() -> {
-					Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, count);
-					binding.itemsFoundValue.setText(String.valueOf(items.size() + itemsViewModel.getLeftItemsCount()));
+					int start;
+					List<Item> addedItems;
+					if (page == null) {
+						int count = items.size();
+						items.clear();
+						Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeRemoved(0, count);
+						start = 0;
+						addedItems = new ArrayList<>();
+					}
+					else {
+						start = items.size();
+						addedItems = page.getItems().subList(items.size(), page.getItems().size());
+					}
+					new ItemInfoFiller(addedItems)
+						.fillCategories(categorySelector.getObjects())
+						.fillCurrencies(currencySelector.getObjects())
+						.fillCities(locationSelector.getCountries());
+					items.addAll(addedItems);
+
+					Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, addedItems.size());
+					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : items.size() + page.getLeftCount()));
 				});
 			}
 			catch (InterruptedException e) {
@@ -85,14 +95,15 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		}).start());
 
 		loadSelectors(new ViewModelProvider(requireActivity()).get(MarketplaceViewModel.class));
-		itemsViewModel.loadMoreItems(new ItemRequest());
+		if (itemsViewModel.getPage().getValue() == null)
+			itemsViewModel.loadMoreItems(getItemRequest());
 
 		return binding.getRoot();
 	}
 
 	@Override
 	public void onClick(View v) {
-		itemsViewModel.clearItems();
+		itemsViewModel.clearPage();
 		itemsViewModel.loadMoreItems(getItemRequest());
 		binding.itemsDisplayOptions.displayOptionsExpansionLayout.collapse(true);
 	}
@@ -147,15 +158,11 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 				notify();
 			}
 		});
-		marketplaceViewModel.getSortTypes().observe(getViewLifecycleOwner(), sortTypes -> {
-			synchronized (this) {
-				sortTypeSelector = new ObjectSelector<>(
-					binding.itemsDisplayOptions.displayOptionsSort,
-					null,
-					sortTypes,
-					SortType::getName);
-				notify();
-			}
-		});
+		marketplaceViewModel.getSortTypes().observe(getViewLifecycleOwner(), sortTypes ->
+			sortTypeSelector = new ObjectSelector<>(
+				binding.itemsDisplayOptions.displayOptionsSort,
+				null,
+				sortTypes,
+				SortType::getName));
 	}
 }
