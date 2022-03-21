@@ -53,23 +53,25 @@ public class MyItemsFragment extends Fragment {
 		});
 
 		MyItemsViewModel myItemsViewModel = new ViewModelProvider(this).get(MyItemsViewModel.class);
-		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> {
+		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> new Thread(() -> {
 			try {
-				User user = Account.get().getUser().getValue();
-				myItems.forEach(i -> i.setUser(user));
 				synchronized (this) {
 					while (categories == null || currencies == null)
 						wait();
 				}
-				new ItemInfoFiller(myItems)
-					.fillCategories(categories)
-					.fillCurrencies(currencies);
-				binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems));
+				requireActivity().runOnUiThread(() -> {
+					User user = Account.get().getUser().getValue();
+					myItems.forEach(i -> i.setUser(user));
+					new ItemInfoFiller(myItems)
+						.fillCategories(categories)
+						.fillCurrencies(currencies);
+					binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems));
+				});
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		});
+		}).start());
 
 		new ItemTouchHelper(new RemoveItemHelper(myItemsViewModel, binding.myItemsRecyclerView))
 			.attachToRecyclerView(binding.myItemsRecyclerView);
