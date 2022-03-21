@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_items"
-        android:name="com.company.marketplace.ui.ItemsFragment"
+        android:name="com.company.marketplace.ui.fragments.ItemsFragment"
         android:label="@string/items"
         tools:layout="@layout/fragment_items" />
 
