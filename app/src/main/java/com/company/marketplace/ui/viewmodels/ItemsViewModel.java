@@ -13,7 +13,6 @@ import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory
 
 public class ItemsViewModel extends AndroidViewModel {
 
-	private static final int TAKE_COUNT = 10;
 	private final MutableLiveData<Page> page;
 	private boolean isLoading;
 
@@ -35,7 +34,6 @@ public class ItemsViewModel extends AndroidViewModel {
 			isLoading = true;
 			if (page.getValue() != null)
 				itemRequest.setSkipCount(page.getValue().getItems().size());
-			itemRequest.setTakeCount(TAKE_COUNT);
 
 			new MarketplaceRepositoryFactory(getApplication())
 				.createItemRepository()
