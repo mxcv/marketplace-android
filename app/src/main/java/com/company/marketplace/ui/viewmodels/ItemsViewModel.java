@@ -1,6 +1,7 @@
 package com.company.marketplace.ui.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -26,6 +27,7 @@ public class ItemsViewModel extends AndroidViewModel {
 	}
 
 	public void clearPage() {
+		Log.d("items", "Loaded items were cleared.");
 		this.page.setValue(null);
 	}
 
@@ -40,6 +42,8 @@ public class ItemsViewModel extends AndroidViewModel {
 				.getItems(itemRequest, page -> {
 					if (this.page.getValue() != null)
 						page.getItems().addAll(0, this.page.getValue().getItems());
+					Log.d("items", "Items loaded: " + page.getItems().size());
+					Log.d("items", "Items left: " + page.getLeftCount());
 					this.page.setValue(page);
 					isLoading = false;
 				});
