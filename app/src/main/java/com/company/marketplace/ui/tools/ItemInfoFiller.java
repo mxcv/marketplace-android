@@ -20,39 +20,39 @@ public class ItemInfoFiller {
 	}
 
 	public ItemInfoFiller fillCategories(List<Category> categories) {
-		items.stream()
-			.filter(i -> i.getCategory() != null)
-			.forEach(i -> i.setCategory(
-				categories.stream()
-					.filter(c -> c.getId() == i.getCategory().getId())
+		for (Item item : items)
+			if (item.getCategory() != null) {
+				item.setCategory(categories.stream()
+					.filter(c -> c.getId() == item.getCategory().getId())
 					.findFirst()
-					.orElse(i.getCategory())));
+					.orElse(item.getCategory()));
+			}
 
 		return this;
 	}
 
 	public ItemInfoFiller fillCurrencies(List<Currency> currencies) {
-		items.stream()
-			.filter(i -> i.getCurrency() != null)
-			.forEach(i -> i.setCurrency(
-				currencies.stream()
-					.filter(c -> c.getId() == i.getCurrency().getId())
+		for (Item item : items)
+			if (item.getCurrency() != null) {
+				item.setCurrency(currencies.stream()
+					.filter(c -> c.getId() == item.getCurrency().getId())
 					.findFirst()
-					.orElse(i.getCurrency())));
+					.orElse(item.getCurrency()));
+			}
 
 		return this;
 	}
 
 	public ItemInfoFiller fillCities(List<Country> countries) {
-		items.stream()
-			.filter(i -> i.getUser() != null && i.getUser().getCity() != null)
-			.forEach(i -> i.getUser().setCity(
-				countries.stream()
+		for (Item item : items)
+			if (item.getUser() != null && item.getUser().getCity() != null) {
+				item.getUser().setCity(countries.stream()
 					.flatMap(c -> c.getRegions().stream())
 					.flatMap(r -> r.getCities().stream())
-					.filter(c -> c.getId() == i.getUser().getCity().getId())
+					.filter(c -> c.getId() == item.getUser().getCity().getId())
 					.findFirst()
-					.orElse(i.getUser().getCity())));
+					.orElse(item.getUser().getCity()));
+			}
 
 		return this;
 	}
