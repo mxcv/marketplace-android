@@ -34,7 +34,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
 		registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 		registerViewModel.getUserId().observe(getViewLifecycleOwner(), userId ->
-			Navigation.findNavController(binding.getRoot()).navigate(R.id.nav_login));
+			Navigation.findNavController(binding.getRoot())
+				.navigate(R.id.action_register_to_login));
 
 		new ViewModelProvider(requireActivity())
 			.get(MarketplaceViewModel.class)

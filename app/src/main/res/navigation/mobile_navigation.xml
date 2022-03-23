@@ -21,19 +21,43 @@
         android:id="@+id/nav_add_item"
         android:name="com.company.marketplace.ui.fragments.AddItemFragment"
         android:label="@string/add_item"
-        tools:layout="@layout/fragment_add_item" />
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_add_item_to_my_items"
+            app:destination="@id/nav_my_items"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.company.marketplace.ui.fragments.LoginFragment"
         android:label="@string/login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_to_items"
+            app:destination="@id/nav_items"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_register"
         android:name="com.company.marketplace.ui.fragments.RegisterFragment"
         android:label="@string/register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/nav_login"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_logout"

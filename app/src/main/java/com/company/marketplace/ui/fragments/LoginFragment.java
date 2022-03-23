@@ -31,8 +31,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 		loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 		loginViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
 			Account.get().setUser(user);
-			Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
-				.navigate(R.id.nav_items);
+			Navigation.findNavController(binding.getRoot())
+				.navigate(R.id.action_login_to_items);
 		});
 
 		return binding.getRoot();
