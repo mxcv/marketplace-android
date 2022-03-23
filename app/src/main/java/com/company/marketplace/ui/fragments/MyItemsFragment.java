@@ -23,6 +23,7 @@ import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.ItemInfoFiller;
 import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
 import com.company.marketplace.ui.viewmodels.MyItemsViewModel;
+import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -65,7 +66,12 @@ public class MyItemsFragment extends Fragment {
 					new ItemInfoFiller(myItems)
 						.fillCategories(categories)
 						.fillCurrencies(currencies);
-					binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems));
+					binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems,
+						item -> {
+							new ViewModelProvider(this)
+								.get(SelectedItemViewModel.class)
+								.select(item);
+						}));
 				});
 			}
 			catch (InterruptedException e) {

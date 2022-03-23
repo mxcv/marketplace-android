@@ -24,6 +24,7 @@ import com.company.marketplace.ui.tools.LocationSelector;
 import com.company.marketplace.ui.tools.ObjectSelector;
 import com.company.marketplace.ui.viewmodels.ItemsViewModel;
 import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
+import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,7 +48,12 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		binding = FragmentItemsBinding.inflate(inflater, container, false);
 		binding.itemsDisplayOptions.displayOptionsApply.setOnClickListener(this);
 
-		binding.itemsItems.setAdapter(new ItemAdapter(getContext(), items = new ArrayList<>()));
+		binding.itemsItems.setAdapter(new ItemAdapter(getContext(), items = new ArrayList<>(),
+			item -> {
+				new ViewModelProvider(this)
+					.get(SelectedItemViewModel.class)
+					.select(item);
+			}));
 		binding.itemsItems.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {

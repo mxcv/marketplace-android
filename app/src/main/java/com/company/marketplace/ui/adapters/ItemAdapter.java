@@ -22,11 +22,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 	private final Context context;
 	private final LayoutInflater inflater;
 	private final List<Item> items;
+	private final OnItemClickListener onItemClickListener;
 
-	public ItemAdapter(Context context, List<Item> items) {
+	public ItemAdapter(Context context, List<Item> items, OnItemClickListener onItemClickListener) {
 		this.context = context;
-		this.items = items;
 		this.inflater = LayoutInflater.from(context);
+		this.items = items;
+		this.onItemClickListener = onItemClickListener;
 	}
 
 	@NonNull
@@ -56,6 +58,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 			sb.append(item.getUser().getCity().getName()).append(", ");
 		sb.append(item.getCreatedDateFormat(context));
 		holder.locationDateTextView.setText(sb.toString());
+
+		if (onItemClickListener != null)
+			holder.itemView.setOnClickListener(v ->
+				onItemClickListener.onItemClick(item));
 	}
 
 	@Override
@@ -75,5 +81,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 			locationDateTextView = view.findViewById(R.id.listItemLocationDate);
 			imageView = view.findViewById(R.id.listItemImage);
 		}
+	}
+
+	public interface OnItemClickListener {
+
+		void onItemClick(Item item);
 	}
 }
