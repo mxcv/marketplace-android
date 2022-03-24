@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,9 +69,11 @@ public class MyItemsFragment extends Fragment {
 						.fillCurrencies(currencies);
 					binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems,
 						item -> {
-							new ViewModelProvider(this)
+							new ViewModelProvider(requireActivity())
 								.get(SelectedItemViewModel.class)
 								.select(item);
+							Navigation.findNavController(binding.getRoot())
+								.navigate(R.id.action_my_items_to_item);
 						}));
 				});
 			}

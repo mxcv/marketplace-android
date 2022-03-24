@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,9 +51,11 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 		binding.itemsItems.setAdapter(new ItemAdapter(getContext(), items = new ArrayList<>(),
 			item -> {
-				new ViewModelProvider(this)
+				new ViewModelProvider(requireActivity())
 					.get(SelectedItemViewModel.class)
 					.select(item);
+				Navigation.findNavController(binding.getRoot())
+					.navigate(R.id.action_items_to_item);
 			}));
 		binding.itemsItems.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
