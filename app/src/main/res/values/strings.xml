@@ -19,6 +19,8 @@
     <string name="email">Email</string>
     <string name="found">Found:</string>
     <string name="free">Free</string>
+    <string name="item">Item</string>
+    <string name="item_image">Item image</string>
     <string name="items">Items</string>
     <string name="location">Location</string>
     <string name="login">Sign in</string>
