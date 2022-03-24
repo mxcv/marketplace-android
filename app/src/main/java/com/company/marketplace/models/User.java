@@ -72,4 +72,13 @@ public class User {
 	public void setImage(ImageInput image) {
 		this.image = image;
 	}
+
+	public String getLocationFormat() {
+		if (city == null)
+			return "";
+		return String.format("%s, %s, %s",
+			city.getRegion().getCountry().getName(),
+			city.getRegion().getName(),
+			city.getName());
+	}
 }

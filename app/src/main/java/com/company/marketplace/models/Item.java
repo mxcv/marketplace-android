@@ -111,6 +111,7 @@ public class Item {
 
 		return NumberFormat.getCurrencyInstance(locale).format(price);
 	}
+
 	public String getCreatedDateFormat(Context context) {
 		if (created == null)
 			return null;
