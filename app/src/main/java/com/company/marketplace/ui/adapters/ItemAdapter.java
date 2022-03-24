@@ -47,7 +47,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
 		if (item.getImages().size() > 0)
 			Picasso.get()
-				.load(NetworkService.get().getBaseUrl() + item.getImages().get(0).getPath())
+				.load(item.getImages().get(0).getFullPath())
 				.placeholder(R.drawable.ic_hourglass_empty)
 				.into(holder.imageView);
 		else

@@ -25,6 +25,7 @@ public class NetworkService {
 	private static NetworkService instance;
 	private final Context context;
 	private final Retrofit retrofit;
+	private String baseUrl;
 
 	private NetworkService(Context context) {
 		this.context = context.getApplicationContext();
@@ -92,18 +93,21 @@ public class NetworkService {
 	}
 
 	public String getBaseUrl() {
-		try {
-			return context
-				.getPackageManager()
-				.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
-				.metaData
-				.get("base_url")
-				.toString();
+		if (baseUrl == null) {
+			try {
+				baseUrl = context
+					.getPackageManager()
+					.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
+					.metaData
+					.get("base_url")
+					.toString();
+			}
+			catch (PackageManager.NameNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
-		catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return baseUrl;
 	}
 
 	private String getAuthHeader(String token) {

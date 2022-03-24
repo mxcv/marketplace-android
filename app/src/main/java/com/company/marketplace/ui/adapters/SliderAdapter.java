@@ -38,7 +38,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 				ViewGroup.LayoutParams.MATCH_PARENT));
 		}
 		else Picasso.get()
-			.load(NetworkService.get().getBaseUrl() + image.getPath())
+			.load(image.getFullPath())
 			.placeholder(R.drawable.ic_hourglass_empty)
 			.into(holder.imageView);
 	}

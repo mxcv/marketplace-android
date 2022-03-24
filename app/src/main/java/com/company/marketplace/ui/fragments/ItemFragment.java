@@ -50,7 +50,7 @@ public class ItemFragment extends Fragment {
 
 		if (item.getUser().getImage() != null)
 			Picasso.get()
-				.load(NetworkService.get().getBaseUrl() + item.getUser().getImage().getPath())
+				.load(item.getUser().getImage().getFullPath())
 				.into(binding.itemUserImage);
 
 		binding.itemUserName.setText(item.getUser().getName());
