@@ -40,8 +40,8 @@
                 android:id="@+id/loginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:layout_marginTop="8dp"
-                android:autofillHints="password"
                 android:maxLength="30" />
 
         </com.google.android.material.textfield.TextInputLayout>
