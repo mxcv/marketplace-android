@@ -16,6 +16,8 @@ import java.util.List;
 
 public class MyItemsViewModel extends AndroidViewModel {
 
+	private static final int MAX_PAGE_SIZE = 100;
+
 	private MutableLiveData<List<Item>> myItems;
 
 	public MyItemsViewModel(@NonNull Application application) {
@@ -27,9 +29,10 @@ public class MyItemsViewModel extends AndroidViewModel {
 			myItems = new MutableLiveData<>();
 			ItemRequest itemRequest = new ItemRequest();
 			itemRequest.setUser(Account.get().getUser().getValue());
+			itemRequest.setPageSize(MAX_PAGE_SIZE);
 			new MarketplaceRepositoryFactory(getApplication())
 				.createItemRepository()
-				.getItems(itemRequest, items -> myItems.setValue(items.getItems()));
+				.getItems(itemRequest, page -> myItems.setValue(page.getItems()));
 		}
 		return myItems;
 	}

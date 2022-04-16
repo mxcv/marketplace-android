@@ -14,8 +14,8 @@ public class ItemRequest {
 	private City city;
 	private User user;
 	private SortType sortType;
-	private Integer skipCount;
-	private Integer takeCount;
+	private Integer pageIndex;
+	private Integer pageSize;
 
 	public String getQuery() {
 		return query;
@@ -87,17 +87,17 @@ public class ItemRequest {
 		this.sortType = sortType;
 	}
 
-	public Integer getSkipCount() {
-		return skipCount;
+	public Integer getPageIndex() {
+		return pageIndex;
 	}
-	public void setSkipCount(Integer skipCount) {
-		this.skipCount = skipCount;
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
 	}
 
-	public Integer getTakeCount() {
-		return takeCount;
+	public Integer getPageSize() {
+		return pageSize;
 	}
-	public void setTakeCount(Integer takeCount) {
-		this.takeCount = takeCount;
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
 	}
 }

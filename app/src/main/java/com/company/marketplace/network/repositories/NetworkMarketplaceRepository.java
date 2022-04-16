@@ -153,8 +153,8 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 				itemRequest.getCity() == null ? null : itemRequest.getCity().getId(),
 				itemRequest.getUser() == null ? null : itemRequest.getUser().getId(),
 				itemRequest.getSortType() == null ? null : itemRequest.getSortType().getId(),
-				itemRequest.getSkipCount(),
-				itemRequest.getTakeCount())
+				itemRequest.getPageIndex(),
+				itemRequest.getPageSize())
 			.enqueue(new SimpleCallback<>(
 				page -> {
 					if (responseListener != null)

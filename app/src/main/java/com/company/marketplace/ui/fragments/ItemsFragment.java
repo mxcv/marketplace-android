@@ -34,8 +34,6 @@ import java.util.Objects;
 
 public class ItemsFragment extends Fragment implements View.OnClickListener {
 
-	private static final int TAKE_ITEMS_COUNT = 20;
-
 	private FragmentItemsBinding binding;
 	private ItemsViewModel itemsViewModel;
 	private ObjectSelector<Category> categorySelector;
@@ -97,7 +95,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 					items.addAll(addedItems);
 
 					Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, addedItems.size());
-					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : items.size() + page.getLeftCount()));
+					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalItems()));
 				});
 			}
 			catch (InterruptedException e) {
@@ -134,7 +132,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		itemRequest.setRegion(locationSelector == null ? null : locationSelector.getSelectedRegion());
 		itemRequest.setCity(locationSelector == null ? null : locationSelector.getSelectedCity());
 		itemRequest.setSortType(sortTypeSelector == null ? null : sortTypeSelector.getSelectedObject());
-		itemRequest.setTakeCount(TAKE_ITEMS_COUNT);
 
 		return itemRequest;
 	}

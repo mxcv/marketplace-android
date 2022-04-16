@@ -14,6 +14,8 @@ import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory
 
 public class ItemsViewModel extends AndroidViewModel {
 
+	private static final int PAGE_SIZE = 20;
+
 	private final MutableLiveData<Page> page;
 	private boolean isLoading;
 
@@ -32,10 +34,11 @@ public class ItemsViewModel extends AndroidViewModel {
 	}
 
 	public synchronized void loadMoreItems(ItemRequest itemRequest) {
-		if (!isLoading && (page.getValue() == null || page.getValue().getLeftCount() != 0)) {
+		if (!isLoading && (page.getValue() == null || page.getValue().getIndex() != page.getValue().getTotalPages())) {
 			isLoading = true;
 			if (page.getValue() != null)
-				itemRequest.setSkipCount(page.getValue().getItems().size());
+				itemRequest.setPageIndex(page.getValue().getIndex() + 1);
+			itemRequest.setPageSize(PAGE_SIZE);
 
 			new MarketplaceRepositoryFactory(getApplication())
 				.createItemRepository()
@@ -43,7 +46,8 @@ public class ItemsViewModel extends AndroidViewModel {
 					if (this.page.getValue() != null)
 						page.getItems().addAll(0, this.page.getValue().getItems());
 					Log.d("items", "Items loaded: " + page.getItems().size());
-					Log.d("items", "Items left: " + page.getLeftCount());
+					Log.d("items", "Current page: " + page.getIndex());
+					Log.d("items", "Total pages: " + page.getTotalPages());
 					this.page.setValue(page);
 					isLoading = false;
 				});

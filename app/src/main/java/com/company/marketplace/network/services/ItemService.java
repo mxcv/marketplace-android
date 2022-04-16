@@ -26,8 +26,8 @@ public interface ItemService {
 						@Query("cityId") Integer cityId,
 						@Query("userId") Integer userId,
 						@Query("sortTypeId") Integer sortTypeId,
-						@Query("skipCount") Integer skipCount,
-						@Query("takeCount") Integer takeCount);
+						@Query("pageIndex") Integer pageIndex,
+						@Query("pageSize") Integer pageSize);
 
 	@POST("items")
 	Call<Integer> postItem(@Body Item item);
