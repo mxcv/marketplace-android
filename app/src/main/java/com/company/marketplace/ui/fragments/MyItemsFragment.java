@@ -54,6 +54,7 @@ public class MyItemsFragment extends Fragment {
 			}
 		});
 
+		getViewModelStore().clear();
 		MyItemsViewModel myItemsViewModel = new ViewModelProvider(this).get(MyItemsViewModel.class);
 		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> new Thread(() -> {
 			try {

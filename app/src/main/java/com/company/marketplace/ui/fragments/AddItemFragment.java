@@ -58,9 +58,11 @@ public class AddItemFragment extends Fragment implements View.OnClickListener {
 		});
 
 		addItemViewModel = new ViewModelProvider(this).get(AddItemViewModel.class);
-		addItemViewModel.getItemId().observe(getViewLifecycleOwner(), itemId ->
+		addItemViewModel.getItemId().observe(getViewLifecycleOwner(), itemId -> {
+			getViewModelStore().clear();
 			Navigation.findNavController(binding.getRoot())
-				.navigate(R.id.action_add_item_to_my_items));
+				.navigate(R.id.action_add_item_to_my_items);
+		});
 		addItemViewModel.getImages().observe(getViewLifecycleOwner(), images -> {
 			binding.addItemImages.removeAllViews();
 			if (images == null)

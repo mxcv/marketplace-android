@@ -65,6 +65,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 			}
 		});
 
+		getViewModelStore().clear();
 		itemsViewModel = new ViewModelProvider(this).get(ItemsViewModel.class);
 		itemsViewModel.getPage().observe(getViewLifecycleOwner(), page -> new Thread(() -> {
 			try {
