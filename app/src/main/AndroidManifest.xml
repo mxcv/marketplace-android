@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="base_url" android:value="http://fexef94625-001-site1.ftempurl.com" />
+        <meta-data android:name="base_url" android:value="https://bsite.net/resabi2721" />
     </application>
 
 </manifest>
