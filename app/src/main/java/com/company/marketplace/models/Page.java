@@ -5,10 +5,10 @@ import java.util.List;
 public class Page {
 
 	private List<Item> items;
-	private int index;
-	private int size;
+	private int pageIndex;
+	private int pageSize;
 	private int totalPages;
-	private int totalItems;
+	private int totalCount;
 
 	public List<Item> getItems() {
 		return items;
@@ -17,18 +17,18 @@ public class Page {
 		this.items = items;
 	}
 
-	public int getIndex() {
-		return index;
+	public int getPageIndex() {
+		return pageIndex;
 	}
-	public void setIndex(int index) {
-		this.index = index;
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
 	}
 
-	public int getSize() {
-		return size;
+	public int getPageSize() {
+		return pageSize;
 	}
-	public void setSize(int size) {
-		this.size = size;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 
 	public int getTotalPages() {
@@ -38,10 +38,10 @@ public class Page {
 		this.totalPages = totalPages;
 	}
 
-	public int getTotalItems() {
-		return totalItems;
+	public int getTotalCount() {
+		return totalCount;
 	}
-	public void setTotalItems(int totalItems) {
-		this.totalItems = totalItems;
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 }

@@ -96,7 +96,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 					items.addAll(addedItems);
 
 					Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, addedItems.size());
-					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalItems()));
+					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalCount()));
 				});
 			}
 			catch (InterruptedException e) {

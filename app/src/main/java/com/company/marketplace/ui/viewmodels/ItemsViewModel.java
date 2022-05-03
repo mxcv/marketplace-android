@@ -34,10 +34,10 @@ public class ItemsViewModel extends AndroidViewModel {
 	}
 
 	public synchronized void loadMoreItems(ItemRequest itemRequest) {
-		if (!isLoading && (page.getValue() == null || page.getValue().getIndex() != page.getValue().getTotalPages())) {
+		if (!isLoading && (page.getValue() == null || page.getValue().getPageIndex() != page.getValue().getTotalPages())) {
 			isLoading = true;
 			if (page.getValue() != null)
-				itemRequest.setPageIndex(page.getValue().getIndex() + 1);
+				itemRequest.setPageIndex(page.getValue().getPageIndex() + 1);
 			itemRequest.setPageSize(PAGE_SIZE);
 
 			new MarketplaceRepositoryFactory(getApplication())
@@ -46,7 +46,7 @@ public class ItemsViewModel extends AndroidViewModel {
 					if (this.page.getValue() != null)
 						page.getItems().addAll(0, this.page.getValue().getItems());
 					Log.d("items", "Items loaded: " + page.getItems().size());
-					Log.d("items", "Current page: " + page.getIndex());
+					Log.d("items", "Current page: " + page.getPageIndex());
 					Log.d("items", "Total pages: " + page.getTotalPages());
 					this.page.setValue(page);
 					isLoading = false;
