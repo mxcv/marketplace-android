@@ -26,6 +26,7 @@ import com.company.marketplace.ui.tools.ObjectSelector;
 import com.company.marketplace.ui.viewmodels.ItemsViewModel;
 import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
 import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
+import com.company.marketplace.ui.viewmodels.SelectedUserViewModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -52,6 +53,9 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 				new ViewModelProvider(requireActivity())
 					.get(SelectedItemViewModel.class)
 					.select(item);
+				new ViewModelProvider(requireActivity())
+					.get(SelectedUserViewModel.class)
+					.select(item.getUser());
 				Navigation.findNavController(binding.getRoot())
 					.navigate(R.id.action_items_to_item);
 			}));

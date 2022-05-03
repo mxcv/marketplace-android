@@ -38,7 +38,29 @@
         android:id="@+id/nav_item"
         android:name="com.company.marketplace.ui.fragments.ItemFragment"
         android:label="@string/item"
-        tools:layout="@layout/fragment_item" />
+        tools:layout="@layout/fragment_item" >
+        <action
+            android:id="@+id/action_item_to_user_items"
+            app:destination="@id/nav_user_items"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_user_items"
+        android:name="com.company.marketplace.ui.fragments.UserItemsFragment"
+        android:label="@string/items"
+        tools:layout="@layout/fragment_user_items" >
+        <action
+            android:id="@+id/action_user_items_to_item"
+            app:destination="@id/nav_item"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_add_item"

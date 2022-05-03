@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="6dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:columnCount="3"
+        app:rowCount="4">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:contentDescription="@string/user_image"
+            android:src="@drawable/ic_person"
+            app:layout_rowSpan="4" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/name"
+            android:src="@drawable/ic_person" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_columnWeight="1"
+            tools:text="Name" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/phone_number"
+            android:src="@drawable/ic_phone" />
+
+        <TextView
+            android:id="@+id/userPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_columnWeight="1"
+            tools:text="Phone number" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/location"
+            android:src="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            tools:text="Location" />
+
+        <Button
+            android:id="@+id/userItems"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/items"
+            app:layout_columnSpan="2"
+            app:layout_columnWeight="1" />
+    </androidx.gridlayout.widget.GridLayout>
+</androidx.cardview.widget.CardView>
