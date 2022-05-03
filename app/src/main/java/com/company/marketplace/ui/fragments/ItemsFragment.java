@@ -53,9 +53,6 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 				new ViewModelProvider(requireActivity())
 					.get(SelectedItemViewModel.class)
 					.select(item);
-				new ViewModelProvider(requireActivity())
-					.get(SelectedUserViewModel.class)
-					.select(item.getUser());
 				Navigation.findNavController(binding.getRoot())
 					.navigate(R.id.action_items_to_item);
 			}));

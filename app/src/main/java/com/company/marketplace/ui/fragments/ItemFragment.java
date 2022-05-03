@@ -36,6 +36,9 @@ public class ItemFragment extends Fragment {
 			.get(SelectedItemViewModel.class)
 			.getItem()
 			.observe(getViewLifecycleOwner(), item -> {
+				new ViewModelProvider(requireActivity())
+					.get(SelectedUserViewModel.class)
+					.select(item.getUser());
 				binding.itemUser.userItems.setOnClickListener(v -> {
 					Navigation.findNavController(binding.getRoot())
 						.navigate(R.id.action_item_to_user_items);

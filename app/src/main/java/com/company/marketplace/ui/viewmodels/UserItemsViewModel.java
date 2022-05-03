@@ -31,7 +31,7 @@ public class UserItemsViewModel extends AndroidViewModel {
 		return items;
 	}
 
-	public void loadItems(User user) {
+	private void loadItems(User user) {
 		ItemRequest request = new ItemRequest();
 		request.setUser(user);
 

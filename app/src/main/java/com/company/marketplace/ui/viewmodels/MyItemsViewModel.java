@@ -10,13 +10,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.company.marketplace.models.Account;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
+import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
 import java.util.List;
 
 public class MyItemsViewModel extends AndroidViewModel {
-
-	private static final int MAX_PAGE_SIZE = 100;
 
 	private MutableLiveData<List<Item>> myItems;
 
@@ -27,12 +26,7 @@ public class MyItemsViewModel extends AndroidViewModel {
 	public LiveData<List<Item>> getMyItems() {
 		if (myItems == null) {
 			myItems = new MutableLiveData<>();
-			ItemRequest itemRequest = new ItemRequest();
-			itemRequest.setUser(Account.get().getUser().getValue());
-			itemRequest.setPageSize(MAX_PAGE_SIZE);
-			new MarketplaceRepositoryFactory(getApplication())
-				.createItemRepository()
-				.getItems(itemRequest, page -> myItems.setValue(page.getItems()));
+			loadMyItems();
 		}
 		return myItems;
 	}
@@ -41,5 +35,19 @@ public class MyItemsViewModel extends AndroidViewModel {
 		new MarketplaceRepositoryFactory(getApplication())
 			.createItemRepository()
 			.removeItem(itemId, null, null);
+	}
+
+	private void loadMyItems() {
+		ItemRequest request = new ItemRequest();
+		request.setUser(Account.get().getUser().getValue());
+
+		new MarketplaceRepositoryFactory(getApplication())
+			.createItemRepository()
+			.getItems(request, page -> {
+				User user = Account.get().getUser().getValue();
+				for (Item item : page.getItems())
+					item.setUser(user);
+				myItems.setValue(page.getItems());
+			});
 	}
 }
