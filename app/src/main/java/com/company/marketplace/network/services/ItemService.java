@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 public interface ItemService {
 
 	@GET("items")
-	Call<Page> getItems(@Query("query") String query,
+	Call<Page<Item>> getItems(@Query("query") String query,
 						@Query("minPrice") BigDecimal minPrice,
 						@Query("maxPrice") BigDecimal maxPrice,
 						@Query("currencyId") Integer currencyId,

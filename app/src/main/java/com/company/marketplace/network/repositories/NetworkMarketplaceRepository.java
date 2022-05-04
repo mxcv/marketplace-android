@@ -138,7 +138,7 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 
 	@Override
 	public void getItems(ItemRequest itemRequest,
-						 ResponseListener<Page> responseListener) {
+						 ResponseListener<Page<Item>> responseListener) {
 
 		NetworkService.get()
 			.getItemService()

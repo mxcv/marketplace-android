@@ -9,7 +9,7 @@ import com.company.marketplace.network.responses.ResponseListener;
 public interface ItemRepository {
 
 	void getItems(ItemRequest itemRequest,
-				  ResponseListener<Page> responseListener);
+				  ResponseListener<Page<Item>> responseListener);
 
 	void addItem(Item item,
 				 ResponseListener<Integer> responseListener,

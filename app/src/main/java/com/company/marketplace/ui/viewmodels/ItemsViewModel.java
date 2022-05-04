@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
@@ -16,7 +17,7 @@ public class ItemsViewModel extends AndroidViewModel {
 
 	private static final int PAGE_SIZE = 20;
 
-	private final MutableLiveData<Page> page;
+	private final MutableLiveData<Page<Item>> page;
 	private boolean isLoading;
 
 	public ItemsViewModel(@NonNull Application application) {
@@ -24,7 +25,7 @@ public class ItemsViewModel extends AndroidViewModel {
 		this.page = new MutableLiveData<>();
 	}
 
-	public LiveData<Page> getPage() {
+	public LiveData<Page<Item>> getPage() {
 		return page;
 	}
 

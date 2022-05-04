@@ -2,18 +2,18 @@ package com.company.marketplace.models;
 
 import java.util.List;
 
-public class Page {
+public class Page<T> {
 
-	private List<Item> items;
+	private List<T> items;
 	private int pageIndex;
 	private int pageSize;
 	private int totalPages;
 	private int totalCount;
 
-	public List<Item> getItems() {
+	public List<T> getItems() {
 		return items;
 	}
-	public void setItems(List<Item> items) {
+	public void setItems(List<T> items) {
 		this.items = items;
 	}
 
