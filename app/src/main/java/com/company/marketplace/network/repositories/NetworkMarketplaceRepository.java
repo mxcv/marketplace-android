@@ -341,7 +341,25 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 	}
 
 	@Override
-	public void getUser(ResponseListener<User> responseListener) {
+	public void getUser(int id,
+						ResponseListener<User> responseListener) {
+
+		NetworkService.get()
+			.getUserService()
+			.getUser(id)
+			.enqueue(new SimpleCallback<>(
+				user -> {
+					if (responseListener != null)
+						responseListener.onResponse(user);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getCurrentUser(ResponseListener<User> responseListener) {
 
 		if (JwtRepository.get().getToken(JwtType.ACCESS) == null) {
 			if (unauthorizedErrorListener != null)
@@ -351,7 +369,7 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 
 		NetworkService.get()
 			.getUserService()
-			.getUser()
+			.getCurrentUser()
 			.enqueue(new SimpleCallback<>(
 				user -> {
 					if (responseListener != null)

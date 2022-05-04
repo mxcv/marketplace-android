@@ -9,8 +9,11 @@ import retrofit2.http.POST;
 
 public interface UserService {
 
+	@GET("users/{id}")
+	Call<User> getUser(int id);
+
 	@GET("users")
-	Call<User> getUser();
+	Call<User> getCurrentUser();
 
 	@POST("users")
 	Call<Integer> postUser(@Body User user);

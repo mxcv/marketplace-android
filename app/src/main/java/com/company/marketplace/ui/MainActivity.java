@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements Observer<User> {
 		NavigationUI.setupWithNavController(navigationView, navController);
 
 		Account.get().getUser().observe(this, this);
-		new MarketplaceRepositoryFactory(this).createUserRepository().getUser(user ->
+		new MarketplaceRepositoryFactory(this).createUserRepository().getCurrentUser(user ->
 			Account.get().setUser(user));
 	}
 

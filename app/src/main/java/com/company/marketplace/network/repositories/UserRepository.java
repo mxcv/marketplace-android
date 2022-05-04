@@ -12,7 +12,10 @@ public interface UserRepository {
 
 	void logout(ResponseListener<Void> responseListener);
 
-	void getUser(ResponseListener<User> responseListener);
+	void getUser(int id,
+				 ResponseListener<User> responseListener);
+
+	void getCurrentUser(ResponseListener<User> responseListener);
 
 	void addUser(User user,
 				 ResponseListener<Integer> responseListener,

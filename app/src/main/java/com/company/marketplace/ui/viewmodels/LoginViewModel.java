@@ -25,7 +25,7 @@ public class LoginViewModel extends AndroidViewModel {
 	public void login(User inputUser) {
 		UserRepository userRepository = new MarketplaceRepositoryFactory(getApplication()).createUserRepository();
 		userRepository.login(inputUser,
-			ignored -> userRepository.getUser(user::setValue),
+			ignored -> userRepository.getCurrentUser(user::setValue),
 			() -> Toast.makeText(getApplication(), R.string.login_error, Toast.LENGTH_SHORT).show());
 	}
 
