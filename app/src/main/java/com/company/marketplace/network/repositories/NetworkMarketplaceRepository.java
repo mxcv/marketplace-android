@@ -7,6 +7,7 @@ import com.company.marketplace.models.Category;
 import com.company.marketplace.models.City;
 import com.company.marketplace.models.Country;
 import com.company.marketplace.models.Currency;
+import com.company.marketplace.models.Feedback;
 import com.company.marketplace.models.ImageOutput;
 import com.company.marketplace.models.Item;
 import com.company.marketplace.models.ItemRequest;
@@ -33,6 +34,7 @@ import okhttp3.RequestBody;
 
 public class NetworkMarketplaceRepository implements CategoryRepository,
 													 CurrencyRepository,
+													 FeedbackRepository,
 													 ImageRepository,
 													 ItemRepository,
 													 LocationRepository,
@@ -90,6 +92,82 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 						responseListener.onResponse(currencies);
 				},
 				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getFeedback(int sellerId,
+							Integer pageIndex,
+							Integer pageSize,
+							ResponseListener<Page<Feedback>> responseListener) {
+
+		NetworkService.get()
+			.getFeedbackService()
+			.getFeedback(sellerId, pageIndex, pageSize)
+			.enqueue(new SimpleCallback<>(
+				page -> {
+					if (responseListener != null)
+						responseListener.onResponse(page);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void getLeftFeedback(int sellerId,
+								ResponseListener<Feedback> responseListener) {
+
+		NetworkService.get()
+			.getFeedbackService()
+			.getLeftFeedback(sellerId)
+			.enqueue(new SimpleCallback<>(
+				feedback -> {
+					if (responseListener != null)
+						responseListener.onResponse(feedback);
+				},
+				null,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void addFeedback(Feedback feedback,
+							ResponseListener<Integer> responseListener,
+							BadRequestErrorListener badRequestErrorListener) {
+
+		NetworkService.get()
+			.getFeedbackService()
+			.postFeedback(feedback)
+			.enqueue(new SimpleCallback<>(
+				id -> {
+					if (responseListener != null)
+						responseListener.onResponse(id);
+				},
+				badRequestErrorListener,
+				unauthorizedErrorListener,
+				networkErrorListener
+			));
+	}
+
+	@Override
+	public void removeFeedback(int sellerId,
+							   ResponseListener<Void> responseListener,
+							   BadRequestErrorListener badRequestErrorListener) {
+
+		NetworkService.get()
+			.getFeedbackService()
+			.deleteFeedback(sellerId)
+			.enqueue(new SimpleCallback<>(
+				ignored -> {
+					if (responseListener != null)
+						responseListener.onResponse(null);
+				},
+				badRequestErrorListener,
 				unauthorizedErrorListener,
 				networkErrorListener
 			));

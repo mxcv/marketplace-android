@@ -20,6 +20,9 @@ public class MarketplaceRepositoryFactory {
 	public CurrencyRepository createCurrencyRepository() {
 		return createMarketplaceRepository();
 	}
+	public FeedbackRepository createFeedbackRepository() {
+		return createMarketplaceRepository();
+	}
 	public ImageRepository createImageRepository() {
 		return createMarketplaceRepository();
 	}

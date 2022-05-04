@@ -9,6 +9,7 @@ public class User {
 	private String name;
 	private City city;
 	private ImageInput image;
+	private FeedbackStatistics feedbackStatistics;
 
 	public User() {
 	}
@@ -71,6 +72,13 @@ public class User {
 	}
 	public void setImage(ImageInput image) {
 		this.image = image;
+	}
+
+	public FeedbackStatistics getFeedbackStatistics() {
+		return feedbackStatistics;
+	}
+	public void setFeedbackStatistics(FeedbackStatistics feedbackStatistics) {
+		this.feedbackStatistics = feedbackStatistics;
 	}
 
 	public String getLocationFormat() {

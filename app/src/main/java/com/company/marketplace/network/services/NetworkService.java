@@ -76,6 +76,9 @@ public class NetworkService {
 	public CurrencyService getCurrencyService() {
 		return retrofit.create(CurrencyService.class);
 	}
+	public FeedbackService getFeedbackService() {
+		return retrofit.create(FeedbackService.class);
+	}
 	public ImageService getImageService() {
 		return retrofit.create(ImageService.class);
 	}
