@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.company.marketplace.R;
 import com.company.marketplace.databinding.FragmentUserItemsBinding;
@@ -19,6 +20,8 @@ import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
 import com.company.marketplace.ui.viewmodels.SelectedUserViewModel;
 import com.company.marketplace.ui.viewmodels.UserItemsViewModel;
 import com.squareup.picasso.Picasso;
+
+import java.util.Locale;
 
 public class UserItemsFragment extends Fragment {
 
@@ -42,10 +45,18 @@ public class UserItemsFragment extends Fragment {
 				.load(user.getImage().getFullPath())
 				.into(binding.userItemsUser.userImage);
 
+		binding.userItemsUser.userItems.setEnabled(false);
 		binding.userItemsUser.userName.setText(user.getName());
 		binding.userItemsUser.userPhone.setText(user.getPhoneNumber());
 		binding.userItemsUser.userLocation.setText(user.getLocationFormat());
-		binding.userItemsUser.userItems.setEnabled(false);
+		binding.userItemsUser.userFeedbackCount.setText(getResources().getString(R.string.feedback_count, user.getFeedbackStatistics().getCount()));
+		binding.userItemsUser.userFeedbackAverage.setText(String.format(Locale.getDefault(), "%.1f", user.getFeedbackStatistics().getAverage()));
+
+		int roundedAverage = (int)Math.round(user.getFeedbackStatistics().getAverage() * 2);
+		for (int i = 0; i < roundedAverage / 2; ++i)
+			((ImageView)binding.userItemsUser.userFeedbackRate.getChildAt(i)).setImageResource(R.drawable.ic_star);
+		if (roundedAverage % 2 == 1)
+			((ImageView)binding.userItemsUser.userFeedbackRate.getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
 
 		new ViewModelProvider(this)
 			.get(UserItemsViewModel.class)

@@ -17,6 +17,8 @@
     <string name="description">Description</string>
     <string name="display_options">Display options</string>
     <string name="email">Email</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_count">Feedback: %1$d</string>
     <string name="found">Found:</string>
     <string name="free">Free</string>
     <string name="item">Item</string>

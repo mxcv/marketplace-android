@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="32dp"
+    app:contentPadding="8dp"
     app:cardCornerRadius="6dp"
     app:cardUseCompatPadding="true">
 
@@ -12,15 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:columnCount="3"
-        app:rowCount="4">
+        app:rowCount="7">
 
         <ImageView
             android:id="@+id/userImage"
             android:layout_width="125dp"
             android:layout_height="125dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:contentDescription="@string/user_image"
             android:src="@drawable/ic_person"
-            app:layout_rowSpan="4" />
+            app:layout_rowSpan="5" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -58,14 +62,85 @@
             android:id="@+id/userLocation"
             android:layout_width="0dp"
             app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
             tools:text="Location" />
+
+        <TextView
+            android:id="@+id/userFeedbackCount"
+            android:layout_width="0dp"
+            app:layout_columnSpan="2"
+            app:layout_columnWeight="1"
+            tools:text="@string/feedback_count" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_columnSpan="2"
+            app:layout_columnWeight="1">
+
+            <TextView
+                android:id="@+id/userFeedbackAverage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                tools:text="0.0" />
+
+            <LinearLayout
+                android:id="@+id/userFeedbackRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star_outline"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star_outline"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star_outline"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star_outline"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star_outline"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/userFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feedback"
+            app:layout_columnSpan="3"
+            app:layout_columnWeight="1" />
 
         <Button
             android:id="@+id/userItems"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/items"
-            app:layout_columnSpan="2"
+            app:layout_columnSpan="3"
             app:layout_columnWeight="1" />
     </androidx.gridlayout.widget.GridLayout>
 </androidx.cardview.widget.CardView>

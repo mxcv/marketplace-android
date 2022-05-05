@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemFragment extends Fragment {
 
@@ -36,15 +38,15 @@ public class ItemFragment extends Fragment {
 			.get(SelectedItemViewModel.class)
 			.getItem()
 			.observe(getViewLifecycleOwner(), item -> {
-				new ViewModelProvider(requireActivity())
-					.get(SelectedUserViewModel.class)
-					.select(item.getUser());
+				SelectedUserViewModel userModel = new ViewModelProvider(requireActivity())
+					.get(SelectedUserViewModel.class);
+				userModel.select(item.getUser());
+				userModel.getUser().observe(getViewLifecycleOwner(), this::setUser);
 				binding.itemUser.userItems.setOnClickListener(v -> {
 					Navigation.findNavController(binding.getRoot())
 						.navigate(R.id.action_item_to_user_items);
 				});
 				setItem(item);
-				setUser(item.getUser());
 			});
 		return binding.getRoot();
 	}
@@ -72,5 +74,13 @@ public class ItemFragment extends Fragment {
 		binding.itemUser.userName.setText(user.getName());
 		binding.itemUser.userPhone.setText(user.getPhoneNumber());
 		binding.itemUser.userLocation.setText(user.getLocationFormat());
+		binding.itemUser.userFeedbackCount.setText(getResources().getString(R.string.feedback_count, user.getFeedbackStatistics().getCount()));
+		binding.itemUser.userFeedbackAverage.setText(String.format(Locale.getDefault(), "%.1f", user.getFeedbackStatistics().getAverage()));
+
+		int roundedAverage = (int)Math.round(user.getFeedbackStatistics().getAverage() * 2);
+		for (int i = 0; i < roundedAverage / 2; ++i)
+			((ImageView)binding.itemUser.userFeedbackRate.getChildAt(i)).setImageResource(R.drawable.ic_star);
+		if (roundedAverage % 2 == 1)
+			((ImageView)binding.itemUser.userFeedbackRate.getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
 	}
 }
