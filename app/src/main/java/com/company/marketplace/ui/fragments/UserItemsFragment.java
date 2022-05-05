@@ -16,6 +16,7 @@ import com.company.marketplace.R;
 import com.company.marketplace.databinding.FragmentUserItemsBinding;
 import com.company.marketplace.models.User;
 import com.company.marketplace.ui.adapters.ItemAdapter;
+import com.company.marketplace.ui.tools.ItemInfoFiller;
 import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
 import com.company.marketplace.ui.viewmodels.SelectedUserViewModel;
 import com.company.marketplace.ui.viewmodels.UserItemsViewModel;
@@ -61,14 +62,14 @@ public class UserItemsFragment extends Fragment {
 		new ViewModelProvider(this)
 			.get(UserItemsViewModel.class)
 			.getItems(user)
-			.observe(getViewLifecycleOwner(), items -> {
-				binding.userItemsRecyclerView.setAdapter(new ItemAdapter(requireContext(), items, item -> {
-					new ViewModelProvider(requireActivity())
-						.get(SelectedItemViewModel.class)
-						.select(item);
-					Navigation.findNavController(binding.getRoot())
-						.navigate(R.id.action_user_items_to_item);
-				}));
-			});
+			.observe(getViewLifecycleOwner(), items ->
+				new ItemInfoFiller(this).fill(items, filledItems ->
+					binding.userItemsRecyclerView.setAdapter(new ItemAdapter(requireContext(), filledItems, item -> {
+						new ViewModelProvider(requireActivity())
+							.get(SelectedItemViewModel.class)
+							.select(item);
+						Navigation.findNavController(binding.getRoot())
+							.navigate(R.id.action_user_items_to_item);
+					}))));
 	}
 }

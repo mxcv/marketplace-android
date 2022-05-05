@@ -26,7 +26,6 @@ import com.company.marketplace.ui.tools.ObjectSelector;
 import com.company.marketplace.ui.viewmodels.ItemsViewModel;
 import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
 import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
-import com.company.marketplace.ui.viewmodels.SelectedUserViewModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -68,44 +67,28 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 
 		getViewModelStore().clear();
 		itemsViewModel = new ViewModelProvider(this).get(ItemsViewModel.class);
-		itemsViewModel.getPage().observe(getViewLifecycleOwner(), page -> new Thread(() -> {
-			try {
-				synchronized (this) {
-					while (categorySelector == null
-						|| currencySelector == null
-						|| locationSelector == null)
-						wait();
-				}
-				requireActivity().runOnUiThread(() -> {
-					int start;
-					List<Item> addedItems;
-					if (page == null) {
-						int count = items.size();
-						items.clear();
-						Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeRemoved(0, count);
-						start = 0;
-						addedItems = new ArrayList<>();
-					}
-					else {
-						start = items.size();
-						addedItems = page.getItems().subList(items.size(), page.getItems().size());
-					}
-					new ItemInfoFiller(addedItems)
-						.fillCategories(categorySelector.getObjects())
-						.fillCurrencies(currencySelector.getObjects())
-						.fillCities(locationSelector.getCountries());
-					items.addAll(addedItems);
-
-					Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, addedItems.size());
-					binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalCount()));
-				});
+		itemsViewModel.getPage().observe(getViewLifecycleOwner(), page -> {
+			int start;
+			List<Item> addedItems;
+			if (page == null) {
+				int count = items.size();
+				items.clear();
+				Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeRemoved(0, count);
+				start = 0;
+				addedItems = new ArrayList<>();
 			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
+			else {
+				start = items.size();
+				addedItems = page.getItems().subList(items.size(), page.getItems().size());
 			}
-		}).start());
+			new ItemInfoFiller(this).fill(addedItems, filledAddedItems -> {
+				items.addAll(filledAddedItems);
+				Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, filledAddedItems.size());
+				binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalCount()));
+			});
+		});
 
-		loadSelectors(new ViewModelProvider(requireActivity()).get(MarketplaceViewModel.class));
+		loadSelectors();
 		if (itemsViewModel.getPage().getValue() == null)
 			itemsViewModel.loadMoreItems(getItemRequest());
 
@@ -138,37 +121,31 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		return itemRequest;
 	}
 
-	private void loadSelectors(MarketplaceViewModel marketplaceViewModel) {
-		marketplaceViewModel.getCategories().observe(getViewLifecycleOwner(), categories -> {
-			synchronized (this) {
-				categorySelector = new ObjectSelector<>(
-					binding.itemsDisplayOptions.displayOptionsCategory,
-					R.string.not_selected,
-					categories,
-					Category::getTitle);
-				notify();
-			}
-		});
-		marketplaceViewModel.getCurrencies().observe(getViewLifecycleOwner(), currencies -> {
-			synchronized (this) {
-				currencySelector = new ObjectSelector<>(
-					binding.itemsDisplayOptions.displayOptionsCurrency,
-					R.string.default_option,
-					currencies,
-					Currency::getSymbol);
-				notify();
-			}
-		});
-		marketplaceViewModel.getCountries().observe(getViewLifecycleOwner(), countries -> {
-			synchronized (this) {
-				locationSelector = new LocationSelector(
-					binding.itemsDisplayOptions.displayOptionsCountry,
-					binding.itemsDisplayOptions.displayOptionsRegion,
-					binding.itemsDisplayOptions.displayOptionsCity,
-					countries);
-				notify();
-			}
-		});
+	private void loadSelectors() {
+		MarketplaceViewModel marketplaceViewModel = new ViewModelProvider(requireActivity())
+			.get(MarketplaceViewModel.class);
+
+		marketplaceViewModel.getCategories().observe(getViewLifecycleOwner(), categories ->
+			categorySelector = new ObjectSelector<>(
+				binding.itemsDisplayOptions.displayOptionsCategory,
+				R.string.not_selected,
+				categories,
+				Category::getTitle));
+
+		marketplaceViewModel.getCurrencies().observe(getViewLifecycleOwner(), currencies ->
+			currencySelector = new ObjectSelector<>(
+				binding.itemsDisplayOptions.displayOptionsCurrency,
+				R.string.default_option,
+				currencies,
+				Currency::getSymbol));
+
+		marketplaceViewModel.getCountries().observe(getViewLifecycleOwner(), countries ->
+			locationSelector = new LocationSelector(
+				binding.itemsDisplayOptions.displayOptionsCountry,
+				binding.itemsDisplayOptions.displayOptionsRegion,
+				binding.itemsDisplayOptions.displayOptionsCity,
+				countries));
+
 		marketplaceViewModel.getSortTypes().observe(getViewLifecycleOwner(), sortTypes ->
 			sortTypeSelector = new ObjectSelector<>(
 				binding.itemsDisplayOptions.displayOptionsSort,

@@ -16,13 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.company.marketplace.R;
 import com.company.marketplace.databinding.FragmentMyItemsBinding;
 import com.company.marketplace.models.Account;
-import com.company.marketplace.models.Category;
-import com.company.marketplace.models.Currency;
 import com.company.marketplace.models.Item;
-import com.company.marketplace.models.User;
 import com.company.marketplace.ui.adapters.ItemAdapter;
 import com.company.marketplace.ui.tools.ItemInfoFiller;
-import com.company.marketplace.ui.viewmodels.MarketplaceViewModel;
 import com.company.marketplace.ui.viewmodels.MyItemsViewModel;
 import com.company.marketplace.ui.viewmodels.SelectedItemViewModel;
 
@@ -32,56 +28,25 @@ import java.util.Objects;
 public class MyItemsFragment extends Fragment {
 
 	private FragmentMyItemsBinding binding;
-	private List<Category> categories;
-	private List<Currency> currencies;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentMyItemsBinding.inflate(inflater, container, false);
 
-		MarketplaceViewModel marketplaceViewModel = new ViewModelProvider(requireActivity())
-			.get(MarketplaceViewModel.class);
-		marketplaceViewModel.getCategories().observe(getViewLifecycleOwner(), categories -> {
-			synchronized (this) {
-				this.categories = categories;
-				notify();
-			}
-		});
-		marketplaceViewModel.getCurrencies().observe(getViewLifecycleOwner(), currencies -> {
-			synchronized (this) {
-				this.currencies = currencies;
-				notify();
-			}
-		});
-
 		getViewModelStore().clear();
 		MyItemsViewModel myItemsViewModel = new ViewModelProvider(this).get(MyItemsViewModel.class);
-		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> new Thread(() -> {
-			try {
-				synchronized (this) {
-					while (categories == null || currencies == null)
-						wait();
-				}
-				requireActivity().runOnUiThread(() -> {
-					User user = Account.get().getUser().getValue();
-					myItems.forEach(i -> i.setUser(user));
-					new ItemInfoFiller(myItems)
-						.fillCategories(categories)
-						.fillCurrencies(currencies);
-					binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), myItems,
-						item -> {
-							new ViewModelProvider(requireActivity())
-								.get(SelectedItemViewModel.class)
-								.select(item);
-							Navigation.findNavController(binding.getRoot())
-								.navigate(R.id.action_my_items_to_item);
-						}));
-				});
-			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}).start());
+		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> {
+			myItems.forEach(i -> i.setUser(Account.get().getUser().getValue()));
+			new ItemInfoFiller(this).fill(myItems, items ->
+				binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), items,
+					item -> {
+						new ViewModelProvider(requireActivity())
+							.get(SelectedItemViewModel.class)
+							.select(item);
+						Navigation.findNavController(binding.getRoot())
+							.navigate(R.id.action_my_items_to_item);
+					})));
+		});
 
 		new ItemTouchHelper(new RemoveItemHelper(myItemsViewModel, binding.myItemsRecyclerView))
 			.attachToRecyclerView(binding.myItemsRecyclerView);
