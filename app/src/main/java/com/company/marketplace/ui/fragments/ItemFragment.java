@@ -42,10 +42,6 @@ public class ItemFragment extends Fragment {
 					.get(SelectedUserViewModel.class);
 				userModel.select(item.getUser());
 				userModel.getUser().observe(getViewLifecycleOwner(), this::setUser);
-				binding.itemUser.userItems.setOnClickListener(v -> {
-					Navigation.findNavController(binding.getRoot())
-						.navigate(R.id.action_item_to_user_items);
-				});
 				setItem(item);
 			});
 		return binding.getRoot();
@@ -66,6 +62,15 @@ public class ItemFragment extends Fragment {
 	}
 
 	private void setUser(User user) {
+		binding.itemUser.userItems.setOnClickListener(v -> {
+			Navigation.findNavController(binding.getRoot())
+				.navigate(R.id.action_item_to_user_items);
+		});
+		binding.itemUser.userFeedback.setOnClickListener(v -> {
+			Navigation.findNavController(binding.getRoot())
+				.navigate(R.id.action_item_to_user_feedback);
+		});
+
 		if (user.getImage() != null)
 			Picasso.get()
 				.load(user.getImage().getFullPath())
@@ -79,8 +84,8 @@ public class ItemFragment extends Fragment {
 
 		int roundedAverage = (int)Math.round(user.getFeedbackStatistics().getAverage() * 2);
 		for (int i = 0; i < roundedAverage / 2; ++i)
-			((ImageView)binding.itemUser.userFeedbackRate.getChildAt(i)).setImageResource(R.drawable.ic_star);
+			((ImageView)binding.itemUser.userFeedbackRate.getRoot().getChildAt(i)).setImageResource(R.drawable.ic_star);
 		if (roundedAverage % 2 == 1)
-			((ImageView)binding.itemUser.userFeedbackRate.getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
+			((ImageView)binding.itemUser.userFeedbackRate.getRoot().getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
 	}
 }

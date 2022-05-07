@@ -55,9 +55,9 @@ public class UserItemsFragment extends Fragment {
 
 		int roundedAverage = (int)Math.round(user.getFeedbackStatistics().getAverage() * 2);
 		for (int i = 0; i < roundedAverage / 2; ++i)
-			((ImageView)binding.userItemsUser.userFeedbackRate.getChildAt(i)).setImageResource(R.drawable.ic_star);
+			((ImageView)binding.userItemsUser.userFeedbackRate.getRoot().getChildAt(i)).setImageResource(R.drawable.ic_star);
 		if (roundedAverage % 2 == 1)
-			((ImageView)binding.userItemsUser.userFeedbackRate.getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
+			((ImageView)binding.userItemsUser.userFeedbackRate.getRoot().getChildAt(roundedAverage / 2)).setImageResource(R.drawable.ic_star_half);
 
 		new ViewModelProvider(this)
 			.get(UserItemsViewModel.class)

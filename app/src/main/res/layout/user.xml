@@ -88,43 +88,12 @@
                 android:textStyle="bold"
                 tools:text="0.0" />
 
-            <LinearLayout
+            <include
                 android:id="@+id/userFeedbackRate"
+                layout="@layout/stars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_star_outline"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_star_outline"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_star_outline"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_star_outline"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_star_outline"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
+                android:layout_marginStart="8dp" />
         </LinearLayout>
 
         <Button

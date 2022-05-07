@@ -1,5 +1,8 @@
 package com.company.marketplace.models;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 
 public class Feedback {
@@ -51,5 +54,14 @@ public class Feedback {
 	}
 	public void setSeller(User seller) {
 		this.seller = seller;
+	}
+
+	public String getCreatedDateFormat() {
+		return created == null
+			? null
+			: created.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDate()
+				.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
 	}
 }
