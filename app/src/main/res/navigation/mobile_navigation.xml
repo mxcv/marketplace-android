@@ -67,6 +67,10 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_user_items_to_user_feedback"
+            app:destination="@id/nav_user_feedback"
+            app:popUpTo="@id/nav_item" />
     </fragment>
 
     <fragment
@@ -74,6 +78,10 @@
         android:name="com.company.marketplace.ui.fragments.UserFeedbackFragment"
         android:label="@string/items"
         tools:layout="@layout/fragment_user_feedback" >
+        <action
+            android:id="@+id/action_user_feedback_to_user_items"
+            app:destination="@id/nav_user_items"
+            app:popUpTo="@id/nav_item" />
     </fragment>
 
     <fragment
