@@ -84,7 +84,7 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 			new ItemInfoFiller(this).fill(addedItems, filledAddedItems -> {
 				items.addAll(filledAddedItems);
 				Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, filledAddedItems.size());
-				binding.itemsFoundValue.setText(String.valueOf(page == null ? 0 : page.getTotalCount()));
+				binding.itemsFound.setText(getString(R.string.found_count, page == null ? 0 : page.getTotalCount()));
 			});
 		});
 

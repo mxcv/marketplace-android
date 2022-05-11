@@ -14,30 +14,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/itemsFoundLayout"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/itemsFound"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemsDisplayOptions">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/found"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/itemsFoundValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textSize="20sp"
-            tools:text="123" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/itemsDisplayOptions"
+        tools:text="@string/found_count" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemsItems"
@@ -48,6 +32,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemsFoundLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/itemsFound" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

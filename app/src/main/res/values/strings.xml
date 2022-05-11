@@ -19,7 +19,7 @@
     <string name="email">Email</string>
     <string name="feedback">Feedback</string>
     <string name="feedback_count">Feedback: %1$d</string>
-    <string name="found">Found:</string>
+    <string name="found_count">Found: %1$d</string>
     <string name="free">Free</string>
     <string name="item">Item</string>
     <string name="item_image">Item image</string>
