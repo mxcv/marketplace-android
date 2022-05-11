@@ -49,7 +49,6 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.ViewHo
 		if (feedback.getReviewer().getImage() != null)
 			Picasso.get()
 				.load(feedback.getReviewer().getImage().getFullPath())
-				.placeholder(R.drawable.ic_hourglass_empty)
 				.into(holder.userImageView);
 	}
 

@@ -2,6 +2,8 @@ package com.company.marketplace.ui;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import com.company.marketplace.databinding.ActivityMainBinding;
 import com.company.marketplace.models.User;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements Observer<User> {
 
@@ -74,8 +77,16 @@ public class MainActivity extends AppCompatActivity implements Observer<User> {
 		else {
 			navigationView.inflateMenu(R.menu.seller_drawer);
 			navigationView.inflateHeaderView(R.layout.nav_header_main);
-			((TextView)navigationView.getHeaderView(0).findViewById(R.id.navName)).setText(user.getName());
-			((TextView)navigationView.getHeaderView(0).findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
+
+			View headerView = navigationView.getHeaderView(0);
+			((TextView)headerView.findViewById(R.id.navName)).setText(user.getName());
+			((TextView)headerView.findViewById(R.id.navPhoneNumber)).setText(user.getPhoneNumber());
+			if (user.getImage() == null)
+				((ImageView)headerView.findViewById(R.id.navImage)).setImageResource(R.drawable.ic_person);
+			else
+				Picasso.get()
+					.load(user.getImage().getFullPath())
+					.into((ImageView)headerView.findViewById(R.id.navImage));
 		}
 	}
 }

@@ -16,15 +16,23 @@
         app:columnCount="3"
         app:rowCount="7">
 
-        <ImageView
-            android:id="@+id/userImage"
+        <androidx.cardview.widget.CardView
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:contentDescription="@string/user_image"
-            android:src="@drawable/ic_person"
-            app:layout_rowSpan="5" />
+            app:layout_rowSpan="5"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="62.5dp"
+            app:cardBackgroundColor="@color/light_gray">
+
+            <ImageView
+                android:id="@+id/userImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/user_image"
+                android:src="@drawable/ic_person" />
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:layout_width="wrap_content"

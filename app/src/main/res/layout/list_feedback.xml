@@ -12,15 +12,15 @@
         android:layout_height="50dp"
         android:layout_marginEnd="12dp"
         app:cardElevation="0dp"
-        app:cardCornerRadius="30dp">
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/light_gray">
 
         <ImageView
             android:id="@+id/listFeedbackUserImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/user_image"
-            android:src="@drawable/ic_person"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/ic_person" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
-
 
         <TextView
             android:id="@+id/listFeedbackUserName"
