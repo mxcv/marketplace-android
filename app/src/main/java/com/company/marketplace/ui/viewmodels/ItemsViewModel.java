@@ -13,45 +13,62 @@ import com.company.marketplace.models.ItemRequest;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.network.repositories.MarketplaceRepositoryFactory;
 
+import java.util.List;
+
 public class ItemsViewModel extends AndroidViewModel {
 
 	private static final int PAGE_SIZE = 20;
-
-	private final MutableLiveData<Page<Item>> page;
+	private final MutableLiveData<List<Item>> items;
+	private final MutableLiveData<Page<Item>> lastPage;
 	private boolean isLoading;
 
 	public ItemsViewModel(@NonNull Application application) {
 		super(application);
-		this.page = new MutableLiveData<>();
+		items = new MutableLiveData<>();
+		lastPage = new MutableLiveData<>();
 	}
 
-	public LiveData<Page<Item>> getPage() {
-		return page;
+	public LiveData<List<Item>> getItems() {
+		return items;
 	}
 
-	public void clearPage() {
+	public LiveData<Page<Item>> getLastPage() {
+		return lastPage;
+	}
+
+	public void clearItems() {
 		Log.d("items", "Loaded items were cleared.");
-		this.page.setValue(null);
+		items.setValue(null);
+		lastPage.setValue(null);
 	}
 
-	public synchronized void loadMoreItems(ItemRequest itemRequest) {
-		if (!isLoading && (page.getValue() == null || page.getValue().getPageIndex() != page.getValue().getTotalPages())) {
+	public synchronized void loadNextPage(ItemRequest itemRequest) {
+		if (!isLoading && hasMorePages()) {
 			isLoading = true;
-			if (page.getValue() != null)
-				itemRequest.setPageIndex(page.getValue().getPageIndex() + 1);
+			if (lastPage.getValue() != null)
+				itemRequest.setPageIndex(lastPage.getValue().getPageIndex() + 1);
 			itemRequest.setPageSize(PAGE_SIZE);
 
 			new MarketplaceRepositoryFactory(getApplication())
 				.createItemRepository()
 				.getItems(itemRequest, page -> {
-					if (this.page.getValue() != null)
-						page.getItems().addAll(0, this.page.getValue().getItems());
 					Log.d("items", "Items loaded: " + page.getItems().size());
-					Log.d("items", "Current page: " + page.getPageIndex());
-					Log.d("items", "Total pages: " + page.getTotalPages());
-					this.page.setValue(page);
+					Log.d("items", String.format("Page: %d/%d", page.getPageIndex(), page.getTotalPages()));
+
+					if (items.getValue() == null)
+						items.setValue(page.getItems());
+					else {
+						items.getValue().addAll(page.getItems());
+						items.setValue(items.getValue());
+					}
+					lastPage.setValue(page);
 					isLoading = false;
 				});
 		}
+	}
+
+	private boolean hasMorePages() {
+		Page<Item> lastPageValue = lastPage.getValue();
+		return lastPageValue == null || lastPageValue.getPageIndex() != lastPageValue.getTotalPages();
 	}
 }

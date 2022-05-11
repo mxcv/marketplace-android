@@ -29,7 +29,7 @@ public class NetworkService {
 
 	private NetworkService(Context context) {
 		this.context = context.getApplicationContext();
-		OkHttpClient client = getUnsafeOkHttpClient()
+		OkHttpClient client = new OkHttpClient.Builder()
 			.addInterceptor(chain -> {
 				String token = JwtRepository.get().getToken(JwtType.ACCESS);
 				return chain.proceed(token == null ? chain.request() : chain.request()

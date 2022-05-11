@@ -47,59 +47,64 @@ public class ItemsFragment extends Fragment implements View.OnClickListener {
 		binding = FragmentItemsBinding.inflate(inflater, container, false);
 		binding.itemsDisplayOptions.displayOptionsApply.setOnClickListener(this);
 
-		binding.itemsItems.setAdapter(new ItemAdapter(getContext(), items = new ArrayList<>(),
-			item -> {
-				new ViewModelProvider(requireActivity())
-					.get(SelectedItemViewModel.class)
-					.select(item);
-				Navigation.findNavController(binding.getRoot())
-					.navigate(R.id.action_items_to_item);
-			}));
-		binding.itemsItems.addOnScrollListener(new RecyclerView.OnScrollListener() {
-			@Override
-			public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-				super.onScrolled(recyclerView, dx, dy);
-				if (((LinearLayoutManager)Objects.requireNonNull(binding.itemsItems.getLayoutManager()))
-					.findLastVisibleItemPosition() == items.size() - 1)
-					itemsViewModel.loadMoreItems(getItemRequest());
-			}
-		});
-
 		getViewModelStore().clear();
 		itemsViewModel = new ViewModelProvider(this).get(ItemsViewModel.class);
-		itemsViewModel.getPage().observe(getViewLifecycleOwner(), page -> {
-			int start;
-			List<Item> addedItems;
-			if (page == null) {
-				int count = items.size();
-				items.clear();
-				Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeRemoved(0, count);
-				start = 0;
-				addedItems = new ArrayList<>();
-			}
-			else {
-				start = items.size();
-				addedItems = page.getItems().subList(items.size(), page.getItems().size());
-			}
-			new ItemInfoFiller(this).fill(addedItems, filledAddedItems -> {
-				items.addAll(filledAddedItems);
-				Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, filledAddedItems.size());
-				binding.itemsFound.setText(getString(R.string.found_count, page == null ? 0 : page.getTotalCount()));
-			});
-		});
 
+		setItemsView();
 		loadSelectors();
-		if (itemsViewModel.getPage().getValue() == null)
-			itemsViewModel.loadMoreItems(getItemRequest());
 
 		return binding.getRoot();
 	}
 
 	@Override
 	public void onClick(View v) {
-		itemsViewModel.clearPage();
-		itemsViewModel.loadMoreItems(getItemRequest());
+		Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeRemoved(0, items.size());
+		items.clear();
+
+		itemsViewModel.clearItems();
+		itemsViewModel.loadNextPage(getItemRequest());
 		binding.itemsDisplayOptions.displayOptionsExpansionLayout.collapse(true);
+	}
+
+	private void setItemsView()
+	{
+		items = new ArrayList<>();
+		binding.itemsItems.setAdapter(new ItemAdapter(getContext(), items, item -> {
+			new ViewModelProvider(requireActivity())
+				.get(SelectedItemViewModel.class)
+				.select(item);
+			Navigation.findNavController(binding.getRoot())
+				.navigate(R.id.action_items_to_item);
+		}));
+		binding.itemsItems.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+				super.onScrolled(recyclerView, dx, dy);
+				LinearLayoutManager llm = (LinearLayoutManager)Objects.requireNonNull(binding.itemsItems.getLayoutManager());
+				if (llm.findLastVisibleItemPosition() == items.size() - 1)
+					itemsViewModel.loadNextPage(getItemRequest());
+			}
+		});
+		itemsViewModel.getLastPage().observe(getViewLifecycleOwner(), page -> {
+			if (page != null) {
+				binding.itemsFound.setText(getString(R.string.found_count, page.getTotalCount()));
+				addItems(page.getItems());
+			}
+		});
+
+		if (itemsViewModel.getItems().getValue() == null)
+			itemsViewModel.loadNextPage(getItemRequest());
+		else
+			addItems(itemsViewModel.getItems().getValue());
+	}
+
+	private void addItems(List<Item> newItems)
+	{
+		new ItemInfoFiller(this).fill(newItems, filledNewItems -> {
+			int start = items.size();
+			items.addAll(filledNewItems);
+			Objects.requireNonNull(binding.itemsItems.getAdapter()).notifyItemRangeInserted(start, filledNewItems.size());
+		});
 	}
 
 	private ItemRequest getItemRequest() {

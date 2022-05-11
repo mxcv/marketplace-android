@@ -32,7 +32,7 @@ public class UserFeedbackViewModel extends AndroidViewModel {
 		return feedback;
 	}
 
-	public MutableLiveData<Page<Feedback>> getLastPage() {
+	public LiveData<Page<Feedback>> getLastPage() {
 		return lastPage;
 	}
 
