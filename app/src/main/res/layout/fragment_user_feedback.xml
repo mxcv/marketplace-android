@@ -23,12 +23,15 @@
 
             <include
                 android:id="@+id/userFeedbackUser"
-                layout="@layout/user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                layout="@layout/user" />
+
+            <include
+                android:id="@+id/userFeedbackAdd"
+                layout="@layout/feedback_add" />
+
+            <include
+                android:id="@+id/userFeedbackRemove"
+                layout="@layout/feedback_remove" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/userFeedbackRecyclerView"

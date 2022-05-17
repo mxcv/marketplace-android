@@ -19,6 +19,9 @@
     <string name="email">Email</string>
     <string name="feedback">Feedback</string>
     <string name="feedback_count">Feedback: %1$d</string>
+    <string name="feedback_error_add">Feedback could not be added</string>
+    <string name="feedback_error_rate">Rate the seller from 1 to 5 before publishing</string>
+    <string name="feedback_error_remove">Feedback could not be removed</string>
     <string name="found_count">Found: %1$d</string>
     <string name="free">Free</string>
     <string name="item">Item</string>
@@ -52,6 +55,7 @@
     <string name="region">Region</string>
     <string name="register">Sign up</string>
     <string name="registration_error">Could not create a new user. Try another email or password.</string>
+    <string name="remove">Remove</string>
     <string name="remove_item_message">Are you sure you want to remove this item?</string>
     <string name="remove_item_title">Remove item</string>
     <string name="sort">Sort</string>

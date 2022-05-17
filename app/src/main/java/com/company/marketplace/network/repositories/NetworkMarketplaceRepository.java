@@ -140,6 +140,10 @@ public class NetworkMarketplaceRepository implements CategoryRepository,
 							ResponseListener<Integer> responseListener,
 							BadRequestErrorListener badRequestErrorListener) {
 
+		User seller = new User();
+		seller.setId(feedback.getSeller().getId());
+		feedback.setSeller(seller);
+
 		NetworkService.get()
 			.getFeedbackService()
 			.postFeedback(feedback)

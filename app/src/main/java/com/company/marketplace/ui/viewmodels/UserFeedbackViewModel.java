@@ -2,12 +2,14 @@ package com.company.marketplace.ui.viewmodels;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.company.marketplace.R;
 import com.company.marketplace.models.Feedback;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.models.User;
@@ -20,12 +22,17 @@ public class UserFeedbackViewModel extends AndroidViewModel {
 	private static final int PAGE_SIZE = 20;
 	private final MutableLiveData<List<Feedback>> feedback;
 	private final MutableLiveData<Page<Feedback>> lastPage;
+	private final MutableLiveData<Integer> addedFeedbackId;
+	private final MutableLiveData<Void> removedFeedback;
+	private MutableLiveData<Feedback> leftFeedback;
 	private boolean isLoading;
 
 	public UserFeedbackViewModel(@NonNull Application application) {
 		super(application);
 		feedback = new MutableLiveData<>();
 		lastPage = new MutableLiveData<>();
+		addedFeedbackId = new MutableLiveData<>();
+		removedFeedback = new MutableLiveData<>();
 	}
 
 	public LiveData<List<Feedback>> getFeedback() {
@@ -34,6 +41,14 @@ public class UserFeedbackViewModel extends AndroidViewModel {
 
 	public LiveData<Page<Feedback>> getLastPage() {
 		return lastPage;
+	}
+
+	public LiveData<Integer> getAddedFeedbackId() {
+		return addedFeedbackId;
+	}
+
+	public LiveData<Void> getRemovedFeedback() {
+		return removedFeedback;
 	}
 
 	public synchronized void loadNextPage(User user) {
@@ -58,6 +73,36 @@ public class UserFeedbackViewModel extends AndroidViewModel {
 						isLoading = false;
 					});
 		}
+	}
+
+	public void addFeedback(Feedback feedback) {
+		if (feedback.getRate() < 1 || feedback.getRate() > 5) {
+			Toast.makeText(getApplication(), R.string.feedback_error_rate, Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		new MarketplaceRepositoryFactory(getApplication())
+			.createFeedbackRepository()
+			.addFeedback(feedback, addedFeedbackId::setValue, () -> Toast.makeText(getApplication(), R.string.feedback_error_add, Toast.LENGTH_SHORT).show());
+	}
+
+	public void removeFeedback(User seller) {
+		new MarketplaceRepositoryFactory(getApplication())
+			.createFeedbackRepository()
+			.removeFeedback(seller.getId(), removedFeedback::setValue, () -> {
+				Toast.makeText(getApplication(), R.string.feedback_error_remove, Toast.LENGTH_SHORT).show();
+				removedFeedback.setValue(null);
+			});
+	}
+
+	public LiveData<Feedback> getLeftFeedback(User user) {
+		if (leftFeedback == null) {
+			leftFeedback = new MutableLiveData<>();
+			new MarketplaceRepositoryFactory(getApplication())
+				.createFeedbackRepository()
+				.getLeftFeedback(user.getId(), feedback -> leftFeedback.setValue(feedback));
+		}
+		return leftFeedback;
 	}
 
 	private boolean hasMorePages() {
