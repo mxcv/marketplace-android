@@ -27,6 +27,7 @@ import java.util.Objects;
 
 public class MyItemsFragment extends Fragment {
 
+	private static final int MAX_ITEM_COUNT = 20;
 	private FragmentMyItemsBinding binding;
 
 	@Override
@@ -36,6 +37,7 @@ public class MyItemsFragment extends Fragment {
 		getViewModelStore().clear();
 		MyItemsViewModel myItemsViewModel = new ViewModelProvider(this).get(MyItemsViewModel.class);
 		myItemsViewModel.getMyItems().observe(getViewLifecycleOwner(), myItems -> {
+			binding.myItemsFound.setText(getResources().getString(R.string.found_count_of, myItems.size(), MAX_ITEM_COUNT));
 			myItems.forEach(i -> i.setUser(Account.get().getUser().getValue()));
 			new ItemInfoFiller(this).fill(myItems, items ->
 				binding.myItemsRecyclerView.setAdapter(new ItemAdapter(getContext(), items,

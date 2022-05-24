@@ -23,6 +23,7 @@
     <string name="feedback_error_rate">Rate the seller from 1 to 5 before publishing</string>
     <string name="feedback_error_remove">Feedback could not be removed</string>
     <string name="found_count">Found: %1$d</string>
+    <string name="found_count_of">Found: %1$d/%2$d</string>
     <string name="free">Free</string>
     <string name="item">Item</string>
     <string name="item_image">Item image</string>
