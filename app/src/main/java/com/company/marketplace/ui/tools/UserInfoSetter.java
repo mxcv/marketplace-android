@@ -13,7 +13,9 @@ import java.util.Locale;
 public class UserInfoSetter {
 
 	public static void setUser(Context context, UserBinding binding, User user) {
-		if (user.getImage() != null)
+		if (user.getImage() == null)
+			binding.userImage.setImageResource(R.drawable.ic_person);
+		else
 			Picasso.get()
 				.load(user.getImage().getFullPath())
 				.into(binding.userImage);
