@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.company.marketplace.R;
+import com.company.marketplace.models.Account;
 import com.company.marketplace.models.Feedback;
 import com.company.marketplace.models.Page;
 import com.company.marketplace.models.User;
@@ -63,6 +64,9 @@ public class UserFeedbackViewModel extends AndroidViewModel {
 					page -> {
 						Log.d("feedback", "Feedback loaded: " + page.getItems().size());
 						Log.d("feedback", String.format("Page: %d/%d", page.getPageIndex(), page.getTotalPages()));
+						User currentUser = Account.get().getUser().getValue();
+						if (currentUser != null)
+							page.getItems().removeIf(x -> x.getReviewer().getId() == currentUser.getId());
 						if (feedback.getValue() == null)
 							feedback.setValue(page.getItems());
 						else {
